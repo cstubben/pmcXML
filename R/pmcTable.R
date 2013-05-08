@@ -130,7 +130,10 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
                      rowspan <- rep(rowspan, colspan)
                   }
 
-
+               # how to get # columns? - could check header if present ... length(thead)
+                # OR  check every row (but some rows may have extra columns)
+                  # nc <- max( sapply(z, function(x) sum( xpathSApply(x, ".//td", xmlGetAttr, "colspan", 1)) ) )
+                # this just uses # columns IN first row 
                   ## create empty data.frame
                   if( i ==1){
                      nc <- length(val)
