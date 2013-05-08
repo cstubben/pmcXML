@@ -1,0 +1,11 @@
+Package: pubmed
+Type: Package
+Title: Tools to parse full text pubmed articles
+Version: 1.0
+Date: 2013-04-12
+Author: Chris Stubben
+Maintainer: Chris Stubben <stubben@lanl.gov>
+License: GPL 3.1
+Depends: stringr, gdata, genomes2
+BiocViews: GenomicSequence, Annotation, Genetics
+Description: tools for searching and parsing full text articles in Pubmed Central

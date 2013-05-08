@@ -1,0 +1,198 @@
+## GET tables from pmc XML file
+# this new version uses rowspan and colspan attributes to format table including multi-line headers.  
+# Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a citation 
+
+
+pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
+{
+   tables  <- getNodeSet(pmc, "//table-wrap")
+   if(length(tables)==0){ 
+      NULL
+   }else{
+      if(!missing(whichTable)) tables <- tables[ whichTable ]
+      n <-  length(tables)
+ 
+      y <- vector("list", n )
+ 
+      for(k  in 1: n ){
+         z2 <- xmlDoc( tables[[ k ]])
+
+         ## TABLE id in URL string
+         id      <- xpathSApply(z2, "//table-wrap", xmlGetAttr, "id")   
+         label   <- xpathSApply(z2, "//label",      xmlValue)
+         caption <- xpathSApply(z2, "//caption",    xmlValue)
+         if(verbose)   print(paste("Parsing", paste(label, caption) ))
+
+         #--------------------------------------------------------------------
+         # PARSE footnotes (with option label and captions)
+         flabel <- xpathSApply(z2, "//table-wrap-foot/fn/label", xmlValue)
+         fn     <- xpathSApply(z2, "//table-wrap-foot/fn/p",     xmlValue)
+          
+         if(length(flabel) > 0){   
+            fn <- paste(flabel, fn, sep=". ") 
+         }
+         # OR any text if no fn/p... 
+         if(length(fn)==0){
+            fn <- xpathSApply(z2, "//table-wrap-foot", xmlValue)
+         }
+
+         #--------------------------------------------------------------------
+         ## GET table tag 
+         t1 <- getNodeSet(z2, "//table")
+  
+         ## some table tags are missing   
+         ## SEE http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2211553/table/ppat-0040009-t001/
+         if(length(t1)==0){ 
+            print("  No table node - possible link to image?") 
+            x <- data.frame()
+            thead <- NA
+            free(z2)
+         }else{
+            t1 <- t1[[1]]
+           
+            #--------------------------------------------------------------------
+            #PARSE HEADER
+            ##  some XML use th (header cell) instead of td (standard cell)?  
+
+            x <- getNodeSet(t1, "//thead/tr")
+
+            if(length(x) == 0){
+                thead<-NA
+
+            ## 1 header row...
+            }else if(length(x) == 1 ){
+                colspan <- as.numeric( xpathSApply(x[[1]], ".//td|.//th", xmlGetAttr, "colspan", 1) )
+                thead <- xpathSApply(x[[1]], ".//td|.//th", xmlValue)
+                if( any(colspan>1) ){ 
+                   thead <- rep(thead, colspan)
+                }
+
+            # OR collapse mutliline header into single row
+            # SEE  tables 1 and 2 in http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3109299 
+            }else{
+               nr <- length(x)
+                        
+               for (i in 1:nr){
+                  rowspan <- as.numeric( xpathSApply(x[[i]], ".//td|.//th", xmlGetAttr, "rowspan", 1) )
+                  colspan <- as.numeric( xpathSApply(x[[i]], ".//td|.//th", xmlGetAttr, "colspan", 1) )
+                  thead <- xpathSApply(x[[i]], ".//td|.//th", xmlValue)
+
+                  if( any(colspan>1) ){ 
+                     thead      <- rep(thead, colspan)
+                     rowspan <- rep(rowspan, colspan)
+                  }
+                  ## create empty data.frame
+                  if( i ==1){
+                     nc <- length(thead)
+                     c2 <- data.frame(matrix(NA, nrow = nr , ncol =  nc ))
+                  }
+                  # fill values into empty cells
+                  n <- which(is.na(c2[i,]))
+                  c2[ i ,n] <- thead
+
+                  if( any(rowspan > 1) ){
+                     for(j in 1:length( rowspan ) ){
+                        if(rowspan[j] > 1){
+                            ## repeat value down column
+                              c2[ (i+1):(i+ ( rowspan[j] -1) ) , n[j] ]   <- thead[j]
+                        }
+                     }
+                  }
+               }
+              
+               ## COLLAPSE into single row...
+               ## some rowspans may extend past nr!  see table 1 PMC3109299 
+               if(nrow(c2) > nr) c2<- c2[1:nr, ]
+               
+
+               thead <- apply(c2, 2, function(x) paste(unique(x), collapse="; "))
+               thead <- gsub("; ; ", "; ", thead)  # some mutliline rows with horizontal lines only
+               thead <- gsub("^; ", "", thead) 
+            }
+
+            #--------------------------------------------------------------------
+            #PARSE TABLE
+            ## Does not repeat values with colspans across rows (usually table subheaders) 
+            ## Repeats values with rowspan down columns  - since single rows are often needed
+
+            x <- getNodeSet(t1, "//tbody/tr")
+            # number of rows 
+            nr <- length(x)
+            for (i in 1:nr){
+                rowspan <- as.numeric( xpathSApply(x[[i]], ".//td", xmlGetAttr, "rowspan", 1) )
+                colspan <- as.numeric( xpathSApply(x[[i]], ".//td", xmlGetAttr, "colspan", 1) )
+                val <- xpathSApply(x[[i]], ".//td", xmlValue)
+
+                  if( any(colspan>1) ){ 
+                     val      <- rep(val, colspan)
+                     ##  DON't repeat subheaders and other colspans (optional?)
+                     val[-1][val[-1]==val[-length(val)]] <- NA
+                     rowspan <- rep(rowspan, colspan)
+                  }
+
+
+                  ## create empty data.frame
+                  if( i ==1){
+                     nc <- length(val)
+                     c2 <- data.frame(matrix(NA, nrow = nr , ncol =  nc ))
+                  }
+  
+                  # fill values into empty cells
+                  n <- which(is.na(c2[i,]))
+ 
+                  # some tables have extra td tags  see table 2  PMC3109299
+                  # <td align="left" rowspan="1" colspan="1"/> 
+                  # truncate to avoid warning.... may lose data???
+                  if(length(val) != length(n) )  val<-val[1: length(n) ]
+                
+                  c2[ i ,n] <- val
+
+                  if( any(rowspan > 1) ){
+                     for(j in 1:length( rowspan ) ){
+                        if(rowspan[j] > 1){
+                        ## repeat value down column
+                        c2[ (i+1):(i+ ( rowspan[j] -1) ) , n[j] ]   <- val[j]
+                     }
+                  }
+               }
+            }
+            
+            free(z2)
+            # table
+            x <- c2
+            if( !is.na( thead[1] ))  colnames(x) <- thead
+
+            #DELETE empty rows  - 
+            if(nrow(x)>1){
+               nX <- apply(x, 1, function(y) sum(! (is.na(y) | y=="") ))
+               x  <- x[nX != 0,, FALSE]   # use FALSE in case only 1 column in TABLE
+            }
+
+            # FIX column typess 
+            ## errors if newlines and tabs in cells (or colnames!)
+            colnames(x) <- gsub("\n *", "", colnames(x))
+
+            # also quotes in cells will cause errors...
+            x2  <- try( fixTypes(x, na.strings="", ...) , silent=TRUE)
+            if(class(x2)=="try-error"){
+                 print("ERROR fixing types - skipped")
+            }else{
+                 x <- x2
+            }
+         }
+         ### Attributes
+         attr(x, "id")   <- attr(pmc, "id")
+         attr(x, "file") <- paste( attr(pmc, "file"), "table", id, sep="/") 
+         attr(x, "label") <- label
+         attr(x, "caption") <- caption
+
+         if(length(fn)>0){
+           attr(x, "footnotes") <- fn
+          }
+         y[[ k ]] <- x
+         names(y)[k ] <- label
+      }
+      if(length(y)==1) y<-y[[1]]
+      y
+   }
+}
