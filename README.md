@@ -8,7 +8,7 @@ Due to the rapid growth of microbial genome sequencing and the lack of model pro
 
 # Overview
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243) and this strain is used to download the RefSeq gff3 file from the [ftp site](ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Burkholderia_pseudomallei_K96243_uid57733) (the `pubmed`, `genomes` and `genomes2` packages have a number of extra functions and datasets to automate these steps below).
+The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243) and this strain is used to download the RefSeq gff3 file from the Genomes ftp site (the `pubmed`, `genomes` and `genomes2` packages have a number of extra functions and datasets to automate these steps below).
 
 	referenceGenome("Burkholderia pseudomallei")
 	[1] "Reference genome, Community selected, UniProt : Burkholderia pseudomallei K96243"
