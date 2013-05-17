@@ -1,7 +1,7 @@
 \name{fixTypes}
 \alias{fixTypes}
 
-\title{
+\title{ test
 
 }
 \description{

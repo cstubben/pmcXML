@@ -1,7 +1,7 @@
 \name{removeFoot}
 \alias{removeFoot}
 
-\title{
+\title{ test
 
 }
 \description{

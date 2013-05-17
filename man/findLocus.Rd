@@ -1,7 +1,7 @@
 \name{findLocus}
 \alias{findLocus}
 
-\title{
+\title{ test
 
 }
 \description{

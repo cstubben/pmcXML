@@ -1,9 +1,7 @@
 \name{abstract}
 \alias{abstract}
 
-\title{
-
-}
+\title{  Parse abstract from pmc XML  }
 \description{
 
 }
@@ -49,6 +47,6 @@ abstract(doc, exdent = 0, ...)
 }
 \examples{
 
+}
 
 \keyword{ ~kwd1 }
-

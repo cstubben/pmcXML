@@ -1,7 +1,7 @@
 \name{findLocusBP}
 \alias{findLocusBP}
 
-\title{
+\title{ test
 
 }
 \description{

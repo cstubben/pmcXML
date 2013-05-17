@@ -1,7 +1,7 @@
 \name{seq2}
 \alias{seq2}
 
-\title{
+\title{ test
 
 }
 \description{

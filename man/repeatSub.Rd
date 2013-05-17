@@ -1,7 +1,7 @@
 \name{repeatSub}
 \alias{repeatSub}
 
-\title{
+\title{ test
 
 }
 \description{

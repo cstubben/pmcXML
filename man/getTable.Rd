@@ -1,7 +1,7 @@
 \name{getTable}
 \alias{getTable}
 
-\title{
+\title{ test
 
 }
 \description{

@@ -30,7 +30,7 @@ findGenesBP<-function(doc, tag, length=4 , proteins=FALSE){
 
    if(proteins){
       ## PROTEINS - can start beginning of sentence.  Some proteins with numbers, but will get Chr1, Chr2 etc 
-      proteins <- searchXMLall(doc, "[A-Z][a-z]{2}[A-Z][^a-zA-Z]", ignore=FALSE)
+      proteins <- searchXML(doc, "[A-Z][a-z]{2}[A-Z][^a-zA-Z]", ignore=FALSE)
       proteins <- unique( unlist( str_extract_all(proteins, "[A-Z][a-z]{2}[A-Z]") ))
       print(paste("Found", length(genes), "genes and", length(proteins), "proteins")) 
       # sometimes protein names are italicized and this avoids searching for bopA AND BopA (since searches are case-insensitive)
@@ -53,8 +53,8 @@ findGenesBP<-function(doc, tag, length=4 , proteins=FALSE){
         ## should not be part of larger word... 
         ## OR bogus names part of hypenated word like  para-aminobenzoate
 
-         x <- searchXML(doc,  paste( genes[i], "[^a-z-]", sep="") )
-         x2 <-searchXMLall(doc, paste( genes[i], "[^a-z-]", sep="") )
+         x <- pmcSearch(doc,  paste( genes[i], "[^a-z-]", sep="") )
+         x2 <-searchXML(doc, paste( genes[i], "[^a-z-]", sep="") )
          ## if x is null, use 0 to avoid logical(0)
          if(length(x2) !=  ifelse(is.null(x), 0, nrow(x))){
            x2 <- x2[!x2 %in% x$citation]

@@ -1,40 +1,35 @@
-\name{pubmed2-package}
-\alias{pubmed2-package}
-\alias{pubmed2}
+\name{pubmed-package}
+\alias{pubmed-package}
+\alias{pubmed}
 \docType{package}
-\title{
-What the package does (short line)
-~~ package title ~~
+\title{ 
+XML documents from Pubmed Central 
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+Download XML documents from the open access subset of Pubmed Central, and search for genes and locus tags in full text, tables, and supplmentary materials. 
 }
 \details{
 \tabular{ll}{
-Package: \tab pubmed2\cr
+Package: \tab pubmed\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2013-05-08\cr
-License: \tab What license is it under?\cr
+License: \tab GPL 3.1\cr
 }
-~~ An overview of how to use the package, including the most important functions ~~
+An overview of how to use the package, including the most important functions ~~
 }
 \author{
-Who wrote it
+Chris Stubben
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+stubben at lanl.gov
 }
 \references{
-~~ Literature or other references for background information ~~
+
 }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
+
 \keyword{ package }
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 }
 \examples{
-~~ simple examples of the most important functions ~~
+
 }

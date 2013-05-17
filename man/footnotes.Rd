@@ -1,7 +1,7 @@
 \name{footnotes}
 \alias{footnotes}
 
-\title{
+\title{ test
 
 }
 \description{

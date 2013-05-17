@@ -1,7 +1,7 @@
 \name{searchTable}
 \alias{searchTable}
 
-\title{
+\title{ test
 
 }
 \description{

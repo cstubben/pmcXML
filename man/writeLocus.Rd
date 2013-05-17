@@ -1,7 +1,7 @@
 \name{writeLocus}
 \alias{writeLocus}
 
-\title{
+\title{ test
 
 }
 \description{

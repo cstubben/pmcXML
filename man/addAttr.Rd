@@ -1,11 +1,12 @@
 \name{addAttr}
 \alias{addAttr}
 
-\title{
+\title{ 
+ Copy attributes to data.frame
 
 }
 \description{
-
+copies extra attributes from data.frame 1 to data.frame 2 , which are lost after subsetting
 }
 \usage{
 addAttr(x, y)
@@ -46,6 +47,7 @@ addAttr(x, y)
 }
 \examples{
 
+}
 
 \keyword{ ~kwd1 }
 

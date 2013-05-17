@@ -18,9 +18,22 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
          z2 <- xmlDoc( tables[[ k ]])
 
          ## TABLE id in URL string
-         id      <- xpathSApply(z2, "//table-wrap", xmlGetAttr, "id")   
-         label   <- xpathSApply(z2, "//label",      xmlValue)
-         caption <- xpathSApply(z2, "//caption",    xmlValue)
+         id      <- xpathSApply(z2, "//table-wrap", xmlGetAttr, "id")
+         label   <- xpathSApply(z2, "//table-wrap/label",      xmlValue)
+         caption <- xpathSApply(z2, "//table-wrap/caption",    xmlValue)
+
+         ## label and caption missing  see PMC3119406  - table is appendix 
+          if(length(caption)==0 & length(label)==0 ) {
+             caption<-""
+             label <- "Table ?"
+          } else if( length(label)==0){
+            # missing label - may be part of caption... see PMC3544749
+             label<- genomes::strsplit2(caption, "\\. ")
+             caption <- gsub(paste(label, ". " ,sep="") , "", caption)
+          }
+          caption <- gsub("\\.$", "", caption)
+
+
          if(verbose)   print(paste("Parsing", paste(label, caption) ))
 
          #--------------------------------------------------------------------
@@ -48,13 +61,14 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
             thead <- NA
             free(z2)
          }else{
+             # a few table-wrap with 2 tables!  see Table 2 PMC3161971 
             t1 <- t1[[1]]
            
             #--------------------------------------------------------------------
             #PARSE HEADER
             ##  some XML use th (header cell) instead of td (standard cell)?  
 
-            x <- getNodeSet(t1, "//thead/tr")
+            x <- getNodeSet(t1, ".//thead/tr")
 
             if(length(x) == 0){
                 thead<-NA
@@ -71,7 +85,7 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
             # SEE  tables 1 and 2 in http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3109299 
             }else{
                nr <- length(x)
-                        
+                 c2 <- data.frame()       
                for (i in 1:nr){
                   rowspan <- as.numeric( xpathSApply(x[[i]], ".//td|.//th", xmlGetAttr, "rowspan", 1) )
                   colspan <- as.numeric( xpathSApply(x[[i]], ".//td|.//th", xmlGetAttr, "colspan", 1) )
@@ -88,6 +102,10 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
                   }
                   # fill values into empty cells
                   n <- which(is.na(c2[i,]))
+
+                  ## truncate to avoid warning - see PMC3119406
+                  if(length(thead ) != length(n) )  thead <- thead[1: length(n) ]
+
                   c2[ i ,n] <- thead
 
                   if( any(rowspan > 1) ){
@@ -103,11 +121,13 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
                ## COLLAPSE into single row...
                ## some rowspans may extend past nr!  see table 1 PMC3109299 
                if(nrow(c2) > nr) c2<- c2[1:nr, ]
-               
+          
+                ## collapsing column names and row values uses ";" as separator
+               thead <- apply(c2, 2, function(x) paste(unique(x), collapse=": "))
+               thead <- gsub(": : ", ": ", thead)  # some mutliline rows with horizontal lines only
+               thead <- gsub("^: ", "", thead) 
+               thead <- gsub(": $", "", thead) 
 
-               thead <- apply(c2, 2, function(x) paste(unique(x), collapse="; "))
-               thead <- gsub("; ; ", "; ", thead)  # some mutliline rows with horizontal lines only
-               thead <- gsub("^; ", "", thead) 
             }
 
             #--------------------------------------------------------------------
@@ -119,9 +139,11 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
             # number of rows 
             nr <- length(x)
             for (i in 1:nr){
-                rowspan <- as.numeric( xpathSApply(x[[i]], ".//td", xmlGetAttr, "rowspan", 1) )
-                colspan <- as.numeric( xpathSApply(x[[i]], ".//td", xmlGetAttr, "colspan", 1) )
-                val <- xpathSApply(x[[i]], ".//td", xmlValue)
+                 ## some table use //th  see table1 PMC3031304
+ 
+                rowspan <- as.numeric( xpathSApply(x[[i]], ".//td|.//th", xmlGetAttr, "rowspan", 1) )
+                colspan <- as.numeric( xpathSApply(x[[i]], ".//td|.//th", xmlGetAttr, "colspan", 1) )
+                val <- xpathSApply(x[[i]], ".//td|.//th", xmlValue)
 
                   if( any(colspan>1) ){ 
                      val      <- rep(val, colspan)
@@ -132,7 +154,7 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
 
                # how to get # columns? - could check header if present ... length(thead)
                 # OR  check every row (but some rows may have extra columns)
-                  # nc <- max( sapply(z, function(x) sum( xpathSApply(x, ".//td", xmlGetAttr, "colspan", 1)) ) )
+                  # nc <- max( sapply(x, function(y) sum( xpathSApply(y, ".//td", xmlGetAttr, "colspan", 1)) ) )
                 # this just uses # columns IN first row 
                   ## create empty data.frame
                   if( i ==1){
@@ -163,8 +185,10 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
             free(z2)
             # table
             x <- c2
-            if( !is.na( thead[1] ))  colnames(x) <- thead
-
+            if( !is.na( thead[1] )){
+                ## see table 3 from PMC3020393  -more colnames than columns
+                colnames(x) <- thead[1:ncol(x)]
+            }
             #DELETE empty rows  - 
             if(nrow(x)>1){
                nX <- apply(x, 1, function(y) sum(! (is.na(y) | y=="") ))
@@ -195,7 +219,7 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
          y[[ k ]] <- x
          names(y)[k ] <- label
       }
-      if(length(y)==1) y<-y[[1]]
+      ##  if(length(y)==1) y<-y[[1]]
       y
    }
 }

@@ -1,7 +1,7 @@
 \name{parse_pmc_XML}
 \alias{parse_pmc_XML}
 
-\title{
+\title{ test
 
 }
 \description{

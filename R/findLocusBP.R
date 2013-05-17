@@ -6,11 +6,11 @@ findLocusBP<-function(doc, ...){
    tag <- "BPS[SL][0-9]{4}[^0-9_]"
  
    ## should not use before or after options IF locus tags are found in those sentences (will be counted twice!)
-   y <-  searchXML(doc, tag, ...)
+   y <-  pmcSearch(doc, tag, ...)
 
     
    ## check for unmarked sections in html
-   y2 <-searchXMLall(doc,tag )
+   y2 <-searchXML(doc,tag )
    ## if y is null, use 0 to avoid logical(0)
    if(length(y2) !=  ifelse(is.null(y), 0, nrow(y))){
       y2 <- y2[!y2 %in% y$citation]

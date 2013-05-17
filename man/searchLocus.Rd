@@ -1,7 +1,7 @@
 \name{searchLocus}
 \alias{searchLocus}
 
-\title{
+\title{ test
 
 }
 \description{

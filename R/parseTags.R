@@ -1,17 +1,21 @@
-#  parse searchXML output and (optionally?) expand tag ranges
+#  parse pmcSearch output and (optionally?) expand tag ranges
 
 #  used by findLocus.R and citeTable.R
 
 # use 1 or more numbers - or 4?
 ## suffix is optional 
 
+# May 8 - add notStartingWith to parse HP and not JHP tags in Helicobacter..
+## USES a negative lookbehind 
+##  str_extract_all("HP0001,HP0002 but not JPH0003", perl( "(?<!J)HP[0-9]{4}" ) )
 
-parseTags<-function(y, tags, prefix, suffix, expand=TRUE, digits = 4 ){
 
- ## check "ac"
-  if(nchar(suffix)>1){
-     if(!grepl("^(\\[|\\()", suffix)) stop('suffix should be single letter "a" or character class "[ac]"  or grouping brackets "(a|c|\\.1)"')
-  } 
+parseTags<-function(y, tags, prefix, suffix="", notStartingWith, expand=TRUE, digits = 4 ){
+
+ ## check suffix
+ if(nchar(suffix)>1){
+       if(!grepl("^(\\[|\\()", suffix)) stop('suffix should be single letter "a" or character class "[ac]"  or grouping brackets "(a|c|\\.1)"')
+ } 
 
   tag <- paste(prefix, "[0-9]+", sep="")  # 1 or more
   if(is.numeric(digits ) )  tag <- paste(prefix, "[0-9]{", digits, "}", sep="")   
@@ -25,19 +29,29 @@ parseTags<-function(y, tags, prefix, suffix, expand=TRUE, digits = 4 ){
    y$citation <- gsub("\n *", "", y$citation)
    y$citation <- gsub("\t *", " ", y$citation)
     
-   # add suffix (only single letters?  tag1a - FIX?  should match tag1.1 )  
-   if(!missing(suffix)) tag<- paste(tag, suffix, "?", sep="")
+   # add suffix 
+   if( nchar(suffix)>0 ) tag<- paste(tag, suffix, "?", sep="")
              
    ## ALL IDs.  str_extract_all in stringr package
-   ## IGNORE case - default for searchXML
-   ids0 <- str_extract_all(y$citation, ignore.case( tag  ) )
+   ## IGNORE case - default for pmcSearch
+
+   tag1 <- tag
+   if(!missing(notStartingWith)){
+      tag1 <- paste("(?<!", notStartingWith, ")", tag1, sep="")
+
+   }
+
+   ids0 <- str_extract_all(y$citation, perl( ignore.case( tag1  ) ) )
+
+
 
 ## EXPAND ranges...
    if(expand){ 
    
       ## IDs including ranges  tag1 to tag2 OR tag1-tag2 OR tag1-n
       ## FIX?  should skip tag1 to tag2 if "compare" in sentence!
-      ids <- str_extract_all(y$citation,  ignore.case( paste(tag, " to ", tag, "|", tag, "-", tag, "|",  tag,"-[0-9]+|", tag, sep=""  ) ))
+
+      ids <- str_extract_all(y$citation,  perl( ignore.case( paste(tag1, " to ", tag, "|", tag1, "-", tag, "|",  tag1,"-[0-9]+|", tag1, sep=""  ) )) )
  
       ## Expand ranges
       n <- grepl("-|to", ids)

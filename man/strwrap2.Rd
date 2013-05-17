@@ -1,7 +1,7 @@
 \name{strwrap2}
 \alias{strwrap2}
 
-\title{
+\title{ test
 
 }
 \description{

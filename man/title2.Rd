@@ -1,7 +1,7 @@
 \name{title2}
 \alias{title2}
 
-\title{
+\title{ test
 
 }
 \description{

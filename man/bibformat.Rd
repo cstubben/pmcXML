@@ -1,8 +1,7 @@
 \name{bibformat}
 \alias{bibformat}
 
-\title{
-
+\title{ test
 }
 \description{
 

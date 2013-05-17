@@ -1,7 +1,7 @@
 \name{toFasta}
 \alias{toFasta}
 
-\title{
+\title{ test
 
 }
 \description{

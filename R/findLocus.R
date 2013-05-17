@@ -12,7 +12,7 @@
 
 
 
-findLocus <-function(doc, tags, prefix, suffix, expand=TRUE, digits=4, ...){
+findLocus <-function(doc, tags, prefix, suffix="", notStartingWith, expand=TRUE, digits=4, ...){
 
    id<- attr(doc, "id")
   
@@ -23,13 +23,18 @@ findLocus <-function(doc, tags, prefix, suffix, expand=TRUE, digits=4, ...){
    if(is.numeric(digits ) )  tag <- paste(prefix, "[0-9]{", digits, "}[^0-9_]", sep="")   
  
    ## should not use before or after options IF locus tags are found in those sentences (will be counted twice!)
-   y <-  searchXML(doc, tag , ...)
+   y <-  pmcSearch(doc, tag , ...)
 
    if(!is.null(y)){
       print(paste("Matched", nrow(y), "sentences"))
-      y <- parseTags(y, tags, prefix, suffix, expand, digits )
+      y <- parseTags(y, tags, prefix, suffix, notStartingWith, expand, digits )
+      ## may not extract any tags if using notStartingWith
+      if(nrow(y)==0){
+         y<-NULL
+      }else{
        ## add ID
        y <-data.frame(id, y, stringsAsFactors=FALSE)
+      }
    }
    y  
 }

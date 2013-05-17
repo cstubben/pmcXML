@@ -1,7 +1,7 @@
 \name{searchXMLall}
 \alias{searchXMLall}
 
-\title{
+\title{ test
 
 }
 \description{

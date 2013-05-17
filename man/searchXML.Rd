@@ -1,7 +1,7 @@
 \name{searchXML}
 \alias{searchXML}
 
-\title{
+\title{ test
 
 }
 \description{

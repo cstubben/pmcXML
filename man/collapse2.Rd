@@ -1,7 +1,7 @@
 \name{collapse2}
 \alias{collapse2}
 
-\title{
+\title{ test
 
 }
 \description{
