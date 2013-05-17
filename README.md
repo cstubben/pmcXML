@@ -8,7 +8,7 @@ Due to the rapid growth of microbial genome sequencing and the lack of model pro
 
 # Overview
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243) and this strain is used to download the RefSeq gff3 file from the [ftp site](ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Burkholderia_pseudomallei_K96243_uid57733) (the `pubmed`, `genomes` and `genomes2` packages have a number of extra functions and datasets to automate these steps below).
+The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243) and this strain is used to download the RefSeq gff3 file from the [ftp site](ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Burkholderia_pseudomallei_K96243_uid57733) (the `pubmed`, `genomes` and `genomes2` packages have a number of extra functions and datasets to automate these steps below).
 
 	referenceGenome("Burkholderia pseudomallei")
 	[1] "Reference genome, Community selected, UniProt : Burkholderia pseudomallei K96243"
@@ -30,7 +30,7 @@ The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in 
 	bplocus <- values(bpgff)$locus
 	bpgenes<- sort(unique(unlist( strsplit(values(bpgff)$gene, ",") )))
 
-Using the locus tag prefixes from the coding regions in the GFF3 file above, the next step is to use a wildcard search to find relevant publications in OA subset of PMC. All the remaining steps detailed below may be combined in a single loop to download the XML and parse tags from full text and tables into a file.  
+Using the locus tag prefixes from the coding regions in the GFF3 file above, the next step is to use a wildcard search to find relevant publications in the OA subset of PMC. All the remaining steps detailed below may be combined in a single loop to download the XML and parse tags from full text and tables into a file.  
 
 	tags <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)"
 	tiab <-  "AND (Burkholderia[TITLE] OR Burkholderia[ABSTRACT])"
