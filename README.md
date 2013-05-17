@@ -4,15 +4,13 @@
 
 ![PMC growth](/inst/doc/pmc_growth.png)
 
-Due to the rapid growth of microbial genome sequencing and the lack of model prokaryotic organism databases (containing high-quality annotations linking features to literature), our main objective is to use the OA subset as a genome annotation database and extract features and citations from reference microbial genomes directly from the literature. Initially, we are focusing on locus tags, but many other features such as gene names, accession numbers, sequences and coordinates (start/stop) will also be needed before attempting to summarize functions, interactions and pathways.  Our goal is to extract the features from *full text, tables and supplements* and output tab-delimited files in a variety of formats, for example, as GFF3 files that can then be viewed in genome browsers. An example of the basic steps using *Burkholderia pseudomallei* is outlined below.  
+Due to the rapid growth of microbial genome sequencing and the lack of model prokaryotic organism databases (containing high-quality annotations linking features to literature), our main objective is to use the OA subset as a genome annotation database and extract features from reference microbial genomes directly from the literature. Initially, we are focusing on locus tags, but many other features such as gene names, accession numbers, sequences and coordinates (start/stop) will also be needed before attempting to summarize functions, interactions and pathways.  Our goal is to extract locus tags from *full text, tables and supplements* and output tab-delimited files in a variety of formats, for example, as GFF3 files that can then be viewed in a genome browser. An example of the basic steps using *Burkholderia pseudomallei* is outlined below.  
 
-# Overview
+## Overview
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243) and this strain is used to download the RefSeq gff3 file from the Genomes ftp site and save the ordered list of locus tags.  Using the locus tag prefixes in the GFF3 file, the next step is to use a wildcard search to find relevant publications in the OA subset of PMC. Finally, a loop is run to download the XML and parse the 2959 locus tag citations from full text and tables into a [file](/inst/doc/bp.tab).  
+The following code downloads a RefSeq GFF3 file using read.ncbi.ftp from the `genomes` package. The locus tag prefixes in the GFF3 file are use to build a wildcard search and find 46 relevant [publications](/inst/doc/bp_refs.tab) in the OA subset of PMC. Finally, a loop is run to download the XML and parse the 2959 locus tag citations from the full text and tables into a [file](/inst/doc/bp.tab). 
 
-
-	org <- "Burkholderia_pseudomallei_K96243_uid57733"
-	bpgff <- read.ncbi.ftp( org, "gff")
+	bpgff <- read.ncbi.ftp( "Burkholderia_pseudomallei_K96243_uid57733", "gff")
 	bplocus <- values(bpgff)$locus
 
 	tags <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)"
