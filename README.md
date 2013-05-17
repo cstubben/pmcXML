@@ -36,14 +36,13 @@ bpgenes<- sort(unique(unlist( strsplit(values(bpgff)$gene, ",") )))
 Using the locus tag prefixes from the coding regions in the GFF3 file above, the next step is to use a wildcard search to find relevant publications in OA subset of PMC.  
 All the remaining steps detailed below may be combined in a single loop to download the XML and parse tags from full text and tables into a file.  
 
-```R
-query <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2* ) AND (Burkholderia[TITLE] OR Burkholderia[ABSTRACT])"
-bp <- ncbiPMC(paste(query, "AND open access[FILTER]")) 
-[1] "46 results found"
-head(bp)
+	tags <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)"
+	tiab <-  "AND (Burkholderia[TITLE] OR Burkholderia[ABSTRACT])"
+	bp <- ncbiPMC(paste(tags, tiab, "AND open access[FILTER]")) 
+	[1] "46 results found"
+	head(bp)
+	pmcLoop(bp, tags= bplocus, prefix = "BPS[SL]" , suffix= "[abc]",  file="bp.tab")
 
-pmcLoop(bp, tags= bplocus, prefix = "BPS[SL]" , suffix= "[abc]",  file="bp.tab")
-```
 
 ## Details
 
