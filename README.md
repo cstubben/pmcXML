@@ -8,7 +8,7 @@ Due to the rapid growth of microbial genome sequencing and the lack of model pro
 
 ## Overview
 
-The following code downloads a RefSeq GFF3 file using read.ncbi.ftp from the `genomes` package. The locus tag prefixes in the GFF3 file are use to build a wildcard search and find 46 relevant [publications](/inst/doc/bp_refs.tab) in the OA subset of PMC. Finally, a loop is run to download the XML and parse the 2959 locus tag citations from the full text and tables into a [file](/inst/doc/bp.tab). 
+The following code downloads *B. pseudomallei* GFF3 files from the Genomes FTP site. The locus tag prefixes in the GFF3 file are use to build a wildcard search and find 46 relevant [publications](/inst/doc/bp_refs.tab) in the OA subset of PMC. Finally, a loop is run to download the XML and parse the 2959 locus tag citations from the full text and tables into a [file](/inst/doc/bp.tab). 
 
 	bpgff <- read.ncbi.ftp( "Burkholderia_pseudomallei_K96243_uid57733", "gff")
 	bplocus <- values(bpgff)$locus
