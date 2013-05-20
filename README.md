@@ -64,7 +64,7 @@ Finally, check if the features within the GFF3 file are sorted and then save the
 
 ## Find relevant publications 
 
-The next step is to find publications containing any *B. pseudomallei* K96243 locus tag.  Searching for a single locus tag in a full-text database like PMC is straightforward, for example, enter "BPSS1492" in the search box and this returnes 10 articles (accessed May 20, 2013).  To find all full-text articles with any locus tag, we use tje prefix and first digit from the GFF3 file to build wildcard searches, in this case "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)".  We also restricted the number of spurious matches by limiting the results to articles in the open access subset with the genus name in the tile or abstract.  This query returns 46 [publications](/inst/doc/bp_refs.tab).
+The next step is to find publications containing any *B. pseudomallei* K96243 locus tag.  Searching for a single locus tag in a full-text database like PMC is straightforward, for example, enter "BPSS1492" in the search box and this returnes 10 articles (accessed May 20, 2013).  To find all full-text articles with any locus tag, we use the tag prefix and first digit from the GFF3 file to build wildcard searches, in this case "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)" since there are two chromosomes.  We also restricted the number of spurious matches by limiting the results to articles in the open access subset with the genus name in the title or abstract.  This query returns 46 [publications](/inst/doc/bp_refs.tab).
 
 
 	tags <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)"
@@ -85,21 +85,91 @@ The next step is to find publications containing any *B. pseudomallei* K96243 lo
 
 ### Download PMC XML
 
-The XML version of Open Access articles may be downloaded from either the FTP site or the Open Archives Initiative (OAI) service.  The pmcOAI function uses the pmc ID to download the XML version and adds carets (^) within superscript tags and hyperlinked table footnotes for displaying as plain text (for example, BPSL0075<sup>a</sup> is displayed as BPSL0075^a and not BPSL0075a since both BPSL0075 and BPSL0075a are valid tag names).  The function also saves a local copy for future use and checks if a local copy exists (and will use that instead of downloading a second time).  Finally,  the function uses the `xmlParse` function from the [XML](http://cran.r-project.org/web/packages/XML/index.html) package to read the file and generate the XML tree within the R session, so objects are stored as an `XMLInternalDocument` class and can be queried using XPath expressions.
+The XML version of Open Access articles are downloaded from Open Archives Initiative (OAI) service using the `pmcOAI function`.  This function also adds carets (^) within superscript tags and hyperlinked table footnotes for displaying as plain text (for example, BPSL0075<sup>a</sup> is displayed as BPSL0075^a and not BPSL0075a since both BPSL0075 and BPSL0075a are valid tag names).  The function also saves a local copy for future use  (and will use that copy instead of downloading a second time).  Finally, the function uses the `xmlParse` function from the [XML](http://cran.r-project.org/web/packages/XML/index.html) package to read the file and generate the XML tree within the R session, so objects are stored as an `XMLInternalDocument` class and can be queried using XPath expressions.
 
 
 	id <- "PMC3418162"
 	doc <- pmcOAI(id)
 
+ A number of different XPath queries can be used to explore the document content and a few are described below, but a complete discussion is beyond the scope of this guide. First, this `xpathSApply` function list all 87 tags and counts the number of occurrences.
 
- with 2959 locus tag [citations](/inst/doc/bp.tab). 
+
+table( xpathSApply(doc, "//*", xmlName))
 
 
+              abstract                    aff                article     article-categories             article-id           article-meta 
+                     1                      2                      1                      1                      4                      1 
+         article-title                   back                   body                   bold                caption                    col 
+                    62                      1                      1                     40                     13                     13 
+              colgroup                contrib          contrib-group       copyright-holder    copyright-statement         copyright-year 
+                     3                      3                      1                      1                      1                      1 
+ 
+
+You can search down the XML tree and find that pubmed XML files are divided into three main nodes including front with abstract, body with main text, and back with references. 
+
+	xpathSApply(doc, "//article/child::node()", xmlName)
+	[1] "front" "body"  "back"
+
+In some cases, tag names are not specific, so searching up the tree may help to find a specific type of tag.  For example, article-titles are either included within the references cited or in the title group and this tag should include the parent to return the main title.
+
+	table( xpathSApply(doc, "//article-title/parent::node()", xmlName) )
+	mixed-citation    title-group 
+	            61              1 
+
+	xpathSApply(doc, "//title-group/article-title", xmlValue)
+	[1] "Burkholderia pseudomallei transcriptional adaptation in macrophages"
+
+
+Captions may also be associated with figures, tables and supplements, so listing all table captions requires adding the table-wrap node before caption.
+
+	table( xpathSApply(doc, "//caption/parent::node()", xmlName) )
+	   fig                  media supplementary-material             table-wrap 
+  	     8                      1                      1                      3 
+
+	xpathSApply(doc, "//table-wrap/caption", xmlValue)
+	[1] "Twenty-five common up-regulated genes ofB. pseudomalleiduring intracellular growth in host macrophages relative toin vitrogrowth"         
+	[2] "Gene function enrichment analysis ofB. pseudomalleicommon up-regulated and down-regulated genes throughout growth within host macrophages"
+	[3] "List of oligonucleotides used in real-time qPCR experiments" 
+
+
+The first function below will list all 27 section titles and the second functions lists only the main sections (not subsections). The searches in the `pubmed` package use this Xpath query to split the main document into sections using `getNodeSet` and then loops through each section to return any matching sentences and the section title where the match was found.
+
+
+	xpathSApply(doc, "//sec/title", xmlValue)
+	xpathSApply(doc, "//body/sec/title", xmlValue)
+	[1] "Background"             "Results"                "Discussion"             "Conclusions"            "Methods"                "Competing interests"   
+	[7] "Authors’ contributions" "Supplementary Material"
+
+        x <-getNodeSet(doc, "//body/sec")
+        x[[1]]
+
+Finally, the values within italic tags are useful for find species and gene names.
+
+	table2( xpathSApply(doc, "//italic", xmlValue) )
+	                          Total
+	B. pseudomallei              87
+	in vitro                     12
+	cydB                          4
+	in vivo                       4
+	rpoS                          4
+	atpB                          3
+	bimA                          3
+	Burkholderia pseudomallei     3
+	fhaB                          3
+	fhaC                          3
+
+
+## Search Full-text
+
+
+
+
+
+
+
+with 2959 locus tag [citations](/inst/doc/bp.tab). 
 
 pmcLoop(bp, tags= bpgff, prefix = "BPS[SL]" , suffix= "[abc]",  file="bp.tab")
-
-
-## Details
 
 
 
