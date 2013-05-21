@@ -157,7 +157,7 @@ Finally, the values within italic tags are used to find species and gene names.
 
 ## Parse XML
 
-The `pubmed` package includes three functions to parse full-text, tables and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).  The `pmcText` function splits the XML document into main sections and also inlcudes many other document parts inlcuding title, abstract, section titles, and captions from figure, table and supplements (references optional).  In addition, the text within each section is also split into complete sentences by taking care to avoid splitting after genus abbreviations like *E. coli* or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and others.  In this example, the `sapply` function is used to count the number of sentences in each section.
+The `pubmed` package includes three functions to parse full-text, tables and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).  The `pmcText` function splits the XML document into main sections and also includes title, abstract, section titles, and captions from figure, table and supplements (references optional).  In addition, the text within each section is also split into complete sentences by taking care to avoid splitting after genus abbreviations like *E. coli* or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and others.  In this example, the `sapply` function is used to count the number of sentences in each section.
 
 	unlist(xpathSApply(doc, "//article", xmlValue))
 	x <- pmcText(doc)
@@ -181,11 +181,13 @@ The `pubmed` package includes three functions to parse full-text, tables and sup
 	[4] "During intracellular growth over the 6 h infection period, approximately 22 % of the B. pseudomallei genome showed significant transcriptional adaptation."
 
 
-The resulting object (list of vectors) can be converted to a corpus using the text-mining package. The object can also be searched directly using the `grep` function and a wrapper in `pubmed` called `searchP` simplifies these `grep` queries and returns the results as a single table.  The findTags, findGenes and other functions described in the next section also use `searchP` to find matches.
+The resulting list of vectors can be converted to a corpus using the text-mining package. 
 
 	package(tm)
 	Corpus(VectorSource(x))
-	
+
+The list can also be searched directly using the `grep` function and a wrapper in `pubmed` called `searchP` simplifies these `grep` queries and returns the results as a single table.  The findTags, findGenes and other functions described in the next section also use `searchP` to find matches.
+
 	lapply(x, function(y) grep( "BPS[SL]", y, value=TRUE) )
 	searchP(x, "BPS[SL]")
 	section                                                                                                                                                                                                                       citation
@@ -201,33 +203,32 @@ The resulting object (list of vectors) can be converted to a corpus using the te
 
 The `pmcTable` function parses the XML tables into a list of data.frames.  This functions uses rowspan and colspan attributes to correctly format and repeat cell values.  For example, [Table 1](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1) includes a multi-line header spanning four columns which is repeated within each cell and then the mulitple lines are combine into a single header row for display.  The caption and footnotes for each table are also saved as attributes.
 
-x <- pmcTable(doc)
-[1] "Parsing Table 1 Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
-[1] "Parsing Table 2 Gene function enrichment analysis of B. pseudomallei common up-regulated and down-regulated genes throughout growth within host macrophages"
-[1] "Parsing Table 3 List of oligonucleotides used in real-time qPCR experiments"
+	x <- pmcTable(doc)
+	[1] "Parsing Table 1 Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
+	[1] "Parsing Table 2 Gene function enrichment analysis of B. pseudomallei common up-regulated and down-regulated genes throughout growth within host macrophages"
+	[1] "Parsing Table 3 List of oligonucleotides used in real-time qPCR experiments"
 
-x[[1]][1:4, 1:4]
-      Gene                            Description Fold Change (in vivo/in vitro) at the indicated time (h): 1 Fold Change (in vivo/in vitro) at the indicated time (h): 2
-1 BPSL0184 Putative rod shape-determining protein                                                       23.83                                                       15.31
-2 BPSL0842           Benzoylformate decarboxylase                                                       70.27                                                       31.78
-3 BPSL0886                   Hypothetical protein                                                       12.29                                                        8.36
-4 BPSL1067                   Hypothetical protein                                                        8.39                                                        5.15
+	x[[1]][1:4, 1:4]
+	      Gene                            Description Fold Change (in vivo/in vitro) at the indicated time (h): 1 Fold Change (in vivo/in vitro) at the indicated time (h): 2
+	1 BPSL0184 Putative rod shape-determining protein                                                       23.83                                                       15.31
+	2 BPSL0842           Benzoylformate decarboxylase                                                       70.27                                                       31.78
+	3 BPSL0886                   Hypothetical protein                                                       12.29                                                        8.36
+	4 BPSL1067                   Hypothetical protein                                                        8.39                                                        5.15
 
-attributes(x[[1]])
-...
-$id
-[1] "PMC3418162"
-$file
-[1] "http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1"
-$label
-[1] "Table 1"
-$caption
-[1] "Twenty-five common up-regulated genes ofB. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
-$footnotes
-[1] "Note: * Genes selected for real-time qPCR analysis."
+	attributes(x[[1]])
+	$id
+	[1] "PMC3418162"
+	$file
+	[1] "http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1"
+	$label
+	[1] "Table 1"
+	$caption
+	[1] "Twenty-five common up-regulated genes ofB. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
+	$footnotes
+	[1] "Note: * Genes selected for real-time qPCR analysis."
 
 
-Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and these may be repeated down the rows using `repeatSub`.  Our main objective is to search tables for features like locus tags and display a single row; therefore, we collapse the row into a single delimited string containing column names and row values using `collapse2`.  Optionally, table captions and footnotes can be included in the string.  The `searchP` may also be used to search tables and returns a data.frame with table names and collapsed rows. 
+Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and these may be repeated down the rows using `repeatSub`.  Since main objective is to search tables and display a single row, we collapse the row into a single delimited string containing column names and row values using `collapse2`.  Optionally, table captions and footnotes can be included in the string.  The `searchP` function may also be used to search the tables and returns the table name and matching rows (in collapsed format). 
 
 	t2 <- repeatSub(x[[2]])
         t2
@@ -244,7 +245,7 @@ Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov
 	collapse2(t2, TRUE)[1:3]
         searchP(x, "BPS[SL]")
 
-The `pmcSupp` function parses the list of supplementary files and file names into a data.frame.  Currently, most supplementary files may be downloaded using the 'getSupp` function (optionally, the PMC ftp site includes XML versions and all supplementary files and creating a pmcFTP function that automatically gets both files is on the to do list).  The `getSupp` read files in a variety of formats including Excel, Word, HTML, PDF, text (and compressed files are automatically unzipped using the unix `unzip` command).   Excel files are read using the `read.xls` function in the gdata package.  We added some extra code to the perl function xls2csv.pl within the package to add carets before superscripts (again, in many cases numeric footnotes are associated with numeric values or character footnotes are added to ends of locus tags which may be a valid suffix).  The entire file is read into a data.frame and reformatted by moving captions and footnotes into attributes and updating column types.   Microsoft Word documents are converted to html files using the Universal Office Converter unoconv and then tables within the html files are read using `readHTMLtable`.  The tables within HTML files are also loaded using `readHTMLtable`.  PDF files are converted to text using the unix script `pdftotext` and the resulting file is read into R using `readLines`.  Most of these files require some manual post-processing (for example, fixing the multi-line header missed by read.xls below). 
+The `pmcSupp` function parses the list of supplementary files and file names into a data.frame.  Currently, most supplementary files may be loaded directly into R using the 'getSupp` function (optionally, the PMC ftp site includes XML versions and all supplementary files and creating a `pmcFTP` function that automatically gets both files is on the to do list).  The `getSupp` read files in a variety of formats including Excel, Word, HTML, PDF, text (and compressed files are automatically unzipped using the unix `unzip` command).   Excel files are read using the `read.xls` function in the gdata package.  We added some extra code to the perl function xls2csv.pl within the package to add carets before superscripts (again, in many cases numeric footnotes are associated with numeric values or character footnotes are added to ends of locus tags which may be a valid suffix).  The entire file is read into a data.frame and reformatted by moving captions and footnotes into attributes and updating column types.   Microsoft Word documents are converted to html files using the Universal Office Converter unoconv and then tables within the html files are read using `readHTMLtable`.  The tables within HTML files are also loaded using `readHTMLtable`.  PDF files are converted to text using the unix script `pdftotext` and the resulting file is read into R using `readLines`.  Most of these files require some manual post-processing (for example, fixing the multi-line header missed by read.xls below). 
 
 
 	y <- pmcSupp(doc)
