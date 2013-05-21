@@ -3,37 +3,46 @@
 
 pmcSearch <- function(doc, pattern, ...){
   
-   ## 3 parts to pmc XML: front (incl abstract), body (main article) and back (references)
-   ## ONLY searches abstract and body 
+   ## 3 parts to pmc XML: front (incl title & abstract), body (main article) and back (references)
 
-   # PLOS may have two abstracts,  Abstract and Author summary  
-   x1 <- getNodeSet(doc, "//abstract")
-   ## no title in abstract 
-   title1 <- "Abstract"
-
-   # split body into sections (and skip subsections) 
-   x2 <- getNodeSet(doc, "//body/sec[not(ancestor::sec)]")
-
-   x <- c( x1, x2)
-   ## IF no abstract OR sections? - see PMC3471637 
+   # MAIN text.  split body into main sections 
+   x <- getNodeSet(doc, "//body/sec")
+   ## IF no  sections? - see PMC3471637 
    if(length(x)==0){
-       x<- getNodeSet(doc, "//body") 
-       title1 <- ""
+       x <- getNodeSet(doc, "//body") 
    }
+   n <- length(x)
+   z <- vector("list", n + 4)
 
-   z <- vector("list", length(x))
-   ## LOOP through sections
-   for(i in 1:length(x)){
+
+   ## SEARCH title
+   y <- searchXML(doc, pattern, "//front//article-title")
+   if(length(y) > 0)  z[[1]] <- cbind("Main title", y)
+
+   # ABSTRACT ...  PLOS may have two abstracts,  Abstract and Author summary  
+   y <-  searchXML(doc, pattern, "//abstract//p")
+   if(length(y) > 0)  z[[2]] <- cbind("Abstract", y)
+
+  
+   ## LOOP through body sections
+   for(i in 1:n){
       doc2 <- xmlDoc(x[[i]])
-      #  when i==1, use title1
-      title <- ifelse(i == 1, title1,  xvalue(doc2, "//title") )  
-                 
+      title <-  xvalue(doc2, "//title")    
+       ## search by paragraphs without table-wrap tags 
       y <- searchXML(doc2, pattern, ...)     
-
       free(doc2)
-
-      if(length(y) > 0)  z[[i]] <- cbind(title, y)
+      if(length(y) > 0)  z[[ i + 2 ]] <- cbind(title, y)
    }
+
+   ## Section titles...
+   y <- searchXML(doc, pattern, "//sec/title")
+   if(length(y) > 0)   z[[ n + 3]] <- cbind("Section title", y)
+
+   ## include REFERENCES?
+    y <- searchXML(doc, pattern, "//ref//article-title")
+   if(length(y) > 0)   z[[ n + 4]] <- cbind("References", y)
+
+
   z <- do.call("rbind", z)
   if(!is.null(z)){
      z <- data.frame(z, stringsAsFactors=FALSE)

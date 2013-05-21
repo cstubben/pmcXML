@@ -8,6 +8,8 @@
 
 
 searchXML <- function(doc, pattern, path="//p[not(descendant::table-wrap)]", before=0, after=0, ignore.case=TRUE, ...){
+
+
    z <- xpathSApply(doc, path, xmlValue)
    # dont split on abbrev B. subtilis 
     z <- gsub(" ([A-Z])\\.", " \\1X.X", z)
