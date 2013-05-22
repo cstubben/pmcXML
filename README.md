@@ -10,7 +10,7 @@ Due to the rapid growth of microbial genome sequencing and the lack of model pro
 
 ## Download Reference Genomes
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the `referenceGenome` function, which searches Entrez genome using a species name.  The next step is to identifiy the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and download annotations and sequences.  The organism directory includes the name and project id and can also be found in the Bacteria dataset.  The `read.ncbi.ftp` function reads most types of RefSeq files on the site including GFF3 files below.   
+The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the `referenceGenome` function, which searches Entrez genome using a species name.  The next step is to identifiy the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and download annotations and sequences.  The organism directory is a combination of the name and project id and can also be found in the Bacteria dataset.  The `read.ncbi.ftp` function reads most types of RefSeq files on the site including GFF3 files below.   
 
 
 	referenceGenome("Burkholderia pseudomallei")
@@ -37,7 +37,7 @@ The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in 
 	   5728       8     126      12      61 
      
 
-The summaryTag function lists the locus tag prefixes, suffixes and tag ranges from coding regions.  These are needed to search PMC and also create the string pattern to extract locus tags from the XML  (alternately, the locus tags or gene names could be used as a dictionary to find matches within the document, but in many cases there are new locus tags and especially gene names in the literature that are not found within GFF3 files)
+The summaryTag function lists the locus tag prefixes, suffixes and tag ranges from coding regions.  The prefixes are needed to search PMC and also create the string pattern to extract locus tags from the XML  (alternately, the locus tags or gene names could be used as a dictionary to find matches within the document, but in many cases there are new locus tags and especially gene names in the literature that are not found within GFF3 files)
 
 	summaryTag(bpgff)
 	$prefix
@@ -55,7 +55,7 @@ The summaryTag function lists the locus tag prefixes, suffixes and tag ranges fr
 	   4 
 	5728 
 
-Finally, this check if the features within the GFF3 file are sorted and then saves the tags and gene names.
+Finally, this checks if the features within the GFF3 file are sorted and then saves the tags and gene names.
 
 	is.sorted(bpgff)
 	bplocus <- values(bpgff)$locus
@@ -64,7 +64,7 @@ Finally, this check if the features within the GFF3 file are sorted and then sav
 
 ## Find relevant publications 
 
-The next step is to find publications containing any *B. pseudomallei* K96243 locus tag.  Searching for a single locus tag in a full-text database like PMC is straightforward, for example, enter "BPSS1492" in the search box and this returns 10 articles (accessed May 20, 2013).  To find all full-text articles with any locus tag, we use the tag prefix and first digit from the GFF3 file to build wildcard searches, in this case "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)" since there are two chromosomes.  We restrict the number of spurious matches by limiting the results to articles with the genus name in the title or abstract. We also find matches to articles in the OA subset only since these are available for text-mining as XML.  This query returns 46 [publications](/inst/doc/bp_refs.tab).
+The next step is to find publications containing any *B. pseudomallei* K96243 locus tag.  Searching for a single locus tag in a full-text database like PMC is straightforward, for example, enter "BPSS1492" in the search box and this returns 10 articles (accessed May 20, 2013).  To find all full-text articles with any locus tag, we use the tag prefix and first digit from the GFF3 file to build a wildcard search, in this case "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)" since there are two chromosomes.  We restrict the number of spurious matches by limiting the results to articles with the genus name in the title or abstract. We also find matches to articles in the OA subset since these are available for text-mining as XML.  This query returns 46 [publications](/inst/doc/bp_refs.tab).
 
 
 	tags <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)"
@@ -90,7 +90,7 @@ The XML version of Open Access articles are downloaded from the Open Archives In
 	id <- "PMC3418162"
 	doc <- pmcOAI(id)
 
- A number of different XPath queries can be used to explore the document content and a few are described below, but a complete discussion is beyond the scope of this guide. Two important functions are `xpathSApply` and `getNodeSet`.  For example, this query list all 87 tags and counts the number of occurrences.
+ A number of different XPath queries can be used to explore the XML document content and a few are described below, but a complete discussion is beyond the scope of this guide. Two important functions are `xpathSApply` and `getNodeSet`.  For example, this query list all 87 tags and counts the number of occurrences.
 
 	table( xpathSApply(doc, "//*", xmlName))
 	
@@ -102,12 +102,12 @@ The XML version of Open Access articles are downloaded from the Open Archives In
                      3                      3                      1                      1                      1                      1 
  
 
-You can search down the XML tree and find the three main nodes of a PMC XML file including front with abstract, body with main text, and back with references. 
+You can search down the XML tree and find the three main nodes of a PMC XML file.  These include the front with abstract, body with main text, and back with references. 
 
 	xpathSApply(doc, "//article/child::node()", xmlName)
 	[1] "front" "body"  "back"
 
-In some cases, tag names are not specific, so searching up the tree may help to find a specific type of tag.  For example, article-titles are included within the references cited or in the title group and both tags are needed to return the main title.
+In some cases, tag names are not specific, so searching up the tree may help find a specific type of tag.  For example, article-titles are included within the references cited or in the title group and both tags are needed to return the main title.
 
 	table( xpathSApply(doc, "//article-title/parent::node()", xmlName) )
 	mixed-citation    title-group 
@@ -129,7 +129,7 @@ Captions may also be associated with figures, tables and supplements, so listing
 	[3] "List of oligonucleotides used in real-time qPCR experiments" 
 
 
-The first function below will list all 27 section titles and the second functions lists only the main sections (not subsections). The `pubmed` package use this Xpath query to split the main document into sections using `getNodeSet` and then loops through each section to split the full text into complete sentences.
+The first function below will list all 27 section titles and the second functions lists only the 8 main sections (not subsections). The `pubmed` package uses this XPath query to split the main document into sections using `getNodeSet` and then loops through each section to split the full text into complete sentences.
 
 	xpathSApply(doc, "//sec/title", xmlValue)
 	xpathSApply(doc, "//body/sec/title", xmlValue)
@@ -139,7 +139,7 @@ The first function below will list all 27 section titles and the second function
 	x <-getNodeSet(doc, "//body/sec")
 	x[[1]]
 
-Finally, the values within italic tags are used to find species and gene names.
+Finally, the values within italic tags include species and gene names.
 
 	table2( xpathSApply(doc, "//italic", xmlValue) )
 	                          Total
@@ -157,7 +157,7 @@ Finally, the values within italic tags are used to find species and gene names.
 
 ## Parse XML
 
-The `pubmed` package includes three functions to parse full-text, tables and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).  The `pmcText` function splits the XML document into main sections and also includes title, abstract, section titles, and captions from figure, table and supplements (references optional).  In addition, the text within each section is also split into complete sentences by taking care to avoid splitting after genus abbreviations like *E. coli* or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and others.  In this example, the `sapply` function is used to count the number of sentences in each section.
+The `pubmed` package includes three functions to parse full-text, tables and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).  The `pmcText` function splits the XML document into main sections and also includes title, abstract, section titles, and captions from figure, table and supplements (references optional).  In addition, the text within each section is also split into complete sentences by taking care to avoid splitting after genus abbreviations like *E. coli* or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and many others.  In this example, the `sapply` function is used to count the number of sentences in each section.
 
 	unlist(xpathSApply(doc, "//article", xmlValue))
 	x <- pmcText(doc)
@@ -179,14 +179,18 @@ The `pubmed` package includes three functions to parse full-text, tables and sup
 	[2] "How the bacterium interacts with host macrophage cells is still not well understood and is critical to appreciate the strategies used by this bacterium to survive and how intracellular survival leads to disease manifestation." 
 	[3] "Here we report the expression profile of intracellular B. pseudomallei following infection of human macrophage-like U937 cells." 
 	[4] "During intracellular growth over the 6 h infection period, approximately 22 % of the B. pseudomallei genome showed significant transcriptional adaptation."
+	[5] "B. pseudomallei adapted rapidly to the intracellular environment by down-regulating numerous genes involved in metabolism, cell envelope, motility, replication, amino acid and ion transport system and regulatory function pathways."                                                
+	[6] "Reduced expression in catabolic and housekeeping genes suggested lower energy requirement and growth arrest during macrophage infection, while expression of genes encoding anaerobic metabolism functions were up regulated."                                                         
+	[7] "However, whilst the type VI secretion system was up regulated, expression of many known virulence factors was not significantly modulated over the 6hours of infection."                                                                                                               
+	[8] "The transcriptome profile described here provides the first comprehensive view of how B. pseudomallei survives within host cells and will help identify potential virulence factors that are important for the survival and growth of B. pseudomallei within human cells."
 
 
-The resulting list of vectors can be converted to a corpus using the text-mining package. 
+The resulting list of vectors can be easily converted to a Corpus using the text-mining package. 
 
 	package(tm)
 	Corpus(VectorSource(x))
 
-The list can also be searched directly using the `grep` function and a wrapper in `pubmed` called `searchP` simplifies these `grep` queries and returns the results as a single table.  The findTags, findGenes and other functions described in the next section also use `searchP` to find matches.
+The list can also be searched directly using the `grep` function or a wrapper called `searchP` that simplifies these `grep` queries and returns the results as a single table.  The `findTags`, `findGenes` and other functions described in the next section also use `searchP` to find matches.
 
 	lapply(x, function(y) grep( "BPS[SL]", y, value=TRUE) )
 	searchP(x, "BPS[SL]")
@@ -194,14 +198,13 @@ The list can also be searched directly using the `grep` function and a wrapper i
 	1    Results Anaerobic metabolism pathway genes such as BPSS1279 (threonine dehydratase), BPSL1771 (cobalamin biosynthesis protein CbiG) and BPSS0842 (benzoylformate decarboxylase) were up-regulated throughout the infection period.
 	3    Results       The major nitrogen source in the intracellular compartment is most likely methylamine and purine as suggested by the increased expression of methylamine utilization protein (BPSS0404) and allantoicase (BPSL2945).
 	5    Results                                                 One of the six clusters of the type VI secretion system, the tss-5 cluster (BPSS1493-BPSS1511), was up-regulated up to 182-fold during intracellular infection (Figure 8).
-	6    Results                                                         We also observed the induction of genes flanking the tss-5 cluster, bimA (Burkholderiaintracellular motility A)(BPSS1492) and BPSS1512 at 2 to 6 h post-infection.
+	6    Results                                                         We also observed the induction of genes flanking the tss-5 cluster, bimA (Burkholderia intracellular motility A)(BPSS1492) and BPSS1512 at 2 to 6 h post-infection.
 	7    Results                                                                              Moreover, the hemolysin activator-like protein precursor, fhaC (BPSS1728) gene was significantly up-regulated during intracellular infection.
 	8    Results                                       Consistently, the large filamentous hemagglutinin precursor, fhaB (BPSS1727) gene, a potential virulence factor of B. pseudomallei[20], was induced between 2 to 6 h post-infection.
 	9 Discussion                                                                                         In this study, high induction of tssD-5 (BPSS1498), an effector Hcp1 protein of T6SS was observed throughout the infection period.
 
 
-
-The `pmcTable` function parses the XML tables into a list of data.frames.  This functions uses rowspan and colspan attributes to correctly format and repeat cell values.  For example, [Table 1](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1) includes a multi-line header spanning four columns which is repeated within each cell and then the mulitple lines are combine into a single header row for display.  The caption and footnotes for each table are also saved as attributes.
+The `pmcTable` function parses the XML tables into a list of data.frames.  This functions uses rowspan and colspan attributes within the <th> and <td> tags to correctly format and repeat cell values as needed.  For example, [Table 1](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1) includes a multi-line header spanning four columns which is repeated within each cell and then the two rows are combined into a single header row for display.  The caption and footnotes for each table are also saved as attributes.
 
 	x <- pmcTable(doc)
 	[1] "Parsing Table 1 Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
@@ -223,15 +226,15 @@ The `pmcTable` function parses the XML tables into a list of data.frames.  This 
 	$label
 	[1] "Table 1"
 	$caption
-	[1] "Twenty-five common up-regulated genes ofB. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
+	[1] "Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
 	$footnotes
 	[1] "Note: * Genes selected for real-time qPCR analysis."
 
 
-Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and these may be repeated down the rows using `repeatSub`.  Since main objective is to search tables and display a single row, we collapse the row into a single delimited string containing column names and row values using `collapse2`.  Optionally, table captions and footnotes can be included in the string.  The `searchP` function may also be used to search the tables and returns the table name and matching rows (in collapsed format). 
+Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and since we often need display a single row only, these subheadings may be repeated down the rows using `repeatSub`.  In addition, we collapse the row into a single delimited string containing column names and row values using `collapse2`.  The `searchP` function may also be used to search the tables and returns the table name and matching rows in collapsed format. 
 
 	t2 <- repeatSub(x[[2]])
-        t2
+	t2
 	             subheading                 Functional class or pathway No. of genes regulated No. of genes in genome Significance (p-value)
 	1    Up-regulated genes      Benzoate degradation via hydroxylation                      3                     29           3.33 × 10^-2
 	2  Down-regulated genes Amino sugar and nucleotide sugar metabolism                     22                     39          7.98 × 10^-10
@@ -242,10 +245,9 @@ Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov
 	[2] "subheading=Down-regulated genes;Functional class or pathway=Amino sugar and nucleotide sugar metabolism;No. of genes regulated=22;No. of genes in genome=39;Significance (p-value)=7.98 × 10^-10"
 	[3] "subheading=Down-regulated genes;Functional class or pathway=Bacterial chemotaxis;No. of genes regulated=23;No. of genes in genome=46;Significance (p-value)=2.65 × 10^-9" 
 	
-	collapse2(t2, TRUE)[1:3]
-        searchP(x, "BPS[SL]")
+	searchP(x, "BPS[SL]")
 
-The `pmcSupp` function parses the list of supplementary files and file names into a data.frame.  Currently, most supplementary files may be loaded directly into R using the 'getSupp` function (optionally, the PMC ftp site includes XML versions and all supplementary files and creating a `pmcFTP` function that automatically gets both files is on the to do list).  The `getSupp` read files in a variety of formats including Excel, Word, HTML, PDF, text (and compressed files are automatically unzipped using the unix `unzip` command).   Excel files are read using the `read.xls` function in the gdata package.  We added some extra code to the perl function xls2csv.pl within the package to add carets before superscripts (again, in many cases numeric footnotes are associated with numeric values or character footnotes are added to ends of locus tags which may be a valid suffix).  The entire file is read into a data.frame and reformatted by moving captions and footnotes into attributes and updating column types.   Microsoft Word documents are converted to html files using the Universal Office Converter unoconv and then tables within the html files are read using `readHTMLtable`.  The tables within HTML files are also loaded using `readHTMLtable`.  PDF files are converted to text using the unix script `pdftotext` and the resulting file is read into R using `readLines`.  Most of these files require some manual post-processing (for example, fixing the multi-line header missed by read.xls below). 
+The `pmcSupp` function parses the list of supplementary files and file names into a data.frame.  Currently, most supplementary files may be loaded directly into R using the `getSupp` function (optionally, the PMC ftp site includes XML versions and supplementary files and creating a `pmcFTP` function that automatically gets both files is on the to do list).  The `getSupp` function reads files in a variety of formats including Excel, Word, HTML, PDF, text and compressed files are automatically unzipped using the unix `unzip` command.   Excel files are read using the `read.xls` function in the [gdata](http://cran.r-project.org/web/packages/gdata/index.html) package.  We added some extra code to the perl function `xls2csv.pl` within the package to add carets before superscripts (again, in many cases numeric footnotes are associated with numeric values or character footnotes are added to ends of locus tags).   Microsoft Word documents are converted to html files using the Universal Office Converter `unoconv` and then tables within the html files are read using `readHTMLtable`.  The tables within HTML files are also loaded using `readHTMLtable`.  PDF files are converted to text using the unix script `pdftotext` and the resulting file is read into R using `readLines`.  Most of these files require some manual post-processing, for example, fixing the multi-line header missed by read.xls below. 
 
 	y <- pmcSupp(doc)
 	y
@@ -253,6 +255,8 @@ The `pmcSupp` function parses the list of supplementary files and file names int
 	1 Additional file 1 List of 1259 common down-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth. 1471-2164-13-328-S1.xls excel
 
 	s1 <- getSupp(doc, "1471-2164-13-328-S1.xls")
+	nrow(s1)
+	[1] 1260
 	head(s1)
 	      Gene                               Description Fold change (in vivo/in vitro) at the indicated time (h)                   
 	1                                                                                                         1.00  2.00  4.00  6.00
