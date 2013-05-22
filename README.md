@@ -10,7 +10,7 @@ Due to the rapid growth of microbial genome sequencing and the lack of model pro
 
 ## Download Reference Genomes
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the <tt>referenceGenome</tt> function, which searches Entrez genome using a species name.  The next step is to identifiy the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and download annotations and sequences.  The organism directory is a combination of the name and project id and can also be found in the Bacteria dataset.  The <pre>read.ncbi.ftp</pre> function reads most types of RefSeq files on the site including GFF3 files below.   
+The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the <code>referenceGenome</code> function, which searches Entrez genome using a species name.  The next step is to identifiy the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and download annotations and sequences.  The organism directory is a combination of the name and project id and can also be found in the Bacteria dataset.  The `read.ncbi.ftp` function reads most types of RefSeq files on the site including GFF3 files below.   
 
 
 	referenceGenome("Burkholderia pseudomallei")
