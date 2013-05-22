@@ -10,7 +10,7 @@ Due to the rapid growth of microbial genome sequencing and the lack of model pro
 
 ## Download Reference Genomes
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the `referenceGenome` function, which searches Entrez genome using a species name.  The next step is to identifiy the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and download annotations and sequences.  The organism directory is a combination of the name and project id and can also be found in the Bacteria dataset.  The `read.ncbi.ftp` function reads most types of RefSeq files on the site including GFF3 files below.   
+The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the <tt>referenceGenome</tt> function, which searches Entrez genome using a species name.  The next step is to identifiy the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and download annotations and sequences.  The organism directory is a combination of the name and project id and can also be found in the Bacteria dataset.  The <pre>read.ncbi.ftp</pre> function reads most types of RefSeq files on the site including GFF3 files below.   
 
 
 	referenceGenome("Burkholderia pseudomallei")
@@ -206,7 +206,6 @@ The list can also be searched directly using the `grep` function or a wrapper ca
 
 The `pmcTable` function parses the XML tables into a list of data.frames.  This functions uses rowspan and colspan attributes within the <th> and <td> tags to correctly format and repeat cell values as needed.  For example, [Table 1](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1) includes a multi-line header spanning four columns which is repeated within each cell and then the two rows are combined into a single header row for display.  The caption and footnotes for each table are also saved as attributes.
 
-```R
 	x <- pmcTable(doc)
 	[1] "Parsing Table 1 Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
 	[1] "Parsing Table 2 Gene function enrichment analysis of B. pseudomallei common up-regulated and down-regulated genes throughout growth within host macrophages"
@@ -230,7 +229,7 @@ The `pmcTable` function parses the XML tables into a list of data.frames.  This 
 	[1] "Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
 	$footnotes
 	[1] "Note: * Genes selected for real-time qPCR analysis."
-```
+
 
 Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and since we often need display a single row only, these subheadings may be repeated down the rows using `repeatSub`.  In addition, we collapse the row into a single delimited string containing column names and row values using `collapse2`.  The `searchP` function may also be used to search the tables and returns the table name and matching rows in collapsed format. 
 
