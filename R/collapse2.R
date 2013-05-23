@@ -3,6 +3,10 @@
 
 ## skip NA, "", and values in na.string
 
+## add caption and footnotes (or after searching for pattern?)
+## fix :  footnotes should only be added to rows with footnote
+
+
 collapse2 <- function(x, caption=FALSE, footnotes= FALSE, na.string ){
  
   y <- names(x)

@@ -4,20 +4,20 @@
 
 ![PMC growth](/inst/doc/pmc_growth.png)
 
-Due to the rapid growth of microbial genome sequencing and the lack of model prokaryotic organism databases (containing high-quality annotations linking features to literature), our main objective is to use the OA subset as a genome annotation database and extract features from reference microbial genomes directly from the literature. Initially, we are focusing on locus tags, but many other features such as gene names, accession numbers, sequences and coordinates (start/stop) should be collected before attempting to summarize functional annotations.  Our goal is to extract passages containing locus tags from *full text, tables and supplements* and output tab-delimited files in a variety of formats, for example, as GFF3 files that can be viewed in a genome browser.  This guide describes some of the functions included within the package by using *Burkholderia pseudomallei* as an example.
+Due to the rapid growth of microbial genome sequencing and the lack of model prokaryotic organism databases (containing high-quality annotations linking features to literature), our main objective is to use the OA subset as a genome annotation database and extract features from reference microbial genomes directly from the literature. Initially, we are focusing on locus tags, but many other features such as gene names, accession numbers, sequences and coordinates (start/stop) should be collected before attempting to summarize functional annotations.  The goals are to extract passages containing locus tags from *full text, tables and supplements*, expand tag pairs marking the start and end of a region, and output tab-delimited files in a variety of formats, for example, as GFF3 files that can be viewed in a genome browser.  This guide describes some of the functions included within the package by using *Burkholderia pseudomallei* as an example.
 
 
 
 ## Download Reference Genomes
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the <code>referenceGenome</code> function, which searches Entrez genome using a species name.  The next step is to identifiy the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and download annotations and sequences.  The organism directory is a combination of the name and project id and can also be found in the Bacteria dataset.  The `read.ncbi.ftp` function reads most types of RefSeq files on the site including GFF3 files below.   
+The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the `referenceGenome` function, which searches Entrez genome using a species name.  The next step is to identify the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and then download annotations.  The `read.ncbi.ftp` function reads most types of RefSeq files on the site including GFF3 files below.   
 
 
 	referenceGenome("Burkholderia pseudomallei")
 	[1] "Reference genome, Community selected, UniProt : Burkholderia pseudomallei K96243"
 	[2] "Project id : 57733"
 	
-	data(Bacteria)  # list of directories in ftp
+	data(Bacteria)  # list of directories in FTP
 	subset(Bacteria, pid ==  57733)
 	                                         name mode size       date   pid
 	386 Burkholderia_pseudomallei_K96243_uid57733    d 4096 2010-12-06 57733
@@ -62,9 +62,9 @@ Finally, this checks if the features within the GFF3 file are sorted and then sa
 	bpgenes <- sort(unique(unlist( strsplit(values(bpgff)$gene, ",") )))
 
 
-## Find relevant publications 
+## Find publications 
 
-The next step is to find publications containing any *B. pseudomallei* K96243 locus tag.  Searching for a single locus tag in a full-text database like PMC is straightforward, for example, enter "BPSS1492" in the search box and this returns 10 articles (accessed May 20, 2013).  To find all full-text articles with any locus tag, we use the tag prefix and first digit from the GFF3 file to build a wildcard search, in this case "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)" since there are two chromosomes.  We restrict the number of spurious matches by limiting the results to articles with the genus name in the title or abstract. We also find matches to articles in the OA subset since these are available for text-mining as XML.  This query returns 46 [publications](/inst/doc/bp_refs.tab).
+The next step is to find relevant publications containing any *B. pseudomallei* K96243 locus tag.  Searching for a single locus tag in a full-text database like PMC is straightforward, for example, enter "BPSS1492" in the search box and this returns 10 articles (accessed May 20, 2013).  To find all full-text articles with any locus tag, we use the tag prefix and first digit from the GFF3 file to build a wildcard search, in this case "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)" since there are two chromosomes.  We restrict the number of spurious matches by limiting the results to articles with the genus name in the title or abstract. We also find matches to articles in the OA subset since these are available for text-mining as XML.  This query returns 46 [publications](/inst/doc/bp_refs.tab).
 
 
 	tags <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)"
@@ -139,20 +139,7 @@ The first function below will list all 27 section titles and the second function
 	x <-getNodeSet(doc, "//body/sec")
 	x[[1]]
 
-Finally, the values within italic tags include species and gene names.
 
-	table2( xpathSApply(doc, "//italic", xmlValue) )
-	                          Total
-	B. pseudomallei              87
-	in vitro                     12
-	cydB                          4
-	in vivo                       4
-	rpoS                          4
-	atpB                          3
-	bimA                          3
-	Burkholderia pseudomallei     3
-	fhaB                          3
-	fhaC                          3
 
 
 ## Parse XML
@@ -160,8 +147,8 @@ Finally, the values within italic tags include species and gene names.
 The `pubmed` package includes three functions to parse full-text, tables and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).  The `pmcText` function splits the XML document into main sections and also includes title, abstract, section titles, and captions from figure, table and supplements (references optional).  In addition, the text within each section is also split into complete sentences by taking care to avoid splitting after genus abbreviations like *E. coli* or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and many others.  In this example, the `sapply` function is used to count the number of sentences in each section.
 
 	unlist(xpathSApply(doc, "//article", xmlValue))
-	x <- pmcText(doc)
-	sapply(x, length)
+	x1 <- pmcText(doc)
+	sapply(x1, length)
 
             Main title               Abstract             Background                Results             Discussion 
                      1                      8                     21                     77                     52 
@@ -170,7 +157,7 @@ The `pubmed` package includes three functions to parse full-text, tables and sup
            Figure text          Table caption     Supplement caption 
                     37                      5                      1 
 
-	x[1:2]
+	x1[1:2]
 	`Main title`
 	[1] "Burkholderia pseudomallei transcriptional adaptation in macrophages."
 
@@ -188,12 +175,12 @@ The `pubmed` package includes three functions to parse full-text, tables and sup
 The resulting list of vectors can be easily converted to a Corpus using the text-mining package. 
 
 	package(tm)
-	Corpus(VectorSource(x))
+	Corpus(VectorSource(x1))
 
 The list can also be searched directly using the `grep` function or a wrapper called `searchP` that simplifies these `grep` queries and returns the results as a single table.  The `findTags`, `findGenes` and other functions described in the next section also use `searchP` to find matches.
 
-	lapply(x, function(y) grep( "BPS[SL]", y, value=TRUE) )
-	searchP(x, "BPS[SL]")
+	lapply(x1, function(y) grep( "BPS[SL]", y, value=TRUE) )
+	searchP(x1, "BPS[SL]")
 	section                                                                                                                                                                                                                       citation
 	1    Results Anaerobic metabolism pathway genes such as BPSS1279 (threonine dehydratase), BPSL1771 (cobalamin biosynthesis protein CbiG) and BPSS0842 (benzoylformate decarboxylase) were up-regulated throughout the infection period.
 	3    Results       The major nitrogen source in the intracellular compartment is most likely methylamine and purine as suggested by the increased expression of methylamine utilization protein (BPSS0404) and allantoicase (BPSL2945).
@@ -206,19 +193,19 @@ The list can also be searched directly using the `grep` function or a wrapper ca
 
 The `pmcTable` function parses the XML tables into a list of data.frames.  This functions uses rowspan and colspan attributes within the <th> and <td> tags to correctly format and repeat cell values as needed.  For example, [Table 1](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1) includes a multi-line header spanning four columns which is repeated within each cell and then the two rows are combined into a single header row for display.  The caption and footnotes for each table are also saved as attributes.
 
-	x <- pmcTable(doc)
+	x2 <- pmcTable(doc)
 	[1] "Parsing Table 1 Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
 	[1] "Parsing Table 2 Gene function enrichment analysis of B. pseudomallei common up-regulated and down-regulated genes throughout growth within host macrophages"
 	[1] "Parsing Table 3 List of oligonucleotides used in real-time qPCR experiments"
 
-	x[[1]][1:4, 1:4]
+	x2[[1]][1:4, 1:4]
 	      Gene                            Description Fold Change (in vivo/in vitro) at the indicated time (h): 1 Fold Change (in vivo/in vitro) at the indicated time (h): 2
 	1 BPSL0184 Putative rod shape-determining protein                                                       23.83                                                       15.31
 	2 BPSL0842           Benzoylformate decarboxylase                                                       70.27                                                       31.78
 	3 BPSL0886                   Hypothetical protein                                                       12.29                                                        8.36
 	4 BPSL1067                   Hypothetical protein                                                        8.39                                                        5.15
 
-	attributes(x[[1]])
+	attributes(x2[[1]])
 	$id
 	[1] "PMC3418162"
 	$file
@@ -233,7 +220,7 @@ The `pmcTable` function parses the XML tables into a list of data.frames.  This 
 
 Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and since we often need display a single row only, these subheadings may be repeated down the rows using `repeatSub`.  In addition, we collapse the row into a single delimited string containing column names and row values using `collapse2`.  The `searchP` function may also be used to search the tables and returns the table name and matching rows in collapsed format. 
 
-	t2 <- repeatSub(x[[2]])
+	t2 <- repeatSub(x2[[2]])
 	t2
 	             subheading                 Functional class or pathway No. of genes regulated No. of genes in genome Significance (p-value)
 	1    Up-regulated genes      Benzoate degradation via hydroxylation                      3                     29           3.33 × 10^-2
@@ -245,12 +232,12 @@ Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov
 	[2] "subheading=Down-regulated genes;Functional class or pathway=Amino sugar and nucleotide sugar metabolism;No. of genes regulated=22;No. of genes in genome=39;Significance (p-value)=7.98 × 10^-10"
 	[3] "subheading=Down-regulated genes;Functional class or pathway=Bacterial chemotaxis;No. of genes regulated=23;No. of genes in genome=46;Significance (p-value)=2.65 × 10^-9" 
 	
-	searchP(x, "BPS[SL]")
+	searchP(x2, "BPS[SL]")  # 32 rows
 
-The `pmcSupp` function parses the list of supplementary files into a data.frame.  The XML file only includes the links to the supplements and therefore the `getSupp` functions is needed to load the file into R.   This function reads files in a variety of formats including Excel, Word, HTML, PDF, text and compressed files are automatically unzipped using the unix `unzip` command.   Excel files are read using the `read.xls` function in the [gdata](http://cran.r-project.org/web/packages/gdata/index.html) package.  We added some extra code to the perl function `xls2csv.pl` within the package to add carets before superscripts (again, in many cases numeric footnotes are associated with numeric values or character footnotes are added to ends of locus tags).   Microsoft Word documents are converted to html files using the Universal Office Converter `unoconv` and then tables within the html files are read using `readHTMLtable` in the XML package.  The tables within HTML files are also loaded using `readHTMLtable`.  PDF files are converted to text using the unix script `pdftotext` and the resulting file is read into R using `readLines`.  Most of these files require some manual post-processing, for example, fixing the multi-line header missed by read.xls below.
+The `pmcSupp` function parses the list of supplementary files into a data.frame.  The XML file only includes the links to the supplements and therefore the `getSupp` functions is needed to load the file into R.   This function reads files in a variety of formats including Excel, Word, HTML, PDF, text and compressed files are automatically unzipped using the unix `unzip` command.   Excel files are read using the `read.xls` function in the [gdata](http://cran.r-project.org/web/packages/gdata/index.html) package.  We added some extra code to the perl function `xls2csv.pl` within `gdata` to add carets before superscripts (again, in many cases numeric footnotes are associated with numeric values or character footnotes are added to ends of locus tags).   Microsoft Word documents are converted to html files using the Universal Office Converter `unoconv` and then tables within the html files are read using `readHTMLtable` in the XML package.  The tables within HTML files are also loaded using `readHTMLtable`.  PDF files are converted to text using the unix script `pdftotext` and the resulting file is read into R using `readLines`.  Most of these files require some manual post-processing, for example, fixing the multi-line header missed by `read.xls` below.
 
-	y <- pmcSupp(doc)
-	y
+	x3 <- pmcSupp(doc)
+	x3
 	              label                                                                                                                                  caption                    file  type
 	1 Additional file 1 List of 1259 common down-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth. 1471-2164-13-328-S1.xls excel
 
@@ -269,12 +256,78 @@ The `pmcSupp` function parses the list of supplementary files into a data.frame.
 
 ## Find features
 
+In order to extract locus tags from the `searchP` results, we  use `str_extract_all` in the `stringr` package to extract locus tags using the prefix, number of digits and optional suffixes (returned by `summaryTags` above) as the pattern string.
+
+	y <- searchP(x1, "BPS[SL][0-9]{4}")
+	
+	str_extract_all(y$citation, "BPS[SL][0-9]{4}[abc]?")
+	[[1]]
+	[1] "BPSS1279" "BPSL1771" "BPSS0842"
+	[[2]]
+	[1] "BPSL2311" "BPSL2312"
+	[[3]]
+	[1] "BPSS0404" "BPSL2945"
+	[[4]]
+	[1] "BPSL2787" "BPSL2810" "BPSS0417" "BPSS0429" "BPSS1825" "BPSS1834"
+
+In addition, many locus tags are arranged as pairs marking the start and end of a region such as a genomic island or operon. We also extract these pairs and expand the range using the oredered list of locus tags from the GFF3 file.
+
+	unlist( str_extract_all(y$citation, "BPS[SL][0-9]{4}-BPS[SL][0-9]{4}") )
+	[1] "BPSL2787-BPSL2810" "BPSS0417-BPSS0429" "BPSS1825-BPSS1834" "BPSS1493-BPSS1511"
+
+	seqIds("BPSS0417-BPSS0429", tags= bplocus)
+	[1] "BPSS0417" "BPSS0418" "BPSS0419" "BPSS0420" "BPSS0421" "BPSS0422" "BPSS0423" "BPSS0424" "BPSS0425" "BPSS0426" "BPSS0427" "BPSS0428" "BPSS0429"
 
 
+The `findTags` function extracts tags and expands ranges using the pmcText or pmcTable output or directly from the XML file.  The resulting data.frame includes 
 
-with 2959 locus tag [citations](/inst/doc/bp.tab). 
+	x <- findTags(x1, bplocus, prefix = "BPS[SL]" , suffix= "[abc]")
+	[1] "9 matches"
+	[1] "Expanded 2 matches to 48, 19 tags"
+	[1] "79 locus tags cited (78 unique)"
 
-pmcLoop(bp, tags= bpgff, prefix = "BPS[SL]" , suffix= "[abc]",  file="bp.tab")
+	x[1:10,]
+	           id  source    locus range                                                                                                citation
+	1  PMC3418162 Results BPSS1279 FALSE Anaerobic metabolism pathway genes such as BPSS1279 (threonine dehydratase), BPSL1771 (cobalamin bio...
+	2  PMC3418162 Results BPSL1771 FALSE Anaerobic metabolism pathway genes such as BPSS1279 (threonine dehydratase), BPSL1771 (cobalamin bio...
+	3  PMC3418162 Results BPSS0842 FALSE Anaerobic metabolism pathway genes such as BPSS1279 (threonine dehydratase), BPSL1771 (cobalamin bio...
+	4  PMC3418162 Results BPSL2311 FALSE Nevertheless, none of the components of the anaerobic respiratory chain showed significant changes i...
+	5  PMC3418162 Results BPSL2312 FALSE Nevertheless, none of the components of the anaerobic respiratory chain showed significant changes i...
+	6  PMC3418162 Results BPSS0404 FALSE The major nitrogen source in the intracellular compartment is most likely methylamine and purine as ...
+	7  PMC3418162 Results BPSL2945 FALSE The major nitrogen source in the intracellular compartment is most likely methylamine and purine as ...
+	8  PMC3418162 Results BPSL2787 FALSE These include the main capsular polysaccharide biosynthesis (BPSL2787-BPSL2810) genes, two potential...
+	9  PMC3418162 Results BPSL2788  TRUE These include the main capsular polysaccharide biosynthesis (BPSL2787-BPSL2810) genes, two potential...
+	10 PMC3418162 Results BPSL2789  TRUE These include the main capsular polysaccharide biosynthesis (BPSL2787-BPSL2810) genes, two potential...
+
+
+The `pubmed` package includes a few other functions to find species and genes (using italic tags) and we are working on functions to find accessions, sequences and coordinates within the full-text, tables and supplements.  In most articles, there are many gene names that are not included in the RefSeq GFF3 file and more work is needed to track down the source of these genes (most are from *B. pseduomallei*, but many gene names cited in the methods may be from other species). 
+
+
+	table2(findSpecies(doc))
+	[1] "Found 96 species citations"
+	                          Total
+	Burkholderia pseudomallei    91
+	Burkholderia cenocepacia      2
+	Bordetella pertussis          1
+	Burkholderia mallei           1
+	Caenorhabditis elegans        1
+
+	x<- findGenes(doc)
+	[1] "Found 30 genes"
+	table(x$gene)
+	bimA bspR cydB CydB dnaB dnaE dpsA dspA fhaB fhaC graY hrcA katG minD minE oxyR parA parB parC rpoS 
+	   2    1    2    2    1    1    2    1    3    4    1    1    1    1    4    2    1    2    1    3 
+
+	unique(x$gene[!x$gene %in% bpgenes])
+	[1] "bspR" "bimA" "fhaC" "fhaB" "dpsA" "graY" "parA" "dspA" 
+
+
+## Finding all tags
+
+Finally, we created a loop that uses the list of references from `ncbiPMC` and then downloads each XML file and parses the full-text and tables and extracts all matching locus tags.  In this cases the 2990 locus tags are saved to a [file](/inst/doc/bp.tab). Currently, the supplements are not included in the loop and these are downloaded separately since some additional code is needed to correctly reformat tables before extracting tags.
+
+	pmcLoop(bp, tags= bpgff, prefix = "BPS[SL]" , suffix= "[abc]",  file="bp.tab")
+
 
 
 

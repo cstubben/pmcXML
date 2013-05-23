@@ -4,8 +4,11 @@ pmcLoop<-function( pmcresults, tags, prefix, suffix="" , file="locus.tab", notSt
    for(j in 1:nrow( pmcresults)) {
       id  <- pmcresults$pmc[j]
       print(paste(j, ". Checking ", pmcresults$title[j], sep=""))
-      doc <- pmc(id)   
-      y <- findLocus(doc, tags, prefix, suffix, notStartingWith, expand, digits)
+      doc <- pmc(id)  
+
+      x1 <- pmcText(doc)
+ 
+      y <- findTags(x1, tags, prefix, suffix, notStartingWith, expand, digits)
       if(is.null(y)){
          print("WARNING: no locus tags in full text")
       }else{
@@ -29,7 +32,9 @@ pmcLoop<-function( pmcresults, tags, prefix, suffix="" , file="locus.tab", notSt
                       x[[i]]<- repeatSub(x[[i]])
                   }
                }
-               y <- citeTable(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits)
+               # y <- citeTable(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits)
+               y <-  findTags(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits)
+
                if(!is.null(y))  writeLocus( y, file )
             }
          }

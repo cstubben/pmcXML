@@ -68,7 +68,7 @@ parseTags<-function(y, tags, prefix, suffix="", notStartingWith, expand=TRUE, di
 
 
       n2 <- sapply(ids, length)
-      if(sum(n) >0 ) print(paste("Expanded", sum(n), "citations to", paste(n2[n], collapse=", "), "tags"))
+      if(sum(n) >0 ) print(paste("Expanded", sum(n), "matches to", paste(n2[n], collapse=", "), "tags"))
       ids <- unlist(ids)
      
       y <- data.frame( source= rep(y$section, n2),  locus=ids, range=inRange,  citation= rep(y$citation, n2), stringsAsFactors=FALSE)

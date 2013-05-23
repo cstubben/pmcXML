@@ -31,7 +31,7 @@ pmcText<-function(doc, references = FALSE ){
    z[["Figure text"]]        <- splitP( xpathSApply(doc, "//fig/caption/p", xmlValue) )
    z[["Table caption"]]      <- splitP( xpathSApply(doc, "//table-wrap/caption", xmlValue))
    z[["Table footnotes"]]    <- splitP( xpathSApply(doc, "//table-wrap-foot/fn", xmlValue))
-   z[["Supplement caption"]] <-         xpathSApply(doc, "//supplementary-material/caption/p[1]", xmlValue)
+   z[["Supplement caption"]] <-  splitP( xpathSApply(doc, "//supplementary-material/caption/p[1]", xmlValue))
   if(references)  z[["References"]] <-  xpathSApply(doc, "//ref//article-title" , xmlValue) 
 
 
@@ -40,6 +40,9 @@ pmcText<-function(doc, references = FALSE ){
 # OR leave as list
 ## package(tm) - convert using Corpus(VectorSource(z))
 
+# add attributes
+
+attr(z, "id") <- attr(doc, "id")
 z
 
  

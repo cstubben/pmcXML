@@ -3,9 +3,9 @@
 # Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a citation 
 
 
-pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
+pmcTable  <- function(doc, whichTable, verbose=TRUE, ...)
 {
-   tables  <- getNodeSet(pmc, "//table-wrap")
+   tables  <- getNodeSet(doc, "//table-wrap")
    if(length(tables)==0){ 
       NULL
    }else{
@@ -208,8 +208,8 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
             }
          }
          ### Attributes
-         attr(x, "id")   <- attr(pmc, "id")
-         attr(x, "file") <- paste( attr(pmc, "file"), "table", id, sep="/") 
+         attr(x, "id")   <- attr(doc, "id")
+         attr(x, "file") <- paste( attr(doc, "file"), "table", id, sep="/") 
          attr(x, "label") <- label
          attr(x, "caption") <- caption
 
@@ -220,6 +220,8 @@ pmcTable  <- function(pmc, whichTable, verbose=TRUE, ...)
          names(y)[k ] <- label
       }
       ##  if(length(y)==1) y<-y[[1]]
+
+       attr(y, "id") <- attr(doc, "id")
       y
    }
 }
