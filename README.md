@@ -1,16 +1,40 @@
 # pubmed
 
-`pubmed` is an `R` package to download and parse XML documents from [Pubmed Central](http://www.ncbi.nlm.nih.gov/pmc) (PMC).  There are over 2.7 million full-text articles in PMC and 22% are available for text mining in the [Open Access](http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist) (OA) subset.  The number of OA publications is increasing rapidly each year and 67% of PMC articles published in 2012 are open access (view [code](/inst/doc/pmc_growth.R) ).  
+`pubmed` is an `R` package to download and parse XML documents from
+[Pubmed Central](http://www.ncbi.nlm.nih.gov/pmc) (PMC).  There are over
+2.7 million full-text articles in PMC and 22% are available for text mining
+in the [Open Access](http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist)
+(OA) subset.  The number of OA publications is increasing rapidly each
+year and 67% of PMC articles published in 2012 are open access (view
+[code](/inst/doc/pmc_growth.R) ).
 
 ![PMC growth](/inst/doc/pmc_growth.png)
 
-Due to the rapid growth of microbial genome sequencing and the lack of model prokaryotic organism databases (containing high-quality annotations linking features to literature), our main objective is to use the OA subset as a genome annotation database and extract features from reference microbial genomes directly from the literature. Initially, we are focusing on locus tags, but many other features such as gene names, accession numbers, sequences and coordinates (start/stop) should be collected before attempting to summarize functional annotations.  The goals are to extract passages containing locus tags from *full text, tables and supplements*, expand tag pairs marking the start and end of a region, and output tab-delimited files in a variety of formats, for example, as GFF3 files that can be viewed in a genome browser.  This guide describes some of the functions included within the package by using *Burkholderia pseudomallei* as an example.
+Due to the rapid growth of microbial genome sequencing and the lack of
+model prokaryotic organism databases (containing high-quality annotations
+linking features to literature), our main objective is to use the OA subset
+as a genome annotation database and extract features from reference microbial
+genomes directly from the literature. Initially, we are focusing on locus tags,
+but many other features such as gene names, accession numbers, sequences and
+coordinates (start/stop) should be collected before attempting to summarize
+functional annotations.  The goals are to extract passages containing locus
+tags from *full text, tables and supplements*, expand tag pairs marking the
+start and end of a region, and output tab-delimited files in a variety of
+formats, for example, as GFF3 files that can be viewed in a genome browser.
+This guide describes some of the functions included within the package by
+using *Burkholderia pseudomallei* as an example.
 
 
 
 ## Download Reference Genomes
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in Entrez Genomes lists the Reference genome (strain K96243). This strain may also be identified using the `referenceGenome` function, which searches Entrez genome using a species name.  The next step is to identify the organism directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria) and then download annotations.  The `read.ncbi.ftp` function reads most types of RefSeq files on the site including GFF3 files below.   
+The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page
+in Entrez Genomes lists the Reference genome (strain K96243). This strain
+may also be identified using the `referenceGenome` function, which searches
+Entrez genome using a species name.  The next step is to identify the organism
+directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria)
+and then download annotations.  The `read.ncbi.ftp` function reads most
+types of RefSeq files on the site including GFF3 files below.
 
 
 	referenceGenome("Burkholderia pseudomallei")
@@ -37,7 +61,12 @@ The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page in 
 	   5728       8     126      12      61 
      
 
-The summaryTag function lists the locus tag prefixes, suffixes and tag ranges from coding regions.  The prefixes are needed to search PMC and also create the string pattern to extract locus tags from the XML  (alternately, the locus tags or gene names could be used as a dictionary to find matches within the document, but in many cases there are new locus tags and especially gene names in the literature that are not found within GFF3 files)
+The summaryTag function lists the locus tag prefixes, suffixes and tag ranges
+from coding regions.  The prefixes are needed to search PMC and also create
+the string pattern to extract locus tags from the XML (alternately, the locus
+tags or gene names could be used as a dictionary to find matches within the
+document, but in many cases there are new locus tags and especially gene
+names in the literature that are not found within GFF3 files)
 
 	summaryTag(bpgff)
 	$prefix
@@ -64,7 +93,17 @@ Finally, this checks if the features within the GFF3 file are sorted and then sa
 
 ## Find publications 
 
-The next step is to find relevant publications containing any *B. pseudomallei* K96243 locus tag.  Searching for a single locus tag in a full-text database like PMC is straightforward, for example, enter "BPSS1492" in the search box and this returns 10 articles (accessed May 20, 2013).  To find all full-text articles with any locus tag, we use the tag prefix and first digit from the GFF3 file to build a wildcard search, in this case "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)" since there are two chromosomes.  We restrict the number of spurious matches by limiting the results to articles with the genus name in the title or abstract. We also find matches to articles in the OA subset since these are available for text-mining as XML.  This query returns 46 [publications](/inst/doc/bp_refs.tab).
+The next step is to find relevant publications containing any *B. pseudomallei*
+K96243 locus tag.  Searching for a single locus tag in a full-text database
+like PMC is straightforward, for example, enter "BPSS1492" in the search box
+and this returns 10 articles (accessed May 20, 2013).  To find all full-text
+articles with any locus tag, we use the tag prefix and first digit from the
+GFF3 file to build a wildcard search, in this case "(BPSL0* OR BPSL1* OR BPSL2*
+OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)" since there are two chromosomes.
+We restrict the number of spurious matches by limiting the results to
+articles with the genus name in the title or abstract. We also find matches
+to articles in the OA subset since these are available for text-mining as XML.
+This query returns 46 [publications](/inst/doc/bp_refs.tab).
 
 
 	tags <- "(BPSL0* OR BPSL1* OR BPSL2* OR BPSL3* OR BPSS0* OR BPSS1* OR BPSS2*)"
@@ -85,7 +124,21 @@ The next step is to find relevant publications containing any *B. pseudomallei* 
 
 ## Download PMC XML
 
-The XML version of Open Access articles are downloaded from the Open Archives Initiative (OAI) service using the `pmcOAI` function.  This function also adds carets (^) within superscript tags and hyperlinked table footnotes for displaying as plain text (since numeric footnotes are often associated with numeric values or character footnotes are added to ends of locus tags, for example, BPSL0075<sup>a</sup> is displayed as BPSL0075^a and not BPSL0075a since both BPSL0075 and BPSL0075a are valid tag names).  The function also saves a local copy for future use  (and will use that copy instead of downloading a second time).  Finally, the function uses the `xmlParse` function from the [XML](http://cran.r-project.org/web/packages/XML/index.html) package to read the file and generate the XML tree within the R session, so objects are stored as an `XMLInternalDocument` class and can be queried using XPath expressions. In this example, the last reference in the list above from [Chieng et al 2012](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162) is loaded into R using the OAI service.
+The XML version of Open Access articles are downloaded from the Open Archives
+Initiative (OAI) service using the `pmcOAI` function.  This function also
+adds carets (^) within superscript tags and hyperlinked table footnotes for
+displaying as plain text (since numeric footnotes are often associated with
+numeric values or character footnotes are added to ends of locus tags, for
+example, BPSL0075<sup>a</sup> is displayed as BPSL0075^a and not BPSL0075a
+since both BPSL0075 and BPSL0075a are valid tag names).  The function
+also saves a local copy for future use (and will use that copy instead
+of downloading a second time).  Finally, the function uses the `xmlParse`
+function from the [XML](http://cran.r-project.org/web/packages/XML/index.html)
+package to read the file and generate the XML tree within the R session, so
+objects are stored as an `XMLInternalDocument` class and can be queried using
+XPath expressions. In this example, the last reference in the list above from
+[Chieng et al 2012](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162)
+is loaded into R using the OAI service.
 
 	id <- "PMC3418162"
 	doc <- pmcOAI(id)
@@ -102,12 +155,17 @@ The XML version of Open Access articles are downloaded from the Open Archives In
                      3                      3                      1                      1                      1                      1 
  
 
-You can search down the XML tree and find the three main nodes of a PMC XML file.  These include the front with abstract, body with main text, and back with references. 
+You can search down the XML tree and find the three main nodes of a PMC
+XML file.  These include the front with abstract, body with main text,
+and back with references.
 
 	xpathSApply(doc, "//article/child::node()", xmlName)
 	[1] "front" "body"  "back"
 
-In some cases, tag names are not specific, so searching up the tree may help find a specific type of tag.  For example, article-titles are included within the references cited or in the title group and both tags are needed to return the main title.
+In some cases, tag names are not specific, so searching up the tree may
+help find a specific type of tag.  For example, article-titles are included
+within the references cited or in the title group and both tags are needed
+to return the main title.
 
 	table( xpathSApply(doc, "//article-title/parent::node()", xmlName) )
 	mixed-citation    title-group 
@@ -117,7 +175,9 @@ In some cases, tag names are not specific, so searching up the tree may help fin
 	[1] "Burkholderia pseudomallei transcriptional adaptation in macrophages"
 
 
-Captions may also be associated with figures, tables and supplements, so listing only table captions requires adding the table-wrap node before the caption.
+Captions may also be associated with figures, tables and supplements,
+so listing only table captions requires adding the table-wrap node before
+the caption.
 
 	table( xpathSApply(doc, "//caption/parent::node()", xmlName) )
 	   fig                  media supplementary-material             table-wrap 
@@ -129,7 +189,11 @@ Captions may also be associated with figures, tables and supplements, so listing
 	[3] "List of oligonucleotides used in real-time qPCR experiments" 
 
 
-The first function below will list all 27 section titles and the second functions lists only the 8 main sections in the document (not subsections). The `pubmed` package uses this XPath query to split the main document into sections using `getNodeSet` and then loops through each section to split the full text into complete sentences.
+The first function below will list all 27 section titles and the second
+functions lists only the 8 main sections in the document (not subsections). The
+`pubmed` package uses this XPath query to split the main document into
+sections using `getNodeSet` and then loops through each section to split
+the full text into complete sentences.
 
 	xpathSApply(doc, "//sec/title", xmlValue)
 	xpathSApply(doc, "//body/sec/title", xmlValue)
@@ -144,7 +208,15 @@ The first function below will list all 27 section titles and the second function
 
 ## Parse XML
 
-The `pubmed` package includes three functions to parse full-text, tables and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).  The `pmcText` function splits the XML document into main sections and also includes title, abstract, section titles, and captions from figure, table and supplements (references are optional).  In addition, the text within each section is split into complete sentences by taking care to avoid splitting after genus abbreviations like *E. coli* or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and many others.  In this example, the `sapply` function is used to count the number of sentences in each section.
+The `pubmed` package includes three functions to parse full-text, tables
+and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).
+The `pmcText` function splits the XML document into main sections and also
+includes title, abstract, section titles, and captions from figure, table and
+supplements (references are optional).  In addition, the text within each
+section is split into complete sentences by taking care to avoid splitting
+after genus abbreviations like *E. coli* or other common abbreviations such
+as Fig., et al., e.g., i.e., sp., ca., vs., and many others.  In this example,
+the `sapply` function is used to count the number of sentences in each section.
 
 	unlist(xpathSApply(doc, "//article", xmlValue))
 	x1 <- pmcText(doc)
@@ -177,7 +249,10 @@ The resulting list of vectors can be easily converted to a Corpus using the text
 	package(tm)
 	Corpus(VectorSource(x1))
 
-The list can also be searched directly using the `grep` function.   Since these types of searches are common, we created a wrapper called `searchP` that returns the results as a single table.  The `findTags`, `findGenes` and other functions described in the next section also use `searchP` to find matches.
+The list can also be searched directly using the `grep` function.  Since these
+types of searches are common, we created a wrapper called `searchP` that
+returns the results as a single table.  The `findTags`, `findGenes` and other
+functions described in the next section also use `searchP` to find matches.
 
 	lapply(x1, function(y) grep( "BPS[SL]", y, value=TRUE) )
 	searchP(x1, "BPS[SL]")
@@ -191,7 +266,13 @@ The list can also be searched directly using the `grep` function.   Since these 
 	9 Discussion                                                                                         In this study, high induction of tssD-5 (BPSS1498), an effector Hcp1 protein of T6SS was observed throughout the infection period.
 
 
-The `pmcTable` function parses the XML tables into a list of data.frames.  This functions uses rowspan and colspan attributes within the th and td tags to correctly format and repeat cell values as needed.  For example, [Table 1](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1) includes a multi-line header spanning four columns which is repeated across each cell and then the two rows are combined into a single header row for display.  The caption and footnotes for each table are also saved as attributes.
+The `pmcTable` function parses the XML tables into a list of data.frames.
+This functions uses rowspan and colspan attributes within the th and td tags
+to correctly format and repeat cell values as needed.  For example, [Table
+1](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T1) includes a
+multi-line header spanning four columns which is repeated across each cell
+and then the two rows are combined into a single header row for display.
+The caption and footnotes for each table are also saved as attributes.
 
 	x2 <- pmcTable(doc)
 	[1] "Parsing Table 1 Twenty-five common up-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth"
@@ -218,7 +299,13 @@ The `pmcTable` function parses the XML tables into a list of data.frames.  This 
 	[1] "Note: * Genes selected for real-time qPCR analysis."
 
 
-Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and since we often need display a single row only, these subheadings are repeated down the rows using `repeatSub`.  In addition, we collapse the row into a single delimited string containing column names and row values using `collapse2`.  The `searchP` function may also be used to search the tables and returns the table name and matching rows in collapsed format. 
+Subheadings are common in many tables like [Table
+2](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3418162/table/T2) and since
+we often need display a single row only, these subheadings are repeated down
+the rows using `repeatSub`.  In addition, we collapse the row into a single
+delimited string containing column names and row values using `collapse2`.
+The `searchP` function may also be used to search the tables and returns
+the table name and matching rows in collapsed format.
 
 	t2 <- repeatSub(x2[[2]])
 	t2
@@ -234,7 +321,23 @@ Subheadings are common in many tables like [Table 2](http://www.ncbi.nlm.nih.gov
 	
 	searchP(x2, "BPS[SL]")  # 32 rows
 
-The `pmcSupp` function parses the list of supplementary files into a data.frame.  The XML file only includes the links to supplements and therefore the `getSupp` functions is needed to load the file into R.   This function reads files in a variety of formats including Excel, Word, HTML, PDF, text and compressed files are automatically unzipped using the unix `unzip` command.   Excel files are read using the `read.xls` function in the [gdata](http://cran.r-project.org/web/packages/gdata/index.html) package.  We added some extra code to the perl function `xls2csv.pl` within `gdata` to add carets before superscripts (again, in many cases numeric footnotes are associated with numeric values or character footnotes are added to ends of locus tags).   Microsoft Word documents are converted to html files using the Universal Office Converter `unoconv` and then tables within the html files are read using `readHTMLtable` in the XML package.  The tables within HTML files are also loaded using `readHTMLtable`.  PDF files are converted to text using the unix script `pdftotext` and the resulting file is read into R using `readLines`.  Most of these files require some manual post-processing, for example, fixing the multi-line header missed by `read.xls` below.
+The `pmcSupp` function parses the list of supplementary files into a
+data.frame.  The XML file only includes the links to supplements and
+therefore the `getSupp` functions is needed to load the file into R.
+This function reads files in a variety of formats including Excel, Word,
+HTML, PDF, text and compressed files are automatically unzipped using the unix
+`unzip` command.  Excel files are read using the `read.xls` function in the
+[gdata](http://cran.r-project.org/web/packages/gdata/index.html) package.
+We added some extra code to the perl function `xls2csv.pl` within `gdata`
+to add carets before superscripts (again, in many cases numeric footnotes
+are associated with numeric values or character footnotes are added to ends
+of locus tags).  Microsoft Word documents are converted to html files using
+the Universal Office Converter `unoconv` and then tables within the html
+files are read using `readHTMLtable` in the XML package.  The tables within
+HTML files are also loaded using `readHTMLtable`.  PDF files are converted to
+text using the unix script `pdftotext` and the resulting file is read into R
+using `readLines`.  Most of these files require some manual post-processing,
+for example, fixing the multi-line header missed by `read.xls` below.
 
 	x3 <- pmcSupp(doc)
 	x3
@@ -256,7 +359,10 @@ The `pmcSupp` function parses the list of supplementary files into a data.frame.
 
 ## Find features
 
-In order to extract locus tags from the `searchP` results, we  use `str_extract_all` in the `stringr` package to extract locus tags using the prefix, number of digits and optional suffixes (returned by `summaryTags` above) as the pattern string.
+In order to extract locus tags from the `searchP` results, we use
+`str_extract_all` in the `stringr` package to extract locus tags using the
+prefix, number of digits and optional suffixes (returned by `summaryTags`
+above) as the pattern string.
 
 	y <- searchP(x1, "BPS[SL][0-9]{4}")
 	
@@ -270,7 +376,10 @@ In order to extract locus tags from the `searchP` results, we  use `str_extract_
 	[[4]]
 	[1] "BPSL2787" "BPSL2810" "BPSS0417" "BPSS0429" "BPSS1825" "BPSS1834"
 
-In addition, many locus tags are arranged as pairs marking the start and end of a region such as a genomic island or operon. We also extract these pairs and expand the range using `seqIds` and the ordered list of locus tags from the GFF3 file.
+In addition, many locus tags are arranged as pairs marking the start and end
+of a region such as a genomic island or operon. We also extract these pairs
+and expand the range using `seqIds` and the ordered list of locus tags from
+the GFF3 file.
 
 	unlist( str_extract_all(y$citation, "BPS[SL][0-9]{4}-BPS[SL][0-9]{4}") )
 	[1] "BPSL2787-BPSL2810" "BPSS0417-BPSS0429" "BPSS1825-BPSS1834" "BPSS1493-BPSS1511"
@@ -279,7 +388,10 @@ In addition, many locus tags are arranged as pairs marking the start and end of 
 	[1] "BPSS0417" "BPSS0418" "BPSS0419" "BPSS0420" "BPSS0421" "BPSS0422" "BPSS0423" "BPSS0424" "BPSS0425" "BPSS0426" "BPSS0427" "BPSS0428" "BPSS0429"
 
 
-The `findTags` function extracts tags and expands ranges using the pmcText or pmcTable output or directly from the XML file.  The resulting data.frame includes the PMC id, section, locus tag, flag indicating if tags was indirectly cited within a range, and the citation (sentence or collapsed row).  
+The `findTags` function extracts tags and expands ranges using the pmcText
+or pmcTable output or directly from the XML file.  The resulting data.frame
+includes the PMC id, section, locus tag, flag indicating if tags was indirectly
+cited within a range, and the citation (sentence or collapsed row).
 
 	x <- findTags(x1, bplocus, prefix = "BPS[SL]" , suffix= "[abc]")
 	[1] "9 matches"
@@ -299,9 +411,13 @@ The `findTags` function extracts tags and expands ranges using the pmcText or pm
 	9  PMC3418162 Results BPSL2788  TRUE These include the main capsular polysaccharide biosynthesis (BPSL2787-BPSL2810) genes, two potential surface polysaccharide biosynthesis gene clusters (BPSS0417-BPSS0429 and BPSS1825-BPSS1834), majority of genes in the lipopolysaccharide (LPS) biosynthesis cluster and genes encoding for flagella assembly and chemotaxis.
 	10 PMC3418162 Results BPSL2789  TRUE These include the main capsular polysaccharide biosynthesis (BPSL2787-BPSL2810) genes, two potential surface polysaccharide biosynthesis gene clusters (BPSS0417-BPSS0429 and BPSS1825-BPSS1834), majority of genes in the lipopolysaccharide (LPS) biosynthesis cluster and genes encoding for flagella assembly and chemotaxis.
 
-
-The `pubmed` package includes a few other functions to find species and genes (using italic tags) and we are working on functions to find accessions, sequences and coordinates within the full-text, tables and supplements.  In most articles, there are many gene names that are not included in the RefSeq GFF3 file and more work is needed to track down the source of these genes (most are from *B. pseduomallei*, but many gene names cited in the methods may be from other species). 
-
+The `pubmed` package includes a few other functions to find species and genes
+(using italic tags) and we are working on functions to find accessions,
+sequences and coordinates within the full-text, tables and supplements.
+In most articles, there are many gene names that are not included in the
+RefSeq GFF3 file and more work is needed to track down the source of these
+genes (most are from *B. pseduomallei*, but many gene names cited in the
+methods may be from other species).
 
 	table2(findSpecies(doc))
 	[1] "Found 96 species citations"
@@ -324,7 +440,12 @@ The `pubmed` package includes a few other functions to find species and genes (u
 
 ## Finding all tags
 
-Finally, we created a loop that uses the list of references from `ncbiPMC` and downloads each XML file and parses the full-text and tables and extracts all matching locus tags.  In this case, the 2990 locus tags are saved to a [file](/inst/doc/bp.tab). Currently, the supplements are not included in the loop and these are downloaded separately since some additional code is still needed to reformat tables before extracting tags.
+Finally, we created a loop that uses the list of references from `ncbiPMC`
+and downloads each XML file and parses the full-text and tables and extracts
+all matching locus tags.  In this case, the 2990 locus tags are saved to a
+[file](/inst/doc/bp.tab). Currently, the supplements are not included in
+the loop and these are downloaded separately since some additional code is
+still needed to reformat tables before extracting tags.
 
 	pmcLoop(bp, tags= bpgff, prefix = "BPS[SL]" , suffix= "[abc]",  file="bp.tab")
 
