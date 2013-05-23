@@ -244,7 +244,7 @@ the `sapply` function is used to count the number of sentences in each section.
 	[8] "The transcriptome profile described here provides the first comprehensive view of how B. pseudomallei survives within host cells and will help identify potential virulence factors that are important for the survival and growth of B. pseudomallei within human cells."
 
 
-The resulting list of vectors can be easily converted to a Corpus using the text-mining package. 
+The resulting list of vectors can be easily converted to a Corpus using the text-mining package.
 
 	package(tm)
 	Corpus(VectorSource(x1))
@@ -392,7 +392,7 @@ the GFF3 file.
 
 The `findTags` function extracts tags and expands ranges using the pmcText
 or pmcTable output or directly from the XML file.  The resulting data.frame
-includes the PMC id, section, locus tag, flag indicating if tags was indirectly
+includes the PMC id, section, locus tag, flag indicating if tags were indirectly
 cited within a range, and the citation (sentence or collapsed row).
 
 	x <- findTags(x1, bplocus, prefix = "BPS[SL]" , suffix= "[abc]")
@@ -444,7 +444,7 @@ methods may be from other species).
 
 Finally, we created a loop that uses the list of references from `ncbiPMC`
 and downloads each XML file and parses the full-text and tables and extracts
-all matching locus tags.  In this case, the 2990 locus tags are saved to a
+all matching locus tags.  In this case, the 2990 locus tag citations are saved to a
 [file](/inst/doc/bp.tab). Currently, the supplements are not included in
 the loop and these are downloaded separately since some additional code is
 still needed to reformat tables before extracting tags.
