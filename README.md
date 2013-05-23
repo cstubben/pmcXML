@@ -268,7 +268,6 @@ functions described in the next section also use `searchP` to find matches.
 	8 Results    Consistently, the large filamentous hemagglutinin precursor, fhaB (BPSS1727) gene, a potential virulence factor of B. pseudomallei[20], was induced between 2 to 6 h post-infection.                                                                                                                                             
 	9 Discussion In this study, high induction of tssD-5 (BPSS1498), an effector Hcp1 protein of T6SS was observed throughout the infection period.	
 
-
 The `pmcTable` function parses the XML tables into a list of data.frames.
 This functions uses rowspan and colspan attributes within the th and td tags
 to correctly format and repeat cell values as needed.  For example, [Table
