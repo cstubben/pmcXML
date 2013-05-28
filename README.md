@@ -35,8 +35,7 @@ studied in the literature and in Entrez Genomes these are often listed as the Re
 For example, the [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page
 in Entrez Genomes lists the Reference genome as *B. pseudomallei* strain K96243. This strain
 may also be identified using the `referenceGenome` function, which searches
-Entrez Genome using a species name.  The next step is to download the annotations from  
-the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria).  The `read.ncbi.ftp` function 
+Entrez Genome using a species name.  The next step is to download the annotations from the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria).  The `read.ncbi.ftp` function 
 requires the name of the ftp organism directory (usually a combination of name and project id) 
 and reads most types of RefSeq files on the site including GFF3 files below.
 
