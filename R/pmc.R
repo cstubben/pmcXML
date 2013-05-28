@@ -27,7 +27,7 @@ pmc <- function(id, local=TRUE, ...){
      
       if(grepl("<error", x[1])){
          ## NOT in open access subset
-          x <- try( readLines(file)  , silent=TRUE)
+          x <- suppressWarnings( try( readLines(file)  , silent=TRUE))
 
          if(class(x)[1] == "try-error"){
             stop("No results found")

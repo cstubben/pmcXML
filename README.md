@@ -11,7 +11,7 @@ year and 67% of PMC articles published in 2012 are open access (view
 ![PMC growth](/inst/doc/pmc_growth.png)
 
 Due to the rapid growth of microbial genome sequencing and the lack of
-model prokaryotic organism databases (containing high-quality annotations
+model organism databases (containing high-quality annotations
 linking features to literature), our main objective is to use the OA subset
 as a genome annotation database and extract features from reference microbial
 genomes directly from the literature. Initially, we are focusing on locus tags,
@@ -22,19 +22,23 @@ tags from *full text, tables and supplements*, expand tag pairs marking the
 start and end of a region, and output tab-delimited files in a variety of
 formats, for example, as GFF3 files that can be viewed in a genome browser.
 This guide describes some of the functions included within the package by
-using *Burkholderia pseudomallei* as an example.
-
+using *Burkholderia pseudomallei* as an example.  
 
 
 ## Download Reference Genomes
 
-The [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page
-in Entrez Genomes lists the Reference genome (strain K96243). This strain
+There are over 30000 locus tag prefixes registered at
+[NCBI](http://www.ncbi.nlm.nih.gov/genomes/lltp.cgi) and almost 150 microbial
+species have 20 or more sequenced strains with a different locus tag prefix.
+In many cases, it is necessary to identify the strain that is most often
+studied in the literature and in Entrez Genomes these are often listed as the Reference genome or community selected.
+For example, the [Burkholderia pseudomallei](http://www.ncbi.nlm.nih.gov/genome/476) page
+in Entrez Genomes lists the Reference genome as *B. pseudomallei* strain K96243. This strain
 may also be identified using the `referenceGenome` function, which searches
-Entrez genome using a species name.  The next step is to identify the organism
-directory in the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria)
-and then download annotations.  The `read.ncbi.ftp` function reads most
-types of RefSeq files on the site including GFF3 files below.
+Entrez Genome using a species name.  The next step is to download the annotations from  
+the Genomes ftp site (ftp.ncbi.nlm.nih.gov/genomes/Bacteria).  The `read.ncbi.ftp` function 
+requires the name of the ftp organism directory (usually a combination of name and project id) 
+and reads most types of RefSeq files on the site including GFF3 files below.
 
 
 	referenceGenome("Burkholderia pseudomallei")
@@ -60,13 +64,13 @@ types of RefSeq files on the site including GFF3 files below.
 	    CDS miscRNA  pseudo    rRNA    tRNA 
 	   5728       8     126      12      61 
      
-
 The summaryTag function lists the locus tag prefixes, suffixes and tag ranges
-from coding regions.  The prefixes are needed to search PMC and also create
-the string pattern to extract locus tags from the XML (alternately, the locus
+from coding regions.  The prefixes are needed to search PMC, create
+the string pattern to extract locus tags from XML, and expand tag pairs marking the
+start and end of a region.  Alternately, the locus
 tags or gene names could be used as a dictionary to find matches within the
 document, but in many cases there are new locus tags and especially gene
-names in the literature that are not found within GFF3 files)
+names in the literature that are not found within GFF3 files.
 
 	summaryTag(bpgff)
 	$prefix
@@ -433,8 +437,8 @@ methods may be from other species).
 	x<- findGenes(doc)
 	[1] "Found 30 genes"
 	table(x$gene)
-	bimA bspR cydB CydB dnaB dnaE dpsA dspA fhaB fhaC graY hrcA katG minD minE oxyR parA parB parC rpoS 
-	   2    1    2    2    1    1    2    1    3    4    1    1    1    1    4    2    1    2    1    3 
+	bimA bspR cydB dnaB dnaE dpsA dspA fhaB fhaC graY hrcA katG minD minE oxyR parA parB parC rpoS 
+	   2    1    4    1    1    2    1    3    4    1    1    1    1    4    2    1    2    1    3 
 
 	unique(x$gene[!x$gene %in% bpgenes])
 	[1] "bspR" "bimA" "fhaC" "fhaB" "dpsA" "graY" "parA" "dspA" 
