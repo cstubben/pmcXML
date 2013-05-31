@@ -13,12 +13,14 @@ pmcText<-function(doc, references = FALSE ){
    if(length(x)==0){
        x <- getNodeSet(doc, "//body") 
    }
- 
+       # abstract ONLY ?? PMC2447356
+   if(length(x) > 0){
    ## LOOP through body sections
    for(i in 1: length(x) ){
       doc2 <- xmlDoc(x[[i]])
       title <-  xvalue(doc2, "//title")   # xpathSApply(doc2, "/sec/title", xmlValue)  # xvalue returns NA instead of list()
       title <- gsub("^[0-9.]* (.*)", "\\1", title )  # remove numbered sections
+      title <- gsub("\n", "", title ) # remove new lines
    
        ## get paragraphs, but not within footnotes, captions or containing table-wrap tags (since cell values will be mashed together - only a few PMC ids)
       y <-  xpathSApply(doc2, "//p[not(ancestor::table-wrap|ancestor::caption|descendant::table-wrap)]", xmlValue)
@@ -33,7 +35,7 @@ pmcText<-function(doc, references = FALSE ){
    z[["Table footnotes"]]    <- splitP( xpathSApply(doc, "//table-wrap-foot/fn", xmlValue))
    z[["Supplement caption"]] <-  splitP( xpathSApply(doc, "//supplementary-material/caption/p[1]", xmlValue))
   if(references)  z[["References"]] <-  xpathSApply(doc, "//ref//article-title" , xmlValue) 
-
+}
 
 # CONVERT to dataframe ?
 ## z <-data.frame( section=rep(names(z), sapply(z, length) ), cite=unlist(z))

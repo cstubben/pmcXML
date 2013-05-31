@@ -33,9 +33,16 @@ pmcLoop<-function( pmcresults, tags, prefix, suffix="" , file="locus.tab", notSt
                   }
                }
                # y <- citeTable(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits)
-               y <-  findTags(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits)
 
-               if(!is.null(y))  writeLocus( y, file )
+               # add caption after...see PMC1525188 for problems
+
+               y <-  findTags(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits, caption =FALSE)
+
+               if(!is.null(y)){
+                  y$citation  <- paste("Caption=", attr(x[[i]], "caption") , ";", y$citation, sep="")
+                  writeLocus( y, file )
+                }
+ 
             }
          }
       }

@@ -63,7 +63,7 @@ and reads most types of RefSeq files on the site including GFF3 files below.
 	    CDS miscRNA  pseudo    rRNA    tRNA 
 	   5728       8     126      12      61 
      
-The summaryTag function lists the locus tag prefixes, suffixes and tag ranges
+The `summaryTag` function lists the locus tag prefixes, suffixes and tag ranges
 from coding regions.  The prefixes are needed to search PMC, create
 the string pattern to extract locus tags from XML, and expand tag pairs marking the
 start and end of a region.  Alternately, the locus
@@ -215,7 +215,7 @@ The `pubmed` package includes three functions to parse full-text, tables
 and supplements from the XML document (`pmcText, pmcTable, pmcSupp`).
 The `pmcText` function splits the XML document into main sections and also
 includes title, abstract, section titles, and captions from figure, table and
-supplements (references are optional).  In addition, the text within each
+supplements (references are optional).  In addition, the text within paragraph tags in each
 section is split into complete sentences by taking care to avoid splitting
 after genus abbreviations like *E. coli* or other common abbreviations such
 as Fig., et al., e.g., i.e., sp., ca., vs., and many others.  In this example,
@@ -247,7 +247,7 @@ the `sapply` function is used to count the number of sentences in each section.
 	[8] "The transcriptome profile described here provides the first comprehensive view of how B. pseudomallei survives within host cells and will help identify potential virulence factors that are important for the survival and growth of B. pseudomallei within human cells."
 
 
-The resulting list of vectors can be easily converted to a Corpus using the text-mining package.
+The resulting list of vectors can be easily converted to a Corpus and further analyzed using the text-mining package.
 
 	package(tm)
 	Corpus(VectorSource(x1))
@@ -328,7 +328,7 @@ the table name and matching rows in collapsed format.
 
 The `pmcSupp` function parses the list of supplementary files into a
 data.frame.  The XML file only includes the links to supplements and
-therefore the `getSupp` functions is needed to load the file into R.
+therefore a file name or row number from the returned list is needed to load the file into R.
 This function reads files in a variety of formats including Excel, Word,
 HTML, PDF, text and compressed files are automatically unzipped using the unix
 `unzip` command.  Excel files are read using the `read.xls` function in the
@@ -344,12 +344,12 @@ text using the unix script `pdftotext` and the resulting file is read into R
 using `readLines`.  Most of these files require some manual post-processing,
 for example, fixing the multi-line header missed by `read.xls` below.
 
-	x3 <- pmcSupp(doc)
-	x3
+	pmcSupp(doc)
 	              label                                                                                                                                  caption                    file  type
 	1 Additional file 1 List of 1259 common down-regulated genes of B. pseudomallei during intracellular growth in host macrophages relative to in vitro growth. 1471-2164-13-328-S1.xls excel
 
-	s1 <- getSupp(doc, "1471-2164-13-328-S1.xls")
+	# s1 <- pmcSupp(doc, "1471-2164-13-328-S1.xls")
+	s1 <- pmcSupp(doc, 1)
 	nrow(s1)
 	[1] 1260
 	head(s1)
