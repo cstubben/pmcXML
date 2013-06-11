@@ -47,8 +47,9 @@ guessTable <-function(x, file, header= 1, ...){
       x <- x[-n1,]
        n <- n[-n1]
    }
-   # CHECK subheaders (other rows with only 1 column) -- see repeatSub
+   if(length(caption)>1)  caption <- paste(caption, collape=" ")
 
+   # CHECK subheaders (other rows with only 1 column) -- see repeatSub
 
    # COLUMN NAMES (ALWAYS in first complete ROW?)  OR specify rows???
    if( is.numeric(header)  ){
@@ -63,11 +64,12 @@ guessTable <-function(x, file, header= 1, ...){
              x <- x[-(1:header),]
           }
       ## CHECK for EMPTY strings -- to avoid  structure(c("", "", "", "", "", "", ... as PRINTED name
-      if(any(xx=="")){
-         xx[xx==""] <-" "
-     }
+     #print(xx)
+     if(any(is.na(xx)))  xx[is.na(xx) ] <-" "
+     if(any(xx==""))    xx[xx==""] <-" "
+
       xx<-gsub(" +", " ", xx)
-      xx<-gsub('"', '', xx)   # with quote=""
+     # xx<-gsub('"', '', xx)   # with quote=""
       colnames(x) <- xx
       
    }
@@ -75,9 +77,9 @@ guessTable <-function(x, file, header= 1, ...){
     #fix column types (by running read.delim)
    x <- fixTypes(x, ...)
    attr(x, "file") <- file
-   ## split label and caption
-    attr(x, "label") <- gsub("([^.]*).*", "\\1", caption)
-   attr(x, "caption") <-gsub("[^.]*. *(.*)", "\\1", caption)
+   ## split label and caption  -doesn't work in many cases
+    attr(x, "label") <- gsub("([^.:]*).*", "\\1", caption)
+   attr(x, "caption") <-gsub("[^.:]*. *(.*)", "\\1", caption)
    attr(x, "footnotes") <- footnotes
    
    x

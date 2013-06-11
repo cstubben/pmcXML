@@ -4,6 +4,7 @@
 
 pmcSupp <-function(doc, file, ... ){
    if(!is.xml(doc )) stop("An XML document is required")
+  ## using file name
   if(!missing(file) && is.character(file) )
   {
     getSupp(doc, file, ...)
@@ -31,10 +32,11 @@ pmcSupp <-function(doc, file, ... ){
          free(z2)
       }
       y <- do.call("rbind", y)
-   
+       # print list of supplements
       if(missing(file) ){
          y
       }else{
+        ## download using file number, 1,2,3, etc
         print(paste("Downloading", y$label[file] ))      
          getSupp(doc, y$file[file], ...)
       }

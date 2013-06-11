@@ -13,7 +13,7 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
        type <- tolower( gsub(".*\\.([^.]*)", "\\1", file) )
    }
    url <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles", pmcid, "bin", file, sep="/")
- # print(paste("Downloading", url))
+
    ZIP <- FALSE
    if(type=="zip"){
        print("Downloading zip file")
@@ -27,7 +27,7 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
 
        ## Use local file for read.* commands
          urlzip <- url 
-         url <-file2
+         url <- file2
         ##  set ZIP flag and skip download.files in pdf and doc (also rename file for system commands)
         ZIP <- TRUE
        
@@ -103,11 +103,25 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
        for(i in 1:ncol(x)) x[,i]<-gsub("^\u00A0$", NA, x[,i])  # nbsp
 
       if(rm & ZIP) file.remove(file2)
-   ## EXCEL files
+   ## EXCEL files  
+   ## June 11, 2013  fix to read multiple sheets
    }else{
-       ## excel files - xlsx or xls
-       x <- read.xls2( url, ...)
-       if(rm & ZIP) file.remove(file2)
+       if(ZIP){
+          file < -file2
+       }else{
+           download.file(url, file, quiet=TRUE)
+       }
+       n <- sheetCount(file)
+       sheets <- sheetNames(file)
+       x <-vector("list", n)
+       if(length(sheets) == n) names(x) <- sheets
+       for( i in 1:n){
+          ## excel files - xlsx or xls
+          print(paste("Reading Sheet", i, sheets[i]))
+          x[[i]] <- read.xls2( file , sheet= i , ...)    
+       }
+       if(rm) file.remove(file)
+
    }
    attr(x, "id") <-  pmcid
    attr(x, "file") <- url 

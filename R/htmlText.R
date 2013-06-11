@@ -8,10 +8,18 @@ htmlText <- function(doc, h=2,  references = FALSE ){
 
    ## split into main sections  
 
-  ## INTRODUCTION is often missing... this might work, but not always!
+  ## INTRODUCTION is often missing... this might work
 ##  xpathSApply(doc, "//div[@class='sec headless whole_rhythm']", xmlValue)
 
-   x <- getNodeSet(doc, paste( "//div[h", h, "]", sep="" ))
+   n1 <- length( xpathSApply(doc, "//div[@class='sec headless whole_rhythm']", xmlName) )
+   if(n1>1){print("More than 1 div with class = sec headless whole_rhythm")} 
+   if(n1 == 1){
+       x <- getNodeSet(doc, paste( "//div[h", h, "]|//div[@class='sec headless whole_rhythm']", sep="" ))
+   }else{
+       x <- getNodeSet(doc, paste( "//div[h", h, "]", sep="" ))
+}
+
+
 
    ## LOOP through sections
    for(i in 1: length(x) ){
@@ -19,8 +27,11 @@ htmlText <- function(doc, h=2,  references = FALSE ){
       doc2 <- xmlDoc(x[[i]])
 
       title <- xvalue(doc2, paste( "//h", h, sep="")  )
+     if(is.na(title)) title <- "Introduction"
+
       title <- gsub("^[0-9.]* (.*)", "\\1", title )  # remove numbered sections
-   
+      title <- gsub("\n", "", title ) # remove new lines
+
       ## get paragraphs 
       y <-  xpathSApply(doc2, "//p", xmlValue)
     
@@ -66,6 +77,7 @@ htmlText <- function(doc, h=2,  references = FALSE ){
     h3 <- xpathSApply(doc, paste("//h", h+1, sep=""), xmlValue) 
    if(length(h3)>0) {
       h3 <- gsub("Î\u0094", "Δ", h3)
+      h3 <- gsub("\n", "", h3 ) 
      z[["Subsections"]] <-  h3
 }
    # get figure and table captions (and truncated text) ?
