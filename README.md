@@ -15,7 +15,8 @@ year and 67% of PMC articles published in 2012 are open access (view
 
 Due to the rapid growth of microbial genome sequencing and the lack of
 model organism databases (containing high-quality annotations
-linking features to literature), our main objective is to use the OA subset
+linking features to literature), our main objective is to use 
+the [Open Access](http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist) (OA) subset
 as a genome annotation database and extract features from reference microbial
 genomes directly from the literature. Initially, we are focusing on locus tags,
 but many other features such as gene names, accession numbers, sequences and
