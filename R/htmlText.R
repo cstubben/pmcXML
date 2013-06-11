@@ -12,14 +12,13 @@ htmlText <- function(doc, h=2,  references = FALSE ){
 ##  xpathSApply(doc, "//div[@class='sec headless whole_rhythm']", xmlValue)
 
    n1 <- length( xpathSApply(doc, "//div[@class='sec headless whole_rhythm']", xmlName) )
-   if(n1>1){print("More than 1 div with class = sec headless whole_rhythm")} 
+   ## print warning if more than 1 headless div class - skipped for now s
+   if(n1>1){print("More than 1 div with class = sec headless whole_rhythm")}  
    if(n1 == 1){
        x <- getNodeSet(doc, paste( "//div[h", h, "]|//div[@class='sec headless whole_rhythm']", sep="" ))
    }else{
        x <- getNodeSet(doc, paste( "//div[h", h, "]", sep="" ))
 }
-
-
 
    ## LOOP through sections
    for(i in 1: length(x) ){

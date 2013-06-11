@@ -107,7 +107,7 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
    ## June 11, 2013  fix to read multiple sheets
    }else{
        if(ZIP){
-          file < -file2
+          file <- file2
        }else{
            download.file(url, file, quiet=TRUE)
        }
@@ -117,9 +117,19 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
        if(length(sheets) == n) names(x) <- sheets
        for( i in 1:n){
           ## excel files - xlsx or xls
-          print(paste("Reading Sheet", i, sheets[i]))
-          x[[i]] <- read.xls2( file , sheet= i , ...)    
+          print(paste("Reading Sheet", i))
+          ## check for empty sheets
+          x[[i]] <- try( read.xls2( file , sheet= i , ...)   , silent=TRUE)
+           if(class(x[[i]])[1] == "try-error"){
+               x[[i]] <- NA
+               print("Empty Sheet")
+           }
+
        }
+       # remove empty sheets
+       x[is.na(x)] <- NULL
+       # 1 sheet then return data.frame
+       if(length(x)==1) x <- x[[1]]
        if(rm) file.remove(file)
 
    }
