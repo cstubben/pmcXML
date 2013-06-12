@@ -1,7 +1,7 @@
 
 # table names in HTML
 
-htmlTables<-function(doc){
+htmlTable <- function(doc){
 
 y<-xpathSApply(doc, "//div[starts-with(@class, 'table')]", xmlValue)
  if (length(y) == 0) {
@@ -11,6 +11,7 @@ y<-xpathSApply(doc, "//div[starts-with(@class, 'table')]", xmlValue)
 
        y<-  gsub("\n", "", y)
         y <- gsub("  *", " ", y)
+        y <- gsub("Table ([0-9]*)\\.?", "Table \\1. ", y, ignore.case=TRUE)
         y
    }
 }

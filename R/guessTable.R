@@ -78,8 +78,8 @@ guessTable <-function(x, file, header= 1, ...){
    x <- fixTypes(x, ...)
    attr(x, "file") <- file
    ## split label and caption  -doesn't work in many cases
-    attr(x, "label") <- gsub("([^.:]*).*", "\\1", caption)
-   attr(x, "caption") <-gsub("[^.:]*. *(.*)", "\\1", caption)
+    attr(x, "label") <- gsub("([^.:-]*).*", "\\1", caption)
+   attr(x, "caption") <-gsub("[^.:-]*. *(.*)", "\\1", caption)
    attr(x, "footnotes") <- footnotes
    
    x

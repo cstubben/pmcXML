@@ -26,8 +26,10 @@ htmlText <- function(doc, h=2,  references = FALSE ){
       doc2 <- xmlDoc(x[[i]])
 
       title <- xvalue(doc2, paste( "//h", h, sep="")  )
-     if(is.na(title)) title <- "Introduction"
-
+     if(is.na(title)){
+          print("Missing header title - using Introduction")
+          title <- "Introduction"
+     }
       title <- gsub("^[0-9.]* (.*)", "\\1", title )  # remove numbered sections
       title <- gsub("\n", "", title ) # remove new lines
 
