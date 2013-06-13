@@ -1,116 +1,49 @@
 \name{findGenes}
 \alias{findGenes}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ Find gene names }
+\description{  Find gene names within XML documents downloaded from PMC Open Access}
 \usage{
 findGenes(doc, tag, length = 4, proteins = FALSE)
 }
 
 \arguments{
-  \item{doc}{
-
+  \item{doc}{ XML document  }
+  \item{tag}{ XML tag, default //italic }
+  \item{length}{  length of gene name, default 4}
+  \item{proteins}{ also search for protein names with initial and final capital }
 }
-  \item{tag}{
-
-}
-  \item{length}{
-
-}
-  \item{proteins}{
-
-}
-}
-\details{
-
+\details{ There are a few ways to find gene names, and probably the best approach will use a combination of sources, including 1) Match to known list of genes. Some genes are common names like 'thiS' and many gene names are not listed in Refseq and other databases.  2) Find gene names in italic tags with length = 4.  Misses genes with 3 or 5 characters and may include some 4 letter words that are not genes.  3) Find protein names with initial and final capital, e.g. SpoT.  Often genes are cited using both protein and gene names.
 }
 \value{
-
-
-
-
+A data.frame with gene names, section title and sentence containing the citation
 
 }
-\references{
+% \references{ }
+\author{ Chris Stubben  }
 
-}
-\author{
+\note{ In progress }
 
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+%\seealso{ }
 \examples{
 
+data(doc)
+#lots of terms in italics.  findGenes will miss operons and other genes like ymt
+table2(xpathSApply(doc, "//body//italic", xmlValue), n=20)
 
+y <-findGenes(doc)
+table(y$gene)
+y
 
+y2<-findGenes(doc, proteins=TRUE)
+table(y2$gene)
 
+y3<-findGenes(doc, length=3)
+table(y3$gene)
+head(y3) # cis is not a gene
 
-function (doc, tag, length = 4, proteins = FALSE) 
-{
-    if (missing(tag)) {
-        tag <- "//em"
-        if (is.xml(doc)) 
-            tag <- "//italic"
-    }
-    n <- xpathSApply(doc, tag, xmlValue)
-    if (length(n) == 0) {
-        print(paste("No", tag, "tags found"))
-        x <- NULL
-    }
-    else {
-        genes <- unique(n[nchar(n) \%in\% length])
-        if (proteins) {
-            proteins <- searchXMLall(doc, "[A-Z][a-z]{2}[A-Z][^a-zA-Z]", 
-                ignore = FALSE)
-            proteins <- unique(unlist(str_extract_all(proteins, 
-                "[A-Z][a-z]{2}[A-Z]")))
-            print(paste("Found", length(genes), "genes and", 
-                length(proteins), "proteins"))
-            genes <- sort(unique(tolower(c(genes, proteins))))
-        }
-        else {
-            print(paste("Found", length(genes), "genes"))
-        }
-        genes <- paste(substr(genes, 1, 3), toupper(substr(genes, 
-            4, 4)), sep = "")
-        if (length(genes) == 0) {
-            x <- NULL
-        }
-        else {
-            z <- vector("list", length(genes))
-            for (i in 1:length(genes)) {
-                x <- searchXML(doc, paste(genes[i], "[^a-z-]", 
-                  sep = ""))
-                if (!is.null(x)) 
-                  z[[i]] <- data.frame(gene = genes[i], x, stringsAsFactors = FALSE)
-            }
-            x <- data.frame(do.call("rbind", z), stringsAsFactors = FALSE)
-            if (nrow(x) == 0) {
-                print("No gene citations found")
-                x <- NULL
-            }
-            else {
-                print(paste(nrow(x), "gene citations"))
-                names(x) <- c("gene", "source", "citation")
-                x <- data.frame(pmid = pmid(doc), x, stringsAsFactors = FALSE)
-            }
-        }
-    }
-    x
-  }
 }
 
 
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

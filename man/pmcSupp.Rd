@@ -1,97 +1,52 @@
 \name{pmcSupp}
 \alias{pmcSupp}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ List and read supplementary files }
+\description{ List supplementary file names within XML documents and optionally read supplementary tables from PMC  }
 \usage{
-pmcSupp(doc, capN)
+pmcSupp(doc, file)
 }
 
 \arguments{
-  \item{doc}{
-
+  \item{doc}{ XML document }
+  \item{ file }{  Supplementary file name or row number }
 }
-  \item{capN}{
-
+\details{ List supplementary files and optionally read tables using \code{\link{getSupp}}  }
+\value{ If file is missing, a data.frame listing supplementary file names and captions.
 }
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
+% \references{ }
+\author{ Chris Stubben }
+\note{ If file is specified, then \code{\link{getSupp}} is used to download the file (currently supports Excel, Word, HTML, PDF, text, and zip files depending of operating system and installed dependencies )
 
 }
 
+\seealso{\code{\link{getSupp}} for complete details }
 
-
-\seealso{
-
-}
 \examples{
 
+data(doc)
+pmcSupp(doc)
 
+\dontrun{
+# DOWNLOAD tables
+# x2 <- pmcSupp(doc, "1471-2180-7-96-S2.xls"  # OR
+x2 <- pmcSupp(doc, 2)
+## most supplementary tables require some updates 
+names(x2) <- gsub("\xb0", "", names(x2) )  # degree symbol
+dim(x2)
+head(x2)
 
-
-
-function (doc, capN) 
-{
-    if (class(doc)[1] == "XMLInternalDocument") {
-        z <- getNodeSet(doc, "//supplementary-material")
-        if (length(z) == 0) {
-            stop("No supplementary materials found", call. = FALSE)
-        }
-        y <- vector("list", length(z))
-        for (i in 1:length(z)) {
-            z2 <- xmlDoc(z[[i]])
-            label <- xvalue(z2, "//label")
-            if (is.na(label)) 
-                label <- xvalue(z2, "//title")
-            caption <- xpathSApply(z2, "//caption/p", xmlValue)
-            n <- grep("^Click here", caption, invert = TRUE)
-            caption <- paste(caption[n], collapse = " ")
-            file <- xattr(z2, "//supplementary-material/media", 
-                "href")
-            type <- xattr(z2, "//supplementary-material/media", 
-                "mime-subtype")
-            type <- gsub("vnd.ms-", "", type)
-            y[[i]] <- data.frame(label, caption, file, type, 
-                stringsAsFactors = FALSE)
-            free(z2)
-        }
-        y <- do.call("rbind", y)
-        if (!missing(capN)) {
-            y[, 2] <- substr(y[, 2], 1, capN)
-        }
-        y
-    }
-    else {
-        print("Warning: this function is for XML docs")
-        y <- xpathSApply(doc, "//div[@class=\"sec suppmat\"]", 
-            xmlValue)
-        y <- gsub("\n", "", y)
-        y <- gsub("  *", " ", y)
-        y
-    }
-  }
+# pdfs return a vector, use pdf2df to convert (and keep subheader)
+x3 <- pmcSupp(doc, 3)
+x3
+x3 <- gsub("For ", "", x3)
+x <- pdf2df(x3, "w w")
+names(x) <- c("name", "primer")
+x <-repeatSub(x)
+x
+}
 }
 
 
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

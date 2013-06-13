@@ -2,8 +2,7 @@
 #PARSE abstract
 
 abstract<-function(doc, exdent = 0 , ...){
-   if(is.xml(doc)
- ){
+   if(is.xml(doc)){
       # check for abstract subtitles?
       x1 <- xpathSApply(doc, "//abstract/sec/title", xmlValue)
       if(length(x1)>0){

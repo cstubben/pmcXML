@@ -1,6 +1,6 @@
-guessTable <-function(x, file, header= 1, ...){
+guessTable <-function(x, header= 1, ...){
    # other options like na.strings passed to fixTypes
-   if(missing(file)) file<-""
+ 
    # EMPTY columns -see Sharma 2010
    n <- apply(x, 2, function(y) sum(! (is.na(y) | y == "" | y == " ") ))
    if(any(n == 0)){
@@ -76,9 +76,9 @@ guessTable <-function(x, file, header= 1, ...){
 
     #fix column types (by running read.delim)
    x <- fixTypes(x, ...)
-   attr(x, "file") <- file
+
    ## split label and caption  -doesn't work in many cases
-    attr(x, "label") <- gsub("([^.:-]*).*", "\\1", caption)
+   attr(x, "label") <- gsub("([^.:-]*).*", "\\1", caption)
    attr(x, "caption") <-gsub("[^.:-]*. *(.*)", "\\1", caption)
    attr(x, "footnotes") <- footnotes
    

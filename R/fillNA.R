@@ -10,7 +10,3 @@ fillNA<-function(x){
   x
 }
 
-
-
-## x<-c("A", "B", NA, "C", NA, NA, NA, "D", NA)
-## fillNA(x)

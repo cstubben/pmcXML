@@ -7,7 +7,7 @@ htmlSupp <- function(doc){
    } else{
      # check file type - may be link to file
        filex <-  rev(strsplit(x, "/")[[1]])[1]
-
+# supplements listed on new page
       if(grepl("html$", filex) ){
           url <- paste( "http://www.ncbi.nlm.nih.gov", x, sep="")
          print(paste("Checking links at", url))

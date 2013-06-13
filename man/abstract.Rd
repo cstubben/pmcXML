@@ -1,8 +1,8 @@
 \name{abstract}
 \alias{abstract}
 
-\title{  Parse abstract from pmc XML  }
-\description{
+\title{  Parse abstract }
+\description{  Parses abstract from XML documents downloaded from PMC Open Access
 
 }
 \usage{
@@ -10,43 +10,24 @@ abstract(doc, exdent = 0, ...)
 }
 
 \arguments{
-  \item{doc}{
-
+  \item{doc}{  XML document from PMC }
+  \item{exdent}{  indentation of subsequent lines, default 0 } 
+  \item{\dots}{  other options passed to \code{\link{strwrap2}} }
 }
-  \item{exdent}{
-
-}
-  \item{\dots}{
-
-}
-}
-\details{
-
-}
+%\details{ }
 \value{
-
-
-
-
-
+ None.  strwrap2 uses \code{\link{cat}} to output abstract.
 }
-\references{
+% \references{ }
+\author{ Chris Stubben }
+% \note{ }
 
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
+\seealso{ \code{\link{pmcText}} to parse all sections
 
 }
 \examples{
-
+data(doc)
+abstract(doc)
 }
 
-\keyword{ ~kwd1 }
+\keyword{ methods }

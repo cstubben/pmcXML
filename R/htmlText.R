@@ -27,7 +27,7 @@ htmlText <- function(doc, h=2,  references = FALSE ){
 
       title <- xvalue(doc2, paste( "//h", h, sep="")  )
      if(is.na(title)){
-          print("Missing header title - using Introduction")
+          print("Missing section title - using Introduction")
           title <- "Introduction"
      }
       title <- gsub("^[0-9.]* (.*)", "\\1", title )  # remove numbered sections

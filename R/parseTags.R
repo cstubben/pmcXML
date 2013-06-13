@@ -10,11 +10,13 @@
 ##  str_extract_all("HP0001,HP0002 but not JPH0003", perl( "(?<!J)HP[0-9]{4}" ) )
 
 
-parseTags<-function(y, tags, prefix, suffix="", notStartingWith, expand=TRUE, digits = 4 ){
+parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digits = 4 ){
 
  ## check suffix
- if(nchar(suffix)>1){
+ if(!missing(suffix) ){
+   if(nchar(suffix)>1){
        if(!grepl("^(\\[|\\()", suffix)) stop('suffix should be single letter "a" or character class "[ac]"  or grouping brackets "(a|c|\\.1)"')
+   }
  } 
 
   tag <- paste(prefix, "[0-9]+", sep="")  # 1 or more
@@ -30,7 +32,7 @@ parseTags<-function(y, tags, prefix, suffix="", notStartingWith, expand=TRUE, di
    y$citation <- gsub("\t *", " ", y$citation)
     
    # add suffix 
-   if( nchar(suffix)>0 ) tag<- paste(tag, suffix, "?", sep="")
+   if( !missing(suffix) ) tag<- paste(tag, suffix, "?", sep="")
              
    ## ALL IDs.  str_extract_all in stringr package
    ## IGNORE case - default for pmcSearch

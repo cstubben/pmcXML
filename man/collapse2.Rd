@@ -1,69 +1,34 @@
 \name{collapse2}
 \alias{collapse2}
 
-\title{ test
-
-}
-\description{
-
+\title{ Collapse a data.frame }
+\description{  Collapse a data.frame into a delimited list with column names and cell values
 }
 \usage{
 collapse2(x, na.string)
 }
 
 \arguments{
-  \item{x}{
-
+  \item{x}{ a data.frame }
+  \item{na.string}{  additional cell values to skip, default is NA and "" }
 }
-  \item{na.string}{
+\details{  Used by \code{\link{searchP}}  }
+\value{  A vector with collapsed table rows  }
+% \references{ }
+\author{ Chris Stubben }
+% \note{ }
 
-}
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+% \seealso{ }
 \examples{
 
+data(doc)
+t1 <- pmcTable(doc, 1)
+t1 <- repeatSub(t1)
+head(t1)
+collapse2(head(t1) )
+# or to skip references with "-"
+collapse2(head(t1), na.string="-")
 
 
-
-
-function (x, na.string) 
-{
-    y <- names(x)
-    cx <- vector("character", nrow(x))
-    for (i in 1:nrow(x)) {
-        n2 <- is.na(x[i, ]) | x[i, ] == ""
-        if (!missing(na.string)) 
-            n2 <- n2 | x[i, ] == na.string
-        cx[i] <- paste(paste(y[!n2], x[i, !n2], sep = "="), collapse = ";")
-    }
-    cx
-  }
-}
-
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

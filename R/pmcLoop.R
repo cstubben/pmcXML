@@ -20,7 +20,7 @@ bplocus <- values(bpgff)$locus
          writeLocus( y, file )
       }
       # TABLES
-      x <- pmcTable(doc, verbose=FALSE)
+      x <- pmcTable(doc, verbose=FALSE, simplify=FALSE)
       if( is.list(x) ){
          for (i in 1:length(x)){
              xtag <- paste(prefix, "[0-9]+", sep="")

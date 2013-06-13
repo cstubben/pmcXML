@@ -1,11 +1,12 @@
 ## find species in pubmed articles using italics tags
 
 
-findSpecies <-function(doc , htmlSection="h2" ){
+findSpecies <-function(doc ){
 
   xml<-FALSE
    if(class(doc)[1] == "XMLInternalDocument") xml<-TRUE  
    if(xml){
+       # not references
        x <-xpathSApply(doc, "//article/*[self::front or self::body]//italic", xmlValue)
    }else{
       # use //p to skip references within <span> tags

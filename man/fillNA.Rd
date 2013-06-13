@@ -1,62 +1,29 @@
 \name{fillNA}
 \alias{fillNA}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ Fill missing values  }
+\description{  Fill mising values with last valid string }
 \usage{
 fillNA(x)
 }
 
 \arguments{
-  \item{x}{
+  \item{x}{  a vector}
+}
+\details{ Many tables include columns with values that should be repeated down the same columns (see \code{\link{repeatSub} to repeat subheaders down a new column).  This replaces NA, empty spaces, and non-breaking spaces with the last valid string.
 
 }
-}
-\details{
+\value{ a vector }
+\references{ }
+\author{ Chris Stubben  }
+%\note{ }
 
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+\seealso{ \code{\link{repeatSub} }
 \examples{
 
+x<-c("A", "B", NA, "C", NA, NA, "", "D", NA)
+fillNA(x)
 
 
-
-
-function (x) 
-{
-    for (i in seq_along(x)[-1]) {
-        if (is.na(x[i]) | x[i] == "" | x[i] == "<U+00A0>") 
-            x[i] <- x[i - 1]
-    }
-    x
-  }
-}
-
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

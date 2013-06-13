@@ -1,124 +1,46 @@
 \name{getTable}
 \alias{getTable}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ Get linked HTML tables }
+\description{  Get linked HTML tables for PMC articles not in Open Access  }
 \usage{
-getTable(doc, n, ...)
+getTable(doc, whichTable, ...)
 }
 
 \arguments{
-  \item{doc}{
-
+  \item{doc}{  A HTML file from PMC  }
+  \item{whichTable}{ Table number to download, default is all tables }
+  \item{\dots}{ Other options passed to \code{\link{fixTypes}} }
 }
-  \item{n}{
-
-}
-  \item{\dots}{
-
-}
-}
-\details{
+\details{  PMC articles outside Open Access only include links to tables.  This reads the table links using \code{htmlTable} and downloads tables
 
 }
 \value{
-
-
-
+A list of data.frame or data.frame if 1 table returned
 
 
 }
-\references{
+% \references{ }
+\author{ Chris Stubben }
+\note{ Should be combined with \code{\link{htmlTable}}  }
 
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+\seealso{\code{\link{htmlTable}}  }
 \examples{
 
 
+# Yersinia pestis Virulence factors
+\dontrun{
+ doc2<- pmc( "PMC2687345")
+ t1 <- getTable(doc2, 1)
+ t1 <- repeatSub(t1)  
+ # split into 2 columns
+ names(t1)[1:2] <- c("Function", "Protein name")
+ head(t1)
+ table2(t1$Function)
+}
 
-
-
-function (doc, n, ...) 
-{
-    url <- "http://www.ncbi.nlm.nih.gov"
-    z <- htmlTableLinks(doc)
-    if (z[1] == "No table links found") 
-        stop(z)
-    if (missing(n)) {
-        n <- 1:length(z)
-    }
-    else {
-        if (any(!n \%in\% 1:length(z))) {
-            stop("Only ", length(z), " table links available")
-        }
-    }
-    y <- vector("list", length(n))
-    for (i in 1:length(n)) {
-        url1 <- paste(url, z[n[i]], sep = "")
-        t1 <- try(htmlParse2(url1))
-        if (class(t1)[1] == "try-error") {
-            stop("Cannot download ", url1)
-        }
-        x <- try(readHTMLTable(t1, stringsAsFactors = FALSE, 
-            which = 1, ...), silent = TRUE)
-        if (class(x)[1] == "try-error") {
-            print("Warning: cannot parse table header")
-            x <- readHTMLTable(t1, stringsAsFactors = FALSE, 
-                header = FALSE, which = 1, ...)
-        }
-        x <- sr(x, "<U+00E2><U+0088><U+0092>|<U+00E2><U+0080><U+0093>|<U+00E2><U+0080><U+0094>|<U+00E2><U+0086><U+0093>", 
-            "-")
-        x <- sr(x, "<U+00C3><U+0097>", "x")
-        x <- sr(x, "<U+00E2><U+0089><U+0088>", "~")
-        x <- sr(x, "<U+00E2><U+0080><U+00B2>|<U+00E2><U+0080><U+0099>", 
-            "'")
-        n <- apply(x, 2, function(y) sum(!(is.na(y) | y == "" | 
-            y == " " | y == "<U+00A0>")))
-        if (any(n == 0)) {
-            x <- x[, n != 0]
-        }
-        x <- fixTypes(x)
-        c1 <- xpathSApply(t1, "//h1[@class='content-title']", 
-            xmlValue)
-        c1 <- gsub("\\.$", "", c1)
-        c2 <- xpathSApply(t1, "//div[@class='caption']", xmlValue)
-        attr(x, "id") <- attr(doc, "id")
-        attr(x, "pmid") <- attr(doc, "pmid")
-        attr(x, "file") <- url1
-        attr(x, "label") <- c1
-        attr(x, "caption") <- c2
-        fn <- xpathSApply(t1, "//div[contains(@id, 'fn')]", xmlValue)
-        if (length(fn) == 0) 
-            fn <- xpathSApply(t1, "//div[contains(@id, 'TF')]", 
-                xmlValue)
-        if (length(fn) > 0) {
-            fn <- gsub("<U+00E2><U+0080><U+0099>", "'", fn)
-            fn <- paste(substr(fn, 1, 2), substring(fn, 3))
-            attr(x, "footnotes") <- fn
-        }
-        y[[i]] <- x
-    }
-    if (length(y) == 1) 
-        y <- y[[1]]
-    y
-  }
 }
 
 
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

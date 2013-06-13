@@ -89,7 +89,7 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
    ## TEXT tables 
    } else if(type=="txt"){
       x <- read.table(url, stringsAsFactors=FALSE, ...)
-      x <- guessTable(x, file)
+      x <- guessTable(x)
       if(rm & ZIP) file.remove(file2)
    ## HTML tables   
    }else if( type == "html"){

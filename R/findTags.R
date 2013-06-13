@@ -8,7 +8,7 @@
 
 # doc should be XML OR list returned by pmcText or pmcTable
 
-findTags <-function(doc, tags, prefix, suffix="", notStartingWith, expand=TRUE, digits=4, ...){
+findTags <-function(doc, tags, prefix, suffix, notStartingWith, expand=TRUE, digits=4, ...){
 
    id <- attr(doc, "id")
    if(is.null(id)) stop("Missing ID attribute")

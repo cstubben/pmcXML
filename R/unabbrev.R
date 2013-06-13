@@ -24,11 +24,11 @@ unabbrev <-function(species){
                print("WARNING: matches two or more genera - using first genus in list") 
             }
             newsp <- paste(x3[n], substring(x1[i],4))
-            print(paste("Changing", x1[i], "to", newsp))
+            print(paste("Changing", x1[i], "to possible", newsp))
             species <- gsub(x1[i], newsp, species )
          }
       }else{
-         print(paste("Changing", x1[i], "to cited", x2[n]))
+         print(paste("Matching", x1[i], "to", x2[n]))
          species <- gsub(x1[i], x2[n], species)
       }
    }

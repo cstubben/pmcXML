@@ -3,7 +3,7 @@
 # Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a citation 
 
 
-pmcTable  <- function(doc, whichTable, verbose=TRUE, ...)
+pmcTable  <- function(doc, whichTable, verbose=TRUE, simplify=TRUE,...)
 {
    tables  <- getNodeSet(doc, "//table-wrap")
    if(length(tables)==0){ 
@@ -219,7 +219,7 @@ pmcTable  <- function(doc, whichTable, verbose=TRUE, ...)
          y[[ k ]] <- x
          names(y)[k ] <- label
       }
-      ##  if(length(y)==1) y<-y[[1]]
+      if(simplify & length(y)==1) y<-y[[1]]
 
        attr(y, "id") <- attr(doc, "id")
       y
