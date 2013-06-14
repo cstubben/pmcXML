@@ -1,7 +1,7 @@
 \name{pmcSupp}
 \alias{pmcSupp}
 
-\title{ List and read supplementary files }
+\title{ List and read PMC supplementary files }
 \description{ List supplementary file names within XML documents and optionally read supplementary tables from PMC  }
 \usage{
 pmcSupp(doc, file)
@@ -36,13 +36,12 @@ names(x2) <- gsub("\xb0", "", names(x2) )  # degree symbol
 dim(x2)
 head(x2)
 
-# pdfs return a vector, use pdf2df to convert (and keep subheader)
+# pdfs return a vector, use pdf2df to convert (and repeat subheader)
 x3 <- pmcSupp(doc, 3)
 x3
-x3 <- gsub("For ", "", x3)
-x <- pdf2df(x3, "w w")
-names(x) <- c("name", "primer")
-x <-repeatSub(x)
+x3 <- gsub("For ", "", x3) # to keep subheader in 1st column only
+x <- pdf2df(x3, "w w", labels=c(1,3) )
+x <-repeatSub(x, "For")
 x
 }
 }

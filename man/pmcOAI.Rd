@@ -1,10 +1,8 @@
 \name{pmcOAI}
 \alias{pmcOAI}
 
-\title{ test
-
-}
-\description{
+\title{ Download Open Access articles from PMC  }
+\description{  Download and save XML documents from the PMC OAI service
 
 }
 \usage{
@@ -12,98 +10,25 @@ pmcOAI(id, local = TRUE, dir = "~/downloads/pmc", ...)
 }
 
 \arguments{
-  \item{id}{
-
-}
-  \item{local}{
-
-}
-  \item{dir}{
-
-}
-  \item{\dots}{
-
+  \item{id}{ PMC id }
+  \item{local}{ Use local copy if available }
+  \item{dir}{  Name of local directory to save file }
+  \item{\dots}{ Other options passed to readLines }
 }
 }
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
+\details{ XML documents in the Open Access (OA) subset are downloaded from the OAI service.  The namespace is removed for easier XPath queries and carets (^) are added to superscript tags and hyperlinked footnotes in tables for displaying text.  The document is parsed using \code{xmlParse} in the \code{XML} package to generate the XML tree within the R session, so objects are stored as an XMLInternalDocument class and can be queried using XPath expressions.  Finally, a local copy is saved using \code{saveXML} for reloading
 }
 
+\value{ An XML internal document }
+\references{ \url{http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist} }
+\author{ Chris Stubben }
+%\note{ }
 
-
-\seealso{
-
-}
+\seealso{\code{\link{pmcOAI}} }
 \examples{
-
-
-
-
-
-function (id, local = TRUE, dir = "~/downloads/pmc", ...) 
-{
-    if (!grepl("^PMC[0-9]+$", id)) 
-        stop("Please include a valid PMC id like PMC3443583")
-    file <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles/", 
-        id, sep = "")
-    xmlfile <- paste(dir, "/", id, ".xml", sep = "")
-    if (local && file.exists(xmlfile)) {
-        print("Loading local XML copy")
-        doc <- xmlParse(xmlfile)
-    }
-    else {
-        url <- "http://www.pubmedcentral.nih.gov/oai/oai.cgi?verb=GetRecord&metadataPrefix=pmc&identifier=oai:pubmedcentral.nih.gov:"
-        id2 <- gsub("PMC", "", id)
-        x <- suppressWarnings(readLines(paste(url, id2, sep = ""), 
-            ...))
-        if (grepl("<error", x[1])) {
-            x <- try(readLines(file), silent = TRUE)
-            if (class(x)[1] == "try-error") {
-                stop("No results found using ", id)
-            }
-            else {
-                stop("No results in Open Access Subset (publisher does not allow downloading of full text XML)")
-            }
-        }
-        else {
-            if (length(x) == 0) {
-                stop("WARNING: Cannot connect to PMC OAI service")
-            }
-            else {
-                x[1] <- gsub(" xmlns=[^ ]*", "", x[1])
-            }
-            x <- gsub("<U+00E2><U+0080><U+00B2>", "'", x)
-            x <- gsub("\342\200\223", "-", x)
-            x <- gsub("<U+00A0>", " ", x)
-            x <- gsub("<sup>", "<sup>^", x)
-            n <- grep("table-fn", x)
-            x[n] <- gsub(">([^<])</xref>", ">^\\1</xref>", x[n])
-            doc <- xmlParse(x)
-            saveXML(doc, file = xmlfile)
-        }
-    }
-    attr(doc, "id") <- id
-    attr(doc, "file") <- file
-    doc
-  }
+doc <- pmc("PMC2231364")
+is.xml(doc)
 }
 
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

@@ -1,6 +1,6 @@
 
 
-pmcLoop<-function( pmcresults, tags, prefix, suffix="" , file="locus.tab", notStartingWith, expand=TRUE, digits=4 ){
+pmcLoop<-function( pmcresults, tags, prefix, suffix , file="locus.tab", notStartingWith, expand=TRUE, digits=4 ){
 
 bplocus <- values(bpgff)$locus
 
@@ -9,7 +9,7 @@ bplocus <- values(bpgff)$locus
    for(j in 1:nrow( pmcresults)) {
       id  <- pmcresults$pmc[j]
       print(paste(j, ". Checking ", pmcresults$title[j], sep=""))
-      doc <- pmc(id)  
+      doc <- pmcOAI(id)  
 
       x1 <- pmcText(doc)
  
@@ -37,17 +37,12 @@ bplocus <- values(bpgff)$locus
                       x[[i]]<- repeatSub(x[[i]])
                   }
                }
-               # y <- citeTable(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits)
-
                # add caption after...see PMC1525188 for problems
-
                y <-  findTags(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits, caption =FALSE)
-
                if(!is.null(y)){
                   y$citation  <- paste("Caption=", attr(x[[i]], "caption") , ";", y$citation, sep="")
                   writeLocus( y, file )
                 }
- 
             }
          }
       }

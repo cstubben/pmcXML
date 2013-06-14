@@ -1,72 +1,35 @@
 \name{ncbiPMC}
 \alias{ncbiPMC}
 
-\title{ test
+\title{ Search NCBI PMC database  }
+\description{ Searches the Pubmed Central database at NCBI and returns a short
+citation with author, year, title, journal and published date. }
 
-}
-\description{
-
-}
 \usage{
 ncbiPMC(term, ...)
 }
 
 \arguments{
-  \item{term}{
-
+  \item{term}{ Entrez search terms or a vector of PMC IDs }
+  \item{\dots}{Other options passed to parse_pmc_xml, current defaults are authorsN=3 and journalFull=TRUE }
 }
-  \item{\dots}{
-
-}
-}
-\details{
-
+\details{Searches the PubMed database and parses the XML returned by E-summary 
 }
 \value{
-
-
-
-
-
+A data.frame
 }
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+\references{ \url{http://www.ncbi.nlm.nih.gov/pmc } }
+\author{ Chris Stubben }
+% \note{ }
+%\seealso{ }
 \examples{
 
-
-
-
-
-function (term, ...) 
-{
-    if (length(term) > 1) {
-        term <- paste(term, collapse = ",")
-    }
-    term <- gsub("PMC", "", term)
-    if (grepl("^[0-9,]*$", term)) {
-        x <- esummary(term, "pmc", version = "2.0", parse = FALSE)
-    }
-    else {
-        x <- esummary(esearch(term, "pmc"), version = "2.0", 
-            parse = FALSE)
-    }
-    parse_pmc_XML(x, ...)
-  }
+ncbiPMC("PMC2231364")
+\dontrun{
+yp <- ncbiPMC("(YPO0* OR YPO1* OR YPO2* OR YPO3* OR YPO4*) AND (Yersinia[TITLE] OR Yersinia[ABSTRACT]) AND open access[FILTER]")
+head(yp)
 }
 
 
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

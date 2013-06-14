@@ -1,127 +1,32 @@
 \name{parseTags}
 \alias{parseTags}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ Parse locus tags }
+\description{  Parse locus tags from text and tables and expand tag pairs marking the start and end of a region}
 \usage{
-parseTags(y, tags, prefix, suffix, expand = TRUE, digits = 4)
+parseTags(y, tags, prefix, suffix, notStartingWith, expand = TRUE, digits = 4)
 }
 
 \arguments{
-  \item{y}{
+  \item{y}{ Output from \code{\link{searchP}} }
+  \item{tags}{  An ordered list of locus tags, used for expanding locus tag pairs }
+  \item{prefix}{ Locus tag prefix, can be a regular expression such as "BPS[SL]" or "VCA?" }
+  \item{suffix}{ Locus tag suffix, should be a  single letter  "a" or character class "[ac]"  or grouping brackets "(a|c|\\.1)" }
+  \item{notStartingWith}{ optional single letter to exclude matches, eg, use "J" to match "HP" but not "JHP" tags in Helicobacter    }
+  \item{expand}{ Expand locus tags pairs marking the start and end of a operon, island or other region }
+  \item{digits}{ Number of digits in locus tags, use NA for 1 or more } 
+}
+\details{ Extracts locus tags and expands tag pairs using \code{\link{seqIds}}.  Mainly used by \code{\link{findTags}}, see that functoin for details.
 
 }
-  \item{tags}{
+\value{ A data.frame  }
+%\references{ }
+\author{ Chris Stubben }
+%\note{  }
 
-}
-  \item{prefix}{
-
-}
-  \item{suffix}{
-
-}
-  \item{expand}{
-
-}
-  \item{digits}{
-
-}
-}
-\details{
-
-}
-\value{
+\seealso{  \code{\link{findTags}} }
+% \examples{ }
 
 
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
-\examples{
-
-
-
-
-
-function (y, tags, prefix, suffix, expand = TRUE, digits = 4) 
-{
-    if (nchar(suffix) > 1) {
-        if (!grepl("^(\\[|\\()", suffix)) 
-            stop("suffix should be single letter \"a\" or character class \"[ac]\"  or grouping brackets \"(a|c|\\.1)\"")
-    }
-    tag <- paste(prefix, "[0-9]+", sep = "")
-    if (is.numeric(digits)) 
-        tag <- paste(prefix, "[0-9]{", digits, "}", sep = "")
-    y$citation <- gsub("\342\200\223", "-", y$citation)
-    y$citation <- gsub(" *- *", "-", y$citation)
-    y$citation <- gsub("\n *", "", y$citation)
-    y$citation <- gsub("\t *", " ", y$citation)
-    if (!missing(suffix)) 
-        tag <- paste(tag, suffix, "?", sep = "")
-    ids0 <- str_extract_all(y$citation, ignore.case(tag))
-    if (expand) {
-        ids <- str_extract_all(y$citation, ignore.case(paste(tag, 
-            " to ", tag, "|", tag, "-", tag, "|", tag, "-[0-9]+|", 
-            tag, sep = "")))
-        n <- grepl("-|to", ids)
-        if (sum(n) > 0) 
-            ids[n] <- lapply(ids[n], function(y) unlist(lapply(y, 
-                seqIds, tags = tags)))
-        ids <- lapply(ids, unique)
-        inRange <- !unlist(mapply(function(x, y) toupper(x) \%in\% 
-            toupper(y), ids, ids0, SIMPLIFY = FALSE))
-        n2 <- sapply(ids, length)
-        if (sum(n) > 0) 
-            print(paste("Expanded", sum(n), "citations to", paste(n2[n], 
-                collapse = ", "), "tags"))
-        ids <- unlist(ids)
-        y <- data.frame(source = rep(y$section, n2), locus = ids, 
-            range = inRange, citation = rep(y$citation, n2), 
-            stringsAsFactors = FALSE)
-    }
-    else {
-        n2 <- sapply(ids0, length)
-        ids <- unlist(ids0)
-        y <- data.frame(source = rep(y$section, n2), locus = ids, 
-            citation = rep(y$citation, n2), stringsAsFactors = FALSE)
-    }
-    if (grepl("^[A-Za-z_]+$", prefix)) {
-        y$locus <- gsub(prefix, prefix, y$locus, ignore.case = TRUE)
-    }
-    else {
-        n <- !y$range
-        if (sum(n) > 0) {
-            n2 <- min(nchar(y$locus[n]))
-            y$locus[!y$range] <- paste(toupper(substr(y$locus[n], 
-                1, (n2 - 1))), substring(y$locus[n], n2), sep = "")
-        }
-    }
-    y <- unique(y)
-    print(paste(nrow(y), " locus tags cited (", length(unique(y$locus)), 
-        " unique)", sep = ""))
-    y
-  }
-}
-
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

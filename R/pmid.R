@@ -1,8 +1,7 @@
-# get a formatted reference from pmid (or pmcid)
-# probably should rename this function
+# get a pmid from XML doc - to assign attribute
 
 pmid <-function(doc){
-   if(class(doc)[1]=="XMLInternalDocument"){
+   if(is.xml(doc) ){
       ID <- xpathSApply(doc, '//article-id[@pub-id-type="pmid"]', xmlValue)
   }else{
       ID <- xpathSApply(doc, '//head/meta[@name="citation_pmid"]', xmlGetAttr, "content") 

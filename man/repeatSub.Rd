@@ -1,94 +1,36 @@
 \name{repeatSub}
 \alias{repeatSub}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ Repeat table subheadings }
+\description{ Repeat table subheadings down a new column }
 \usage{
 repeatSub(x, column = "subheading", first = TRUE, ...)
 }
 
 \arguments{
-  \item{x}{
+  \item{x}{  A data.frame with subheadings }
+  \item{column}{  Column name }
+  \item{first}{  Add subheader as first column }
+  \item{\dots}{Other options passed to \code{\link{fixTypes}}  }
+}
+\details{  Identifies subheadings in a data frame by checking for rows with a non-empty first column and all other columns empty. Removes subheader rows and repeats values down a new column.
 
 }
-  \item{column}{
+\value{ A data frame }
 
-}
-  \item{first}{
-
-}
-  \item{\dots}{
-
-}
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+% \references{ }
+\author{ Chris Stubben}
+% \note{ }
+\seealso{ }
 \examples{
 
+doc <- pmcOAI("PMC2231364" )
+t1<-pmcTable(doc, 1)
+head(t1, 10)
+t1<-repeatSub(t1)
+head(t1,10)
+table2(t1$sub)
 
 
-
-
-function (x, column = "subheading", first = TRUE, ...) 
-{
-    n <- apply(x[, -1, FALSE], 1, function(z) all(is.na(z) | 
-        z == "NA" | z == "" | z == "<U+00A0>"))
-    y <- x
-    if (sum(diff(which(n)) == 1) > 1) {
-        print("Too many subheaders in consecutive rows")
-    }
-    else if (which(n)[1] != 1) {
-        print("No subheader in row 1")
-    }
-    else if (length(n) == 0) {
-        print("No subheaders found")
-    }
-    else {
-        x[[column]] <- rep(x[n, 1], times = diff(c(which(n), 
-            nrow(x) + 1)))
-        y <- subset(x, !n)
-        rownames(y) <- NULL
-        y <- fixTypes(y, ...)
-        if (first) 
-            y <- y[, c(ncol(y), 1:(ncol(y) - 1))]
-        attr(y, "id") <- attr(x, "id")
-        attr(y, "pmid") <- attr(x, "pmid")
-        attr(y, "file") <- attr(x, "file")
-        attr(y, "label") <- attr(x, "label")
-        attr(y, "caption") <- attr(x, "caption")
-        attr(y, "footnotes") <- attr(x, "footnotes")
-    }
-    y
-  }
 }
-
-
-\keyword{ ~kwd1 }
-
+\keyword{ methods }

@@ -1,12 +1,12 @@
 # Get XML from pmc OAI
-pmc <- function(id, local=TRUE, ...){
+pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
    
    # check for PMC prefix 
    if(!grepl("^PMC", id))  id<- paste("PMC", id, sep="")
 
    file <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles/", id, sep="")
 
-   localfile <- paste("~/downloads/pmc/", id, sep="")
+   localfile <- paste(dir, "/", id, sep="")
    xmlfile <- paste(localfile, ".xml", sep="")
    htmlfile <- paste(localfile, ".html", sep="")
 

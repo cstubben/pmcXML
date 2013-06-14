@@ -6,7 +6,7 @@
 XML documents from Pubmed Central 
 }
 \description{
-Download XML documents from the open access subset of Pubmed Central, and search for genes and locus tags in full text, tables, and supplmentary materials. 
+Download XML documents from the Open Access subset of Pubmed Central, and search for genes and locus tags in full text, tables, and supplmentary materials. 
 }
 \details{
 \tabular{ll}{
@@ -23,13 +23,20 @@ Chris Stubben
 
 stubben at lanl.gov
 }
-\references{
-
-}
+%\references{ }
 
 \keyword{ package }
 \seealso{
 }
 \examples{
-
+\dontrun{
+doc <- pmcOAI("PMC2231364" )
+txt <-pmcText(doc)
+tab <- pmcTable(doc)
+sup <- pmcSupp(doc)
+txt[1:2]
+tab[1]
+sup
+pmcSupp(doc, 3)
+}
 }

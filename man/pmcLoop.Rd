@@ -1,115 +1,33 @@
 \name{pmcLoop}
 \alias{pmcLoop}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ Loop through PMC search results }
+\description{  Loops through PMC search results and downloads and extracts locus tags in text and tables }
 \usage{
-pmcLoop(pmcresults, tags, prefix, suffix, file = "locus.tab", expand = TRUE, digits = 4)
+pmcLoop(pmcresults, tags, prefix, suffix, file = "locus.tab", notStartingWith, expand = TRUE, digits = 4)
 }
 
 \arguments{
-  \item{pmcresults}{
-
-}
-  \item{tags}{
-
-}
-  \item{prefix}{
-
-}
-  \item{suffix}{
-
-}
-  \item{file}{
-
-}
-  \item{expand}{
-
-}
-  \item{digits}{
-
+  \item{pmcresults}{  PMC search results from \code{\link{ncbiPMC}}  }
+  \item{tags}{  An ordered list of locus tags, used for expanding locus tag pairs }
+ \item{prefix}{ Locus tag prefix, can be a regular expression such as "BPS[SL]" or "VCA?" }
+  \item{suffix}{ Locus tag suffix, should be a  single letter  "a" or character class "[ac]"  or grouping brackets "(a|c|\\.1)" }
+  \item{fle}{ Name of output file} 
+  \item{notStartingWith}{ optional single letter to exclude matches, eg, use "J" to match "HP" but not "JHP" tags in Helicobacter    }
+  \item{expand}{ Expand locus tags pairs marking the start and end of a operon, island or other region }
+  \item{digits}{ Number of digits in locus tags, use NA for 1 or more } 
 }
 }
-\details{
+\details{ Downloads XML using \code{\link{pmcPOAI}} and then parses text using \code{\link{pmcText}}  and tableus using \code{\link{pmcTable}} and extracts tags using \code{\link{findTags}}.  Also adds captions to collapsed table rows and writes citations to output file
 
 }
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+\value{  None. Citations are saved to output file }
+% \references{ }
+\author{ Chris Stubben}
+% \note{ }
+\seealso{ }
 \examples{
 
-
-
-
-
-function (pmcresults, tags, prefix, suffix, file = "locus.tab", 
-    expand = TRUE, digits = 4) 
-{
-    for (j in 1:nrow(pmcresults)) {
-        id <- pmcresults$pmc[j]
-        print(paste(j, ". Checking ", pmcresults$title[j], sep = ""))
-        doc <- pmc(id)
-        y <- findLocus(doc, tags, prefix, suffix, expand, digits)
-        if (is.null(y)) {
-            print("WARNING: no locus tags in full text")
-        }
-        else {
-            writeLocus(y, file)
-        }
-        x <- pmcTable(doc, verbose = FALSE)
-        if (is.list(x)) {
-            for (i in 1:length(x)) {
-                xtag <- paste(prefix, "[0-9]+", sep = "")
-                if (is.numeric(digits)) 
-                  xtag <- paste(prefix, "[0-9]{", digits, "}[^0-9_]", 
-                    sep = "")
-                hasTags <- searchTable(x[[i]], xtag)
-                if (hasTags) {
-                  print(paste(" Found tags in", paste(names(x[i]), 
-                    attr(x[[i]], "caption"), sep = ". ")))
-                  if (ncol(x[[i]]) > 1) {
-                    hasSubs <- apply(x[[i]][1, -1, FALSE], 1, 
-                      function(z) all(is.na(z) | z == "NA" | 
-                        z == "" | z == "<U+00A0>"))
-                    if (hasSubs) {
-                      print(" REPEATING subheadings")
-                      x[[i]] <- repeatSub(x[[i]])
-                    }
-                  }
-                  y <- citeTable(x[[i]], tags, prefix, suffix, 
-                    expand, digits)
-                  writeLocus(y, file)
-                }
-            }
-        }
-        print("")
-    }
-  }
 }
-
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

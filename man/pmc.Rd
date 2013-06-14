@@ -1,123 +1,35 @@
 \name{pmc}
 \alias{pmc}
 
-\title{ test
-
-}
-\description{
-
+\title{ Download articles from PMC }
+\description{  Download and save XML and HTML articles from PMC
 }
 \usage{
-pmc(id, local = TRUE, ...)
+pmc(id, local = TRUE, dir = "~/downloads/pmc", ...)
 }
 
 \arguments{
-  \item{id}{
+  \item{id}{ PMC id }
+  \item{local}{ Use local copy if available }
+  \item{dir}{  Name of local directory to save file, default ~/downloads/pmc }
+  \item{\dots}{ Other options passed to readLines }
+}
+\details{ PMC Open Access (OA) articles in XML format are downloaded from the OAI service using \code{\link{pmcOAI}}.  If a PMC id is not in the OA subset, this function will download an HTML copy directly from PMC for personal use.  The articles outside the OA subset are subject to numerous restrictions including no automated and bulk downloads, so please use the \code{link{pmcOAI}} function in loops and other code and also restrict PMC search results using the "Open Access[FITLER]".  In 2012, over two-thirds of PMC articles were in the OA subset. 
 
 }
-  \item{local}{
+\value{ An XML or HTML internal document }
+\references{ \url{http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist} }
+\author{ Chris Stubben }
+\note{ A local directory should be created before downloading files }
 
-}
-  \item{\dots}{
-
-}
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+\seealso{\code{\link{pmcOAI}} }
 \examples{
 
+doc <-pmc( "PMC2687345")
+is.xml(doc)
 
-
-
-
-function (id, local = TRUE, ...) 
-{
-    if (!grepl("^PMC", id)) 
-        id <- paste("PMC", id, sep = "")
-    file <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles/", 
-        id, sep = "")
-    localfile <- paste("~/downloads/pmc/", id, sep = "")
-    xmlfile <- paste(localfile, ".xml", sep = "")
-    htmlfile <- paste(localfile, ".html", sep = "")
-    if (local && file.exists(xmlfile)) {
-        print("Loading local XML copy")
-        doc <- xmlParse(xmlfile)
-    }
-    else if (local && file.exists(htmlfile)) {
-        print("Loading local HTML copy")
-        doc <- htmlParse(htmlfile)
-    }
-    else {
-        url <- "http://www.pubmedcentral.nih.gov/oai/oai.cgi?verb=GetRecord&metadataPrefix=pmc&identifier=oai:pubmedcentral.nih.gov:"
-        id2 <- gsub("PMC", "", id)
-        x <- suppressWarnings(readLines(paste(url, id2, sep = ""), 
-            ...))
-        if (grepl("<error", x[1])) {
-            x <- try(readLines(file), silent = TRUE)
-            if (class(x)[1] == "try-error") {
-                stop("No results found")
-            }
-            else {
-                print("No XML results in Open Access Subset.  Downloading HTML from PMC (please check copyright restrictions)")
-                x <- gsub("<sup>", "<sup>^", x)
-                x <- gsub("<sub>", "<sub>_", x)
-                x <- gsub("<U+00E2><U+0080><U+00B2>", "'", x)
-                x <- gsub("\342\200\223", "-", x)
-                x <- gsub("&#x02013;", "-", x)
-                x <- gsub("<U+00A0>", " ", x)
-                doc <- htmlParse(x)
-                saveXML(doc, file = htmlfile)
-            }
-        }
-        else {
-            if (length(x) == 0) {
-                print("WARNING: Cannot connect to PMC OAI service - trying Efetch")
-                x <- efetch(id2, db = "pmc", retmode = "xml")
-            }
-            else {
-                x[1] <- gsub(" xmlns=[^ ]*", "", x[1])
-            }
-            x <- gsub("<U+00E2><U+0080><U+00B2>", "'", x)
-            x <- gsub("\342\200\223", "-", x)
-            x <- gsub("<U+00A0>", " ", x)
-            x <- gsub("<sup>", "<sup>^", x)
-            x <- gsub("<sub>", "<sub>_", x)
-            n <- grep("table-fn", x)
-            x[n] <- gsub(">([^<])</xref>", ">^\\1</xref>", x[n])
-            doc <- xmlParse(x)
-            saveXML(doc, file = xmlfile)
-        }
-    }
-    attr(doc, "id") <- id
-    attr(doc, "pmid") <- pmid(doc)
-    attr(doc, "file") <- file
-    doc
-  }
 }
 
 
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

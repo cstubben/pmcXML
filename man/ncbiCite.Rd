@@ -1,101 +1,30 @@
 \name{ncbiCite}
 \alias{ncbiCite}
 
-\title{ test
-
-}
-\description{
-
+\title{ List citations linked to PMC articles }
+\description{  List PMC artices that cite another article or references cited at end of the article
 }
 \usage{
-ncbiCite(id, fetch = "citation", ...)
+ncbiCite(id, citedby=TRUE)
 }
 
 \arguments{
-  \item{id}{
+  \item{id}{ A pubmed or PMC id}
+  \item{citedby}{ List cited by references in PMC, default true  }
 
 }
-  \item{fetch}{
+\details{ Uses E-link to get either "pubmed_pmc_refs" or "pubmed_pubmed_refs" links in PMC.  The first (and default) returns PMC articles citing the given ID and the second returns the references cited at the end of a PMC ID. 
 
 }
-  \item{\dots}{
+\value{ A data.frame }
+% \references{ }
+\author{  Chris Stubben }
+% \note{ }
 
-}
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+% \seealso{ }
 \examples{
-
-
-
-
-
-function (id, fetch = "citation", ...) 
-{
-    pmc <- substr(id, 1, 3) == "PMC"
-    if (fetch \%in\% 1:3) 
-        fetch <- c("citation", "citedby", "references")[fetch]
-    if (fetch == "citation") {
-        if (pmc) {
-            x <- ncbiPMC(id)
-        }
-        else {
-            x <- ncbiPubmed(id)
-        }
-        bibformat(x, width = 300)
-    }
-    else {
-        id2 <- id
-        if (pmc) {
-            id2 <- as.numeric(substring(id2, 4))
-            id2 <- elink(id2, dbfrom = "pmc", db = "pubmed", 
-                linkname = "pmc_pubmed", cmd = "neighbor")
-        }
-        if (fetch == "citedby") {
-            xml <- esummary(elink(id2, dbfrom = "pubmed", db = "pmc", 
-                linkname = "pubmed_pmc_refs"), version = "2.0", 
-                parse = FALSE)
-            x <- parse_pmc_XML(xml)
-            print(paste("Found", nrow(x), "PMC articles citing", 
-                id))
-        }
-        else {
-            xml <- esummary(elink(id2, linkname = "pubmed_pubmed_refs"), 
-                version = "2.0", parse = FALSE)
-            x <- parse_pubmed_XML(xml)
-            print(paste("Found", nrow(x), "references cited in", 
-                id))
-        }
-        x <- x[order(x$authors), ]
-        rownames(x) <- NULL
-        x
-    }
-  }
+ncbiCite("PMC2231364")
 }
 
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

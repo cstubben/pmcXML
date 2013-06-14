@@ -29,14 +29,18 @@ pdf2df <-function(x, split, captionRow=1, headerRow=2, labels )
       header <- unlist( strsplit(xx, " "))
       if(!missing( labels )){
            if(is.numeric(labels)){
-              n<-length(labels) 
-              # vector with ELEMENTS to keep
-              if(max(labels) >= n){
+              n <-length(labels) 
+              # vector with ELEMENTS to keep.  >= OR >
+              if(max(labels) > n){
                  header <- header[labels]
               # vector with number of words in column names
               }else{
-                 z<- split(header, rep(1:n, labels))
-                 header <- as.vector(sapply(z, paste, collapse=" "))
+                 if(sum(labels)==n | any(duplicated(labels))  ){
+                    z  <- split(header, rep(1:n, labels))
+                    header <- as.vector(sapply(z, paste, collapse=" "))
+                 }else{    # in case >=
+                    header <- header[labels]
+                 }
               }
            }else{
               header <- labels

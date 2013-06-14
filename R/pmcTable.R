@@ -1,5 +1,5 @@
 ## GET tables from pmc XML file
-# this new version uses rowspan and colspan attributes to format table including multi-line headers.  
+# this  uses rowspan and colspan attributes to format table including multi-line headers.  
 # Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a citation 
 
 

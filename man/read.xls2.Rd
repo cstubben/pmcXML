@@ -1,70 +1,29 @@
 \name{read.xls2}
 \alias{read.xls2}
 
-\title{ test
+\title{ Read Excel files }
+\description{ Read Microsoft Excel supplements into a data frame  }
 
-}
-\description{
-
-}
 \usage{
 read.xls2(file, sheet = 1, skip = 0, ...)
 }
 
 \arguments{
-  \item{file}{
-
+  \item{file}{ Path to file }
+  \item{sheet}{ Number of sheet }
+  \item{skip}{ Rows to skip }
+  \item{\dots}{ Other options passed to \code{\link{guessTable}} }
 }
-  \item{sheet}{
-
-}
-  \item{skip}{
-
-}
-  \item{\dots}{
-
-}
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
+\details{  Reads an Excel file using \code{read.xls} from the \code{gdata} package and then uses \code{\link{guessTable}} to reformat.   Some extra code was added to the perl function \code{xls2csv.pl} within gdata to add carets before superscripts (see note). This change should be included in future version of \code{pubmed} }
+\value{ A data frame
 }
 
-
-
-\seealso{
-
-}
+% \references{ }
+\author{ Chris Stubben}
+% \note{ }
+%\seealso{ }
 \examples{
 
-
-
-
-
-function (file, sheet = 1, skip = 0, ...) 
-{
-    x <- read.xls(file, stringsAsFactors = FALSE, header = FALSE, 
-        sheet = sheet, method = "tab", quote = "", skip = skip)
-    for (i in 1:ncol(x)) x[, i] <- gsub("\"", "", x[, i])
-    guessTable(x, file, ...)
-  }
 }
-
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 
