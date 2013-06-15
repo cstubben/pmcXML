@@ -1,4 +1,4 @@
-# get a pmid from XML doc - to assign attribute
+# get a pmid from XML doc - used by pmc() to assign attribute
 
 pmid <-function(doc){
    if(is.xml(doc) ){

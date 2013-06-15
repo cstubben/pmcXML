@@ -1,4 +1,4 @@
-#  parse pmcSearch output and (optionally?) expand tag ranges
+#  parse searchP output and (optionally?) expand tag ranges
 
 #  used by findTags.R 
 # if digits is NA (or not numeric) then use 1 or more numbers 
@@ -7,6 +7,8 @@
 # May 8 - add notStartingWith to parse HP and not JHP tags in Helicobacter..
 ## USES a negative lookbehind 
 ##  str_extract_all("HP0001,HP0002 but not JPH0003", perl( "(?<!J)HP[0-9]{4}" ) )
+
+# y = searchP output -change name?
 
 parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digits = 4 ){
    ## check suffix
@@ -32,7 +34,7 @@ parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digit
    if( !missing(suffix) ) tag<- paste(tag, suffix, "?", sep="")
              
    ## ALL IDs.  str_extract_all in stringr package
-   ## IGNORE case - default for pmcSearch
+   ## use IGNORE case - 
 
    tag1 <- tag
    if(!missing(notStartingWith)){

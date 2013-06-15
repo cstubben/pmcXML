@@ -1,4 +1,4 @@
-# xvalue - 1 value
+# xvalue in genomes - 1 value
 
 xvalues  <- function(doc, tag, sep ="/"){
    # if wildcard....separate values from different child tags 

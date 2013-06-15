@@ -1,6 +1,9 @@
+
+## used by findSpecies
+
 unabbrev <-function(species){
 
-   x<-unique(species) 
+   x <- unique(species) 
    n<-grepl("^[A-Z]\\.", x )
    x1<- x[n]
    if(length(x1)==0) {
