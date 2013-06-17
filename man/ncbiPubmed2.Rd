@@ -20,10 +20,10 @@ ncbiPubmed2(term, ...)
 % \note{ }
 %\seealso{ }
 \examples{
-
 \dontrun{
 yp2 <- ncbiPubmed("(YPO0* OR YPO1* OR YPO2* OR YPO3* OR YPO4*) AND Yersinia NOT pubmed pmc[FILTER]")
 yp2
+}
 }
 \keyword{ methods }
 

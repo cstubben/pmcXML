@@ -27,7 +27,7 @@ A data.frame with gene names, section title and sentence containing the citation
 %\seealso{ }
 \examples{
 
-data(doc)
+doc <- pmcOAI("PMC2231364" )
 #lots of terms in italics.  findGenes will miss operons and other genes like ymt
 table2(xpathSApply(doc, "//body//italic", xmlValue), n=20)
 

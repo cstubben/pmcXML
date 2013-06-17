@@ -9,11 +9,11 @@ ncbiCite(id, citedby=TRUE)
 }
 
 \arguments{
-  \item{id}{ A pubmed or PMC id}
-  \item{citedby}{ List cited by references in PMC, default true  }
+  \item{id}{ a pubmed or PMC id}
+  \item{citedby}{ list cited by references in PMC, default true  }
 
 }
-\details{ Uses E-link to get either "pubmed_pmc_refs" or "pubmed_pubmed_refs" links in PMC.  The first (and default) returns PMC articles citing the given ID and the second returns the references cited at the end of a PMC ID. 
+\details{ Uses E-link to get either "pubmed_pmc_refs" or "pubmed_pubmed_refs" links in PMC.  The first (and default) returns PMC articles citing the given ID and the second returns the references cited at the end of a PMC article. 
 
 }
 \value{ A data.frame }

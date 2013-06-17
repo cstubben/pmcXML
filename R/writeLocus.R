@@ -1,5 +1,5 @@
 
-## write citations from citeTable or findLocus to file...
+## write citations to file...
 
 writeLocus <-function(x, file= "locus.tab" ){
    n <- nrow(x)

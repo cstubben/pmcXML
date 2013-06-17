@@ -1,85 +1,36 @@
 \name{searchP}
 \alias{searchP}
-\title{
-}
-\description{
-}
+\title{ Search PMC text and tables }
+\description{ Search PMC text and tables for a specific pattern }
 \usage{
 searchP(x, pattern, caption = TRUE, before = FALSE, after = FALSE, ignore.case = TRUE, ...)
 }
 \arguments{
-  \item{x}{
+  \item{x}{ output from pmcText or pmcTable or pmcSupp }
+  \item{pattern}{ character string containing a regular expression }
+  \item{caption}{ include caption in collapsed table rows }
+  \item{before}{ include sentence before match }
+  \item{after}{ include sentence after match } 
+  \item{ignore.case}{ ignore case }
+  \item{\dots}{ other options passed to \code{grep} }
 }
-  \item{pattern}{
+\details{ Searches text and collpased tables using \code{\link{grep}} and returns a data.frame with section title and sentence (or table name and row).
 }
-  \item{caption}{
-}
-  \item{before}{
-}
-  \item{after}{
-}
-  \item{ignore.case}{
-}
-  \item{\dots}{
-}
-}
-\details{
-}
-\value{
-}
-\references{
-}
-\author{
-}
-\note{
-}
+\value{ A data.frame }
+% \references{ }
+\author{ Chris Stubben}
+% \note{ }
+\seealso{ \code{\link{pmcText}} }
 
-
-\seealso{
-}
 \examples{
-
-function (x, pattern, caption = TRUE, before = FALSE, after = FALSE, 
-    ignore.case = TRUE, ...) 
-{
-    if (class(x) != "list") {
-        y <- attr(x, "label")
-        if (is.null(y)) 
-            y <- "Unknown"
-        x <- list(x)
-        names(x) <- y
-    }
-    z <- vector("list", length(x))
-    for (i in 1:length(x)) {
-        if (class(x[[i]]) == "data.frame") {
-            x2 <- collapse2(x[[i]])
-            n <- grep(pattern, x2, ignore.case = ignore.case, 
-                ...)
-            if (length(n) > 0) {
-                z[[i]] <- data.frame(section = names(x[i]), citation = x2[n], 
-                  stringsAsFactors = FALSE)
-                if (caption) 
-                  z[[i]]$citation <- paste("Caption=", attr(x[[i]], 
-                    "caption"), ";", z[[i]]$citation, sep = "")
-            }
-        }
-        else {
-            n <- grep(pattern, x[[i]], ignore.case = ignore.case, 
-                ...)
-            if (length(n) > 0) {
-                z[[i]] <- data.frame(section = names(x[i]), citation = x[[i]][n], 
-                  stringsAsFactors = FALSE)
-                if (before) 
-                  z[[i]]$citation <- ifelse(n == 1, z[[i]]$citation, 
-                    paste(x[[i]][n - 1], z[[i]]$citation))
-                if (after) 
-                  z[[i]]$citation <- ifelse(n == length(x[[i]]), 
-                    z[[i]]$citation, paste(z[[i]]$citation, x[[i]][n + 
-                      1]))
-            }
-        }
-    }
-    do.call("rbind", z)
-  }
+doc <- pmcOAI("PMC2231364" )
+txt <- pmcText(doc)
+searchP(txt, "virulen")
+searchP(txt, "pathway")
+searchP(txt, "accession")
+# regular expression
+searchP(txt, "[ACTGN]{6}")   # seqeunce
+searchP(txt, "YPO[0-9]{4}")  # locus tag
+searchP(txt, "[A-Z][a-z]{2}[A-Z]", ignore.case=FALSE)  # protein name
 }
-\keyword{ ~kwd1 }
+\keyword{ methods }

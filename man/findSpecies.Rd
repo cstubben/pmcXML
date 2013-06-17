@@ -22,7 +22,7 @@ findSpecies(doc )
  \code{\link{unabbrev}}
 }
 \examples{
-data(doc)
+doc <- pmcOAI("PMC2231364" )
 table2(findSpecies(doc))
 }
 \keyword{ methods }

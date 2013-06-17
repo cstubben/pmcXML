@@ -12,7 +12,7 @@ htmlTable(doc)
 }
 
 \arguments{
-  \item{doc}{A HTML file from PMC }
+  \item{doc}{ HTML file from PMC }
 }
 %\details{  }
 \value{ A data.frame listing table links and captions }
@@ -22,7 +22,7 @@ htmlTable(doc)
 
 \seealso{ \code{\link{getTable}} }
 \examples{
-\dontrun
+\dontrun{
 doc2<-pmc("PMC2687345")
 htmlTable(doc2)
 }

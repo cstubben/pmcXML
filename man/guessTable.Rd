@@ -8,9 +8,9 @@ guessTable(x, header = 1, ...)
 }
 
 \arguments{
-  \item{x}{ A data.frame, often loaded by \code{read.xls}  }
-  \item{header}{ Header row(s), after removing caption}
-  \item{\dots}{ Other options passed to \code{\link{fixTypes}}   }
+  \item{x}{ a data.frame, often loaded by \code{read.xls}  }
+  \item{header}{ header row(s), after removing caption}
+  \item{\dots}{ other options passed to \code{\link{fixTypes}}   }
 }
 \details{  Counts the number of non-empty cells in a data.frame and finds consecutive runs of 1 at the start and end, which are assigned to caption and footnote attributes.  The remaining rows are reformated into a new data.frame 
 

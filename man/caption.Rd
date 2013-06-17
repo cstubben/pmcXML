@@ -9,7 +9,7 @@ caption(x, ...)
 
 \arguments{
   \item{x}{  XML document or PMC table output }
-  \item{\dots}{ Other options passed to \code{\link{strwrap2}} }
+  \item{\dots}{ other options passed to \code{\link{strwrap2}} }
 }
 \details{ Prints the table captions in XML documents or the caption attribute from data.frames returned by \code{\link{pmcTable}} 
 
@@ -20,8 +20,8 @@ caption(x, ...)
 % \note{ }
 % \seealso{ }
 \examples{
-data(doc)
+doc <- pmcOAI("PMC2231364" )
 caption(doc)
-
+}
 \keyword{ methods }
 

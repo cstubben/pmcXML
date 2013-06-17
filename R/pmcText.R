@@ -22,8 +22,8 @@ pmcText<-function(doc, references = FALSE ){
       title <- gsub("^[0-9.]* (.*)", "\\1", title )  # remove numbered sections
       title <- gsub("\n", "", title ) # remove new lines
    
-       ## get paragraphs, but not within footnotes, captions or containing table-wrap tags (since cell values will be mashed together - only a few PMC ids)
-      y <-  xpathSApply(doc2, "//p[not(ancestor::table-wrap|ancestor::caption|descendant::table-wrap)]", xmlValue)
+       ## get paragraphs, but not within footnotes, captions, formulas or containing table-wrap tags (since cell values will be mashed together - only a few PMC ids)
+      y <-  xpathSApply(doc2, "//p[not(ancestor::table-wrap|ancestor::caption|descendant::table-wrap|descendant::disp-formula)]", xmlValue)
        z[[title ]] <- splitP( y) 
       free(doc2)
    }

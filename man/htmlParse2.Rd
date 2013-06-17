@@ -17,11 +17,11 @@ htmlParse2(url, ...)
 \value{
 HTMLInternalDocument
 }
-\references{}
+%\references{}
 \author{ Chris Stubben}
 %\note{ }
 
-\seealso{ \code{\link{htmlParse}}  }
+\seealso{ \code{htmlParse}  }
 \examples{
 
 x <- "<p>Some locus tags and numbers have superscript tags than should be preserved when converting to text like BPSL0075<sup>a</sup> at start coordinate 1234<sup>1</sup></p>"

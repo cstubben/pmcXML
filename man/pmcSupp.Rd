@@ -4,12 +4,13 @@
 \title{ List and read PMC supplementary files }
 \description{ List supplementary file names within XML documents and optionally read supplementary tables from PMC  }
 \usage{
-pmcSupp(doc, file)
+pmcSupp(doc, file, ...)
 }
 
 \arguments{
   \item{doc}{ XML document }
-  \item{ file }{  Supplementary file name or row number }
+  \item{ file }{  supplementary file name or row number }
+  \item{\dots}{ other options passed to \code{\link{getSupp}} }
 }
 \details{ List supplementary files and optionally read tables using \code{\link{getSupp}}  }
 \value{ If file is missing, a data.frame listing supplementary file names and captions.
@@ -24,7 +25,7 @@ pmcSupp(doc, file)
 
 \examples{
 
-data(doc)
+doc <- pmcOAI("PMC2231364" )
 pmcSupp(doc)
 
 \dontrun{

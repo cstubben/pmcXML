@@ -8,7 +8,7 @@ meshTerms(term)
 }
 
 \arguments{
-  \item{term}{  A search term, pubmed IDs or document with pmid attribute (returned by \code{pmc})
+  \item{term}{ a search term, pubmed IDs or document with pmid attribute (returned by \code{pmid})
 }
 }
 \details{ Parses MeSH headings in XML document returned by E-fetch

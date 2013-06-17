@@ -11,9 +11,10 @@ pmcTable(doc, whichTable, verbose = TRUE, simplify=TRUE, ...)
 
 \arguments{
   \item{doc}{ XML document from PMC }
-  \item{whichTable}{  Table number to parse, default all tables }
-  \item{verbose}{ Print captions to screen before parsing }
-  \item{\dots}{ Other options passed to \code{\link{fixTypes}} 
+  \item{whichTable}{  table number to parse, default all tables }
+  \item{verbose}{ print captions to screen before parsing }
+  \item{simplify}{ simplify to data frame if 1 table }
+  \item{\dots}{ other options passed to \code{\link{fixTypes}} 
 }
 }
 \details{ Saves the caption and footnotes as attributes and uses rowspan and colspan attributes to format multi-line headers.  Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a citation.
@@ -28,7 +29,7 @@ pmcTable(doc, whichTable, verbose = TRUE, simplify=TRUE, ...)
 
 doc <- pmc("PMC2231364" )
 tab <- pmcTable(doc)
-sapply(tab, nrow
+sapply(tab, nrow)
 tab
 
 }

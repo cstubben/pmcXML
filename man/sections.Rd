@@ -1,10 +1,8 @@
 \name{sections}
 \alias{sections}
 
-\title{ test
-
-}
-\description{
+\title{ Print sections }
+\description{ Print sections in PMC documents
 
 }
 \usage{
@@ -12,55 +10,18 @@ sections(doc, html = "//h2")
 }
 
 \arguments{
-  \item{doc}{
-
+  \item{doc}{ Document from PMC }
+  \item{html}{  HTML section tag}
 }
-  \item{html}{
+\details{ Prints main sections in PMC articles }
+\value{ None. \code{\link{strwrap2}} uses \code{\link{cat}} to print sections. }
 
-}
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+% \references{ }
+\author{ Chris Stubben}
+% \note{ }
+\seealso{  \code{\link{pmcText}} }
 \examples{
-
-
-
-
-
-function (doc, html = "//h2") 
-{
-    if (class(doc)[1] == "XMLInternalDocument") {
-        xpathSApply(doc, "//article/body/sec/title", xmlValue)
-    }
-    else {
-        xpathSApply(doc, html, xmlValue)
-    }
-  }
+doc <- pmcOAI("PMC2231364" )
+sections(doc)
 }
-
-
-\keyword{ ~kwd1 }
-
+\keyword{ methods }

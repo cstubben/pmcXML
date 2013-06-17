@@ -9,12 +9,12 @@ getSupp(doc, file, type, opts = "-raw -nopgbrk", rm = TRUE, header = TRUE, ...)
 
 \arguments{
   \item{doc}{ XML document with PMC id attribute }
-  \item{file}{ Supplementary file name }
-  \item{type}{ Yype of file, default to file extension }
+  \item{file}{ supplementary file name }
+  \item{type}{ type of file, default to file extension }
   \item{opts}{ pdftotext options }
-  \item{rm}{ Remove downloaded files}
-  \item{header}{ Column labels in Word doc }
-  \item{\dots}{ Other options passed to \code{read} commands }
+  \item{rm}{ remove downloaded files}
+  \item{header}{ column labels in Word doc }
+  \item{\dots}{ other options passed to \code{read} commands }
 }
 \details{ This function is used by \code{\link{pmcSupp}} to read supplmentary tables in a variety of formats including Excel, Word, HTML, PDF, text, and zip. The url string is generated using the PMC id and the file name  http://www.ncbi.nlm.nih.gov/pmc/articles/<pmcid>/bin/<supplementary file>
 

@@ -11,7 +11,7 @@ ncbiPMC(term, ...)
 
 \arguments{
   \item{term}{ Entrez search terms or a vector of PMC IDs }
-  \item{\dots}{Other options passed to parse_pmc_xml, current defaults are authorsN=3 and journalFull=TRUE }
+  \item{\dots}{other options passed to parse_pmc_xml, current defaults are authorsN=3 and journalFull=TRUE }
 }
 \details{Searches the PubMed database and parses the XML returned by E-summary 
 }
@@ -30,6 +30,6 @@ yp <- ncbiPMC("(YPO0* OR YPO1* OR YPO2* OR YPO3* OR YPO4*) AND (Yersinia[TITLE] 
 head(yp)
 }
 
-
+}
 \keyword{ methods }
 

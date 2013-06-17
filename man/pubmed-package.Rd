@@ -26,8 +26,7 @@ stubben at lanl.gov
 %\references{ }
 
 \keyword{ package }
-\seealso{
-}
+% \seealso{ }
 \examples{
 \dontrun{
 doc <- pmcOAI("PMC2231364" )

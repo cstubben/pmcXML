@@ -8,11 +8,11 @@ pdf2df(x, split, captionRow = 1, headerRow = 2, labels)
 }
 
 \arguments{
-  \item{x}{ A vector of pdf text containing a structured table }
-  \item{split}{ Space delimited string defining columns where w = single word (no spaces), d = decimal 0-9 and characters in scientific notation [Ee.-], a = any character including spaces. }
-  \item{captionRow}{  Row(s) containing caption }
-  \item{headerRow}{ Row(s) containing header }
-  \item{labels}{  A optional vector to specify which words in headerRow to assign to column names, see note for details)
+  \item{x}{ a vector of pdf text containing a structured table }
+  \item{split}{ space delimited string defining columns where w = single word (no spaces), d = decimal 0-9 and characters in scientific notation [Ee.-], a = any character including spaces. }
+  \item{captionRow}{  row(s) containing caption }
+  \item{headerRow}{ row(s) containing header }
+  \item{labels}{  an optional vector to specify which words in headerRow to assign to column names, see note for details)
 }
 }
 \details{ see \code{\link{pmcSupp}} to read supplementary tables in pdf formats. This function attempts to convert the loaded vector into a data.frame }

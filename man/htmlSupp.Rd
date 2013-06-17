@@ -7,7 +7,7 @@
 htmlSupp(doc)
 }
 \arguments{
-  \item{doc}{ A HTML file from PMC  }
+  \item{doc}{ HTML file from PMC  }
 }
 \details{ Links to supplements are either listed on a new page or within the HTML document
 }
@@ -20,7 +20,7 @@ htmlSupp(doc)
 %\seealso{ }
 \examples{
 
-\dontrun
+\dontrun{
 id <- "PMC3257920" 
 doc<- pmc(id)   
 htmlSupp(doc)

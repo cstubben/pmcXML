@@ -3,9 +3,13 @@
 getTable <-function(doc, whichTable , ...){
    url <- "http://www.ncbi.nlm.nih.gov"
 
-   tableLinks <- htmlTableLinks(doc)
+    y <- xpathApply(doc, "//a[@target='table']", xmlAttrs)
+    if (length(y) == 0) {
+        print("No table links found")
+    }
+  
+    tableLinks <- unique( sapply(y, "[[", "href") )
 
-   if(tableLinks[1]=="No table links found") stop(z)
    if(missing(whichTable)){
       whichTable <- 1 : length(tableLinks)
    }else{
@@ -209,21 +213,5 @@ getTable <-function(doc, whichTable , ...){
    y
 }
 
-
-
-
-
-
-htmlTableLinks <- function (doc) 
-{
-    y <- xpathApply(doc, "//a[@target='table']", xmlAttrs)
-    if (length(y) == 0) {
-        print("No table links found")
-    }
-    else {
-        z <- sapply(y, "[[", "href")
-        unique(z)
-    }
-}
 
 

@@ -8,25 +8,20 @@ getTable(doc, whichTable, ...)
 }
 
 \arguments{
-  \item{doc}{  A HTML file from PMC  }
-  \item{whichTable}{ Table number to download, default is all tables }
-  \item{\dots}{ Other options passed to \code{\link{fixTypes}} }
+  \item{doc}{  HTML file from PMC  }
+  \item{whichTable}{ table number to download, default is all tables }
+  \item{\dots}{ other options passed to \code{\link{fixTypes}} }
 }
 \details{  PMC articles outside Open Access only include links to tables.  This reads the table links using \code{htmlTable} and downloads tables
 
 }
-\value{
-A list of data.frame or data.frame if 1 table returned
-
-
-}
+\value{ A list of data frames or a data.frame if 1 table returned }
 % \references{ }
 \author{ Chris Stubben }
 \note{ Should be combined with \code{\link{htmlTable}}  }
 
 \seealso{\code{\link{htmlTable}}  }
 \examples{
-
 
 # Yersinia pestis Virulence factors
 \dontrun{
@@ -40,7 +35,6 @@ A list of data.frame or data.frame if 1 table returned
 }
 
 }
-
 
 \keyword{ methods }
 

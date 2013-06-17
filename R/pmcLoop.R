@@ -2,8 +2,6 @@
 
 pmcLoop<-function( pmcresults, tags, prefix, suffix , file="locus.tab", notStartingWith, expand=TRUE, digits=4 ){
 
-bplocus <- values(bpgff)$locus
-
   if(class(tags) == "GRanges") tags <- values(tags)$locus
 
    for(j in 1:nrow( pmcresults)) {

@@ -19,7 +19,7 @@ seqIds(id, stop, tags)
 % \references{ }
 \author{ Chris Stubben}
 % \note{ }
-\seealso{ }
+% \seealso{ }
 \examples{
  seqIds("YPO0010-YPO0015")
 ## inlcude YPO0013a and RNAs in GFF3 file

@@ -8,7 +8,7 @@ is.xml(doc)
 }
 
 \arguments{
-  \item{doc}{ An object }
+  \item{doc}{ a document object }
 }
 \details{Checks is document is an XMLInternalDocument (ie, XML doument downloaded from PMC Open Access service)
 
@@ -18,11 +18,11 @@ is.xml(doc)
 \author{ Chris Stubben }
 % \note{ }
 
-\seealso{ }
+%\seealso{ }
 \examples{
-data(doc)
+doc <- pmcOAI("PMC2231364" )
 is.xml(doc)
 
-
+}
 \keyword{ methods }
 

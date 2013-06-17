@@ -9,7 +9,7 @@ footnotes(x, ...)
 
 \arguments{
   \item{x}{  PMC table output from \code{\link{pmcTable}} }
-  \item{\dots}{ Other options passed to \code{\link{strwrap2}} }
+  \item{\dots}{ other options passed to \code{\link{strwrap2}} }
 }
 \details{
   Shortcut for  attr(x, "footnotes")
@@ -19,12 +19,12 @@ footnotes(x, ...)
 \author{ Chris Stubben }
 \note{ Fix to read XML doc like caption }
 
-\seealso{ \code{\link{caption} }
+\seealso{ \code{\link{caption}} }
 \examples{
 
-data(doc)
-tab<- pmcTable(doc)
+doc <- pmcOAI("PMC2231364" )
+tab <- pmcTable(doc)
 footnotes(tab[[1]])
-
+}
 \keyword{ methods }
 

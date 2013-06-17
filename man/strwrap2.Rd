@@ -1,70 +1,26 @@
 \name{strwrap2}
 \alias{strwrap2}
 
-\title{ test
-
-}
-\description{
-
-}
+\title{ Wrap character strings }
+\description{ Wrap and print character strings  }
 \usage{
-strwrap2(x, exdent = 5, width = 120, ...)
+strwrap2(x, exdent = 5, ...)
 }
 
 \arguments{
-  \item{x}{
-
+  \item{x}{ a character vector }
+  \item{exdent}{indentation of subsequent lines in paragraphs}
+  \item{\dots}{  other options passed to \code{\link{strwrap}} }
 }
-  \item{exdent}{
-
-}
-  \item{width}{
-
-}
-  \item{\dots}{
-
-}
-}
-\details{
-
-}
-\value{
-
-
-
-
-
-}
-\references{
-
-}
-\author{
-
-}
-\note{
-
-}
-
-
-
-\seealso{
-
-}
+% \details{   }
+\value{  None.  strwrap2 uses \code{\link{cat}} to print results. }
+% \references{ }
+\author{ Chris Stubben}
+% \note{ }
+% \seealso{ }
 \examples{
-
-
-
-
-
-function (x, exdent = 5, width = 120, ...) 
-{
-    if (is.data.frame(x)) 
-        x <- apply(x, 1, paste, collapse = ". ")
-    cat(paste(strwrap(x, exdent = exdent, width = width, ...), 
-        collapse = "\n"), "\n")
-  }
+doc <- pmcOAI("PMC2231364" )
+strwrap2(xpathSApply(doc, "//abstract//p", xmlValue))
 }
-
-
-\keyword{ ~kwd1 }
+\keyword{ methods }
 

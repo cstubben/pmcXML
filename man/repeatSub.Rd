@@ -8,10 +8,10 @@ repeatSub(x, column = "subheading", first = TRUE, ...)
 }
 
 \arguments{
-  \item{x}{  A data.frame with subheadings }
-  \item{column}{  Column name }
-  \item{first}{  Add subheader as first column }
-  \item{\dots}{Other options passed to \code{\link{fixTypes}}  }
+  \item{x}{  a data.frame with subheadings }
+  \item{column}{  column name }
+  \item{first}{  add subheader as first column }
+  \item{\dots}{other options passed to \code{\link{fixTypes}}  }
 }
 \details{  Identifies subheadings in a data frame by checking for rows with a non-empty first column and all other columns empty. Removes subheader rows and repeats values down a new column.
 
@@ -21,7 +21,7 @@ repeatSub(x, column = "subheading", first = TRUE, ...)
 % \references{ }
 \author{ Chris Stubben}
 % \note{ }
-\seealso{ }
+% \seealso{ }
 \examples{
 
 doc <- pmcOAI("PMC2231364" )

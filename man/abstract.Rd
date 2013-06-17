@@ -26,7 +26,7 @@ abstract(doc, exdent = 0, ...)
 
 }
 \examples{
-data(doc)
+doc <- pmcOAI("PMC2231364" )
 abstract(doc)
 }
 
