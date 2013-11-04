@@ -1,18 +1,32 @@
-# download Excel supplements - some .xls files are actually text
+# download Excel supplements from web (need option to read local file and skip download.file lines)
+
+## NOTE: some .xls files are actually text /csv
+
+## June 25, 2013.  add pmc=TRUE to allow downloads of supplements outside PMC (then file = url).
+## change 1st option doc to pmcid
 
 # SAVE pmid and file
 
-getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE, ...)
+getSupp <- function(pmcid, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE, pmc=TRUE,  ...)
 {
-   pmcid <- attr(doc, "id")
-   if(is.null(pmcid)) stop("Missing PMC id attribute")
+   ## option to read id from XML doc
+   if( !is.vector(pmcid) ){
+      pmcid <- attr(pmcid , "id")
+      if(is.null(pmcid)) stop("Missing PMC id attribute")
+   }
    if(missing(file)) stop("Missing file name") 
 
    # match file type to filename extension? some xls are actually text files! 
    if(missing(type)){
        type <- tolower( gsub(".*\\.([^.]*)", "\\1", file) )
    }
+ if(pmc){
    url <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles", pmcid, "bin", file, sep="/")
+}else{
+   url <- file
+   file <- paste("tmp", type, sep=".")
+
+}
 
    ZIP <- FALSE
    if(type=="zip"){
@@ -72,7 +86,7 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
       system(command)
       ## read html or  table ??  read html to see captions, footnotes 
      # x <- htmlParse2("tmp.html", ...)
-      x <-readHTMLTable("tmp.html", stringsAsFactors=FALSE, header=header, ...)
+      x <-readHTMLTable("tmp.html", stringsAsFactors=FALSE, header=header, ...)    # fixed July 25, 2013  -add header=header
       if(length(x)==1) x <- x[[1]]
 
 
@@ -88,6 +102,7 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
 
    ## TEXT tables 
    } else if(type=="txt"){
+      ## should tab be default separator ?  sep="\t" 
       x <- read.table(url, stringsAsFactors=FALSE, ...)
       x <- guessTable(x)
       if(rm & ZIP) file.remove(file2)
@@ -111,7 +126,13 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
        }else{
            download.file(url, file, quiet=TRUE)
        }
-       n <- sheetCount(file)
+    #  some delimited-files have excel extension   - try unix file command to determine file type?
+    ##   n <- sheetCount(file)
+    n <- suppressWarnings( try(sheetCount(file), silent=TRUE))
+    if(class(n)[1]=="try-error"){
+       message("Possible delimited text file with Excel extension?") 
+}else{
+
        sheets <- sheetNames(file)
        x <-vector("list", n)
        if(length(sheets) == n) names(x) <- sheets
@@ -119,7 +140,8 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
           ## excel files - xlsx or xls
           print(paste("Reading Sheet", i))
           ## check for empty sheets
-          x[[i]] <- try( read.xls2( file , sheet= i , ...)   , silent=TRUE)
+         x[[i]] <- try( read.xls2( file , sheet= i , ...)   , silent=TRUE)
+         # x[[i]] <- try( read.xls2( file , sheet= i , header=header, ...)   , silent=TRUE)
            if(class(x[[i]])[1] == "try-error"){
                x[[i]] <- NA
                print("Empty Sheet")
@@ -131,7 +153,7 @@ getSupp <-function(doc, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE
        # 1 sheet then return data.frame
        if(length(x)==1) x <- x[[1]]
        if(rm) file.remove(file)
-
+     }
    }
    attr(x, "id") <-  pmcid
    attr(x, "file") <- url 

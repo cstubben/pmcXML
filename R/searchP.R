@@ -1,11 +1,13 @@
 
 ### search pmcText output  - search in base used to list packages...
 
+# other options to grep  (or collapse2 ?)  
+
 # some grep like options to print sentence before and after 
 
-searchP <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore.case=TRUE, ...){
+searchP <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore.case=TRUE, na.string = "", ...){
 
-   ## x should be list (sentences or tables) OR supplementary table -  is.list(data.frame()) = TRUE
+   ## x should be list (sentences or tables) OR  table -  is.list(data.frame()) = TRUE
    if(class(x)!="list" ){
          y <- attr(x, "label")
          if(is.null(y)) y <- "Unknown"  # in case label is missing
@@ -18,7 +20,7 @@ searchP <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore
       
       if(class(x[[i]] )=="data.frame"){
          #COLLAPSE table rows  - add caption after search
-         x2 <- collapse2( x[[i]] ) 
+         x2 <- collapse2( x[[i]], na.string= na.string ) 
          n <- grep(pattern, x2,  ignore.case=ignore.case, ...)
          if(length(n) >0){
              z[[i]] <- data.frame( section = names(x[i]), citation = x2[n] , stringsAsFactors=FALSE )

@@ -7,7 +7,7 @@
 \usage{data(yplocus)}
 
 \format{
-  The format is:
+  A vector with 4087 tags
  chr [1:4087] "YPO0001" "YPO0002" "YPO0003" "YPO0004" "YPO0005" "YPO0006" "YPO0007" "YPO0008" "YPO0009" "YPO0010" ...
 }
 \details{  A vector of locus tags in the RefSeq GFF3 file.   See example for details

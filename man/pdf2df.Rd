@@ -9,7 +9,7 @@ pdf2df(x, split, captionRow = 1, headerRow = 2, labels)
 
 \arguments{
   \item{x}{ a vector of pdf text containing a structured table }
-  \item{split}{ space delimited string defining columns where w = single word (no spaces), d = decimal 0-9 and characters in scientific notation [Ee.-], a = any character including spaces. }
+  \item{split}{ space delimited string defining columns where w = single word (no spaces), s=single letter, d = decimal 0-9 and characters in scientific notation [Ee.-], a = any character including spaces. }
   \item{captionRow}{  row(s) containing caption }
   \item{headerRow}{ row(s) containing header }
   \item{labels}{  an optional vector to specify which words in headerRow to assign to column names, see note for details)

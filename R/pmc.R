@@ -1,4 +1,7 @@
-# Get XML from pmc OAI
+# Get XML from pmc OAI OR HTML from PMC website
+
+## update August 13, 2013
+
 pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
    
    # check for PMC prefix 
@@ -23,9 +26,9 @@ pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
        # no prefix
       id2 <- gsub("PMC", "", id)
       # will complain about incomplete final line
-      x <- suppressWarnings( readLines(paste(url, id2, sep=""), ...))
+      x <- suppressWarnings( try(readLines(paste(url, id2, sep=""), ...), silent=TRUE))
      
-      if(grepl("<error", x[1])){
+      if(class(x)[1] == "try-error"){
          ## NOT in open access subset
           x <- suppressWarnings( try( readLines(file)  , silent=TRUE))
 
@@ -37,7 +40,7 @@ pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
             print("No XML results in Open Access Subset.  Downloading HTML from PMC (please check copyright restrictions)")
 
              x <- gsub("<sup>", "<sup>^", x)
-              x <- gsub("<sub>", "<sub>_", x)   ## or use _ like Latex math  (locus tag with numeric subscript casues problems)
+              x <- gsub("<sub>", "<sub>_", x)   ## subscripts -  use _ like Latex math 
 
             ## SPECIAL characters
             x <- gsub("â\u0080²", "'", x)  ## 3' and 5'
@@ -49,15 +52,9 @@ pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
             saveXML(doc, file= htmlfile )
          }
       }else{
-         # if pmc OAI not working ?
-         if(length(x) == 0 ){ 
-            print("WARNING: Cannot connect to PMC OAI service - trying Efetch")
-            x <- efetch(id2, db="pmc", retmode="xml")
-         }else{
-            # remove namespace (from OAI)
-            x[1] <- gsub(" xmlns=[^ ]*" , "", x[1])
-         }
-
+         # remove namespace (from OAI)
+         x[1] <- gsub(" xmlns=[^ ]*" , "", x[1])
+      
          ## SPECIAL characters
          x <- gsub("â\u0080²", "'", x)  ## 3' and 5'
          x <- gsub("–", "-", x)         ## long dashes
@@ -65,7 +62,11 @@ pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
 
          ## replace ALL superscripts and subscripts
          x <- gsub("<sup>", "<sup>^", x)
-         x <- gsub("<sub>", "<sub>_", x)   ## or use _ like Latex math  (locus tag with numeric subscript casues problems)
+         x <- gsub("<sub>", "<sub>_", x)   ## use _ like Latex math 
+## Bib cross-references?  should include RID in text...
+# <xref ref-type="bibr" rid="B13">
+#        x <- gsub('(<xref ref-type="bibr"[^>]*)>', "\\1>XREF#", x)
+#        x <- gsub('(<xref ref-type="bibr"[^>]*)>', "\\1>XREF#", x)
 
          ## AND hyperlinked footnotes in TABLES only
          n <- grep("table-fn", x)

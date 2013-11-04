@@ -1,17 +1,11 @@
 
 # CONVERT pmc Table to GRange 
 
-# requires start, end and strand columns OR column numbers
-
-# June 25, 2013 add option to split coordinates (start-end in same column)
-
- # convert long dash  to regular dash for GRange (or warning strand values must be in '+' '-' '*' )
-## SEE http://www.utf8-chartable.de/unicode-utf8-table.pl?start=8192 for codes
-## u2010-u2015 (en-dash em-dash are u2013 and u2014)
-#  also minius sign = u2212  (see table 1 from PMC3395615)
+# collapse columns except ID into single attributes column
 
 
-pmcGRange<-function(x, acc, columns = c("start", "end", "strand")){
+
+pmcGRange2<-function(x, acc, seqlength, id =1, columns = c("start", "end", "strand") ){
 
    if(missing(acc)){ stop("Missing accession number") }
    # columns can be numbers
@@ -58,17 +52,23 @@ pmcGRange<-function(x, acc, columns = c("start", "end", "strand")){
 
    # check if start < end  - see checkStart in genomes2
    x <- checkStart(x, names(x)[n[1]], names(x)[ n[2]] , ok=FALSE)
-
+    
+   attrs <- x[, -c(n, id) , FALSE]    # in case 1 column use drop= FALSE
+   if(ncol(attrs)>=1){
+        eM <-  data.frame(id= x[, id], attrs = collapse2( attrs) , stringsAsFactors=FALSE )  
+   }else{
+       eM <-  data.frame(id= x[, id], stringsAsFactors=FALSE )    
+   }
    gr <- GRanges(seqnames= acc,
           ranges = IRanges( x[, n[1]] ,   x[, n[2]]   ),
           strand = x[, n[3]],
-          data.frame(x[, -n , FALSE]))    # in case 1 column use drop= FALSE
-   seqlengths(gr) <- ncbiNucleotide(acc)$size
-   # inlcude file (from read.xls2)
-   #metadata(gr) <- list( 
-   #   file = attr(x, "file"),
-   #   caption =  attr(x, "caption"),
-   #   footnotes = attr(x, "footnotes" ))
+          eM )   
+   if(missing(seqlength)){
+        seqlengths(gr) <- ncbiNucleotide(acc)$size
+}else{
+          seqlengths(gr) <- seqlength
+}
+ 
    gr
 }
 

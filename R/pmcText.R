@@ -1,6 +1,6 @@
 # split PMC xml into sentences with section labels
 
-pmcText<-function(doc, references = FALSE ){
+pmcText<-function(doc, references = FALSE, anyP=FALSE ){
 
    z <- vector("list")
    z[["Main title"]] <- splitP( xpathSApply(doc, "//front//article-title", xmlValue) )
@@ -22,8 +22,12 @@ pmcText<-function(doc, references = FALSE ){
       title <- gsub("^[0-9.]* (.*)", "\\1", title )  # remove numbered sections
       title <- gsub("\n", "", title ) # remove new lines
    
-       ## get paragraphs, but not within footnotes, captions, formulas or containing table-wrap tags (since cell values will be mashed together - only a few PMC ids)
+       ## get paragraphs, but not within tables or captions or containing tables or formulas (since cell values will be mashed together - only a few PMC ids)
       y <-  xpathSApply(doc2, "//p[not(ancestor::table-wrap|ancestor::caption|descendant::table-wrap|descendant::disp-formula)]", xmlValue)
+ 
+    # OR any paragraph except nested paragraphs
+     if(anyP)  y <-  xpathSApply(doc2, "//p[not(ancestor::p)]", xmlValue)  
+
        z[[title ]] <- splitP( y) 
       free(doc2)
    }

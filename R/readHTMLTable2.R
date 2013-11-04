@@ -1,29 +1,14 @@
-## get Table from pubmed central directly - HTML docs only have table links)
+## read html tables -  
 
-getTable <-function(doc, whichTable , ...){
-   url <- "http://www.ncbi.nlm.nih.gov"
-
-    y <- xpathApply(doc, "//a[@target='table']", xmlAttrs)
-    if (length(y) == 0) {
-        print("No table links found")
-    }
-  
-    tableLinks <- unique( sapply(y, "[[", "href") )
-
-   if(missing(whichTable)){
-      whichTable <- 1 : length(tableLinks)
-   }else{
-      if(any(!whichTable %in% 1:length(tableLinks) )){stop("Only ", length(tableLinks) , " table links available")} 
-   }
-   y <- vector("list", length(whichTable) )
-
-   for(k in 1: length(whichTable) ){
-      print(paste("Downloading Table", whichTable[k] ))
-      url1 <- paste(url, tableLinks[ whichTable[k] ], sep="")
-      t1 <- try( htmlParse2(url1))
-      if(class(t1)[1] == "try-error"){stop("Cannot download ", url1) }
-
-           ## from pmcTable
+readHTMLTable2 <-function(doc, ...){
+ 
+   ## tbls <- getNodeSet(doc, "//table")  # or skip  tables without data 
+   tbls <- getNodeSet(doc, "//table/tbody/..")
+   nt <- length(tbls)
+   if(nt == 0) stop("No table tags (with tbody child node) found") 
+   y <- vector("list", nt )
+   for(k in 1:nt){      ## i and j used below
+      t1 <- xmlDoc(tbls [[k]])
 
            #--------------------------------------------------------------------
             #PARSE HEADER
@@ -192,27 +177,10 @@ getTable <-function(doc, whichTable , ...){
       ## fix types 
       x <- fixTypes(x)      
 
-      ## GET caption
-      c1<- xpathSApply(t1, "//h1[@class='content-title']", xmlValue)
-      c1 <- gsub("\\.$", "", c1)
-      c2 <-xpathSApply(t1, "//div[@class='caption']", xmlValue)
- 
      attr(x, "id") <- attr(doc, "id")
-      attr(x, "file") <- url1
-      # check if empty list?
-      attr(x, "label") <- c1
-      attr(x, "caption") <- c2
-
-        ## footnotes - 
-       fn <- xpathSApply(t1, "//div[contains(@id, 'fn')]", xmlValue)
-      if(length(fn)==0)  fn<- xpathSApply(t1, "//div[contains(@id, 'TF')]",    xmlValue) 
-      if(length(fn)>0){
-          fn <- gsub( "â\u0080\u0099", "'", fn)  
-          ## ADD space
-          fn <- paste( substr(fn, 1,2), substring(fn, 3))
-          attr(x, "footnotes") <- fn
-      }  
+  
       y[[k]] <- x
+     free(t1)
    }
    if(length(y)==1)  y <- y[[1]]
    y

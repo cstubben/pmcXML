@@ -55,7 +55,10 @@ parse_pubmed_XML<-function(xml, authorsN=3, journalFull=TRUE)
       sortdate <- xvalue(z2, "//SortPubDate")
       sortdate <- as.Date(substr(sortdate, 1,10))
 
-      pubs[[i]]<-data.frame(pmid, authors, year, title, journal, volume, pages, pubdate, sortdate,
+## PMC (if available)
+     pmc <-  xtags(z2, "//ArticleId", "IdType", "Value", "pmc")  
+
+      pubs[[i]]<-data.frame(pmid, authors, year, title, journal, volume, pages, pubdate, sortdate, pmc,
          stringsAsFactors=FALSE)
       free(z2)
    }

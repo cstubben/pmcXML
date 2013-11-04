@@ -4,7 +4,7 @@
 # or Helicobacter strain j99 tags -- HP not JHP_   
 # doc should be XML OR list returned by pmcText or pmcTable
 
-findTags <-function(doc, tags, prefix, suffix, notStartingWith, expand=TRUE, digits=4, ...){
+findTags <-function(doc, tags, prefix, suffix, notStartingWith, expand=TRUE, digits=4, na.string="", ...){
 
    id <- attr(doc, "id")
    if(is.null(id)) stop("Missing ID attribute")
@@ -19,7 +19,7 @@ findTags <-function(doc, tags, prefix, suffix, notStartingWith, expand=TRUE, dig
    # if(is.numeric(digits ) )  tag <- paste(prefix, "[0-9]{", digits, "}[^0-9_]", sep="")   
    # avoid before or after since tags will also be extracted. If tag in table caption, 
    # then that will be repeated... see PMC1525188 for problems
-   y <-  searchP(doc, tag , ...)
+   y <-  searchP(doc, tag , na.string=na.string, ...)
    if(!is.null(y)){
       print(paste(nrow(y), "matches"))
       y <- parseTags(y, tags, prefix, suffix, notStartingWith, expand, digits )

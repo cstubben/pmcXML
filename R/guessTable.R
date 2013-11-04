@@ -4,21 +4,21 @@ guessTable <-function(x, header= 1, ...){
    # EMPTY columns -see Sharma 2010
    n <- apply(x, 2, function(y) sum(! (is.na(y) | y == "" | y == " ") ))
    if(any(n == 0)){
-      print(paste("Deleted", sum(n == 0), "empty columns"))
+      message(paste("Deleted", sum(n == 0), "empty columns"))
       x <- x[, n != 0] 
    }
 
    #EMPTY ROWs... NA or empty strings..
    n <- apply(x, 1, function(y) sum(! (is.na(y) | y == "" | y ==" ") ))
    if(any(n==0)){
-      print(paste("Deleted", sum(n == 0), "empty rows"))
+      message(paste("Deleted", sum(n == 0), "empty rows"))
       x <- x[n != 0,] 
       n <- n[n != 0]
    }
 
    # extra spaces in last column - Rasmussen 2009
    if( any(grepl(" $", x[,ncol(x)]))){
-      print("Trimmed spaces in last column")
+      message("Trimmed spaces in last column")
       x[,ncol(x)] <- gdata::trim(x[,ncol(x)] )
    }
 
@@ -47,7 +47,8 @@ guessTable <-function(x, header= 1, ...){
       x <- x[-n1,]
        n <- n[-n1]
    }
-   if(length(caption)>1)  caption <- paste(caption, collape=" ")
+
+   if(length(caption)>1)  caption <- paste(caption, collapse=" ")
 
    # CHECK subheaders (other rows with only 1 column) -- see repeatSub
 
@@ -78,8 +79,10 @@ guessTable <-function(x, header= 1, ...){
    x <- fixTypes(x, ...)
 
    ## split label and caption  -doesn't work in many cases
+
    attr(x, "label") <- gsub("([^.:-]*).*", "\\1", caption)
    attr(x, "caption") <-gsub("[^.:-]*. *(.*)", "\\1", caption)
+
    attr(x, "footnotes") <- footnotes
    
    x

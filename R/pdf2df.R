@@ -2,8 +2,10 @@
 
 # SPLIT is a space delimited string with either 
 # w = single word (no spaces)
+# s = single letter  ## added July 31, 2013 since "-" strand matches d (which can mess up splitting)
 # d = decimal 0-9 and characters in scientific notation [Ee.-]
 # a = any character including spaces
+# e = optional last column on end of line 
 
 ## need NA, NaN for digit?
 
@@ -59,10 +61,16 @@ pdf2df <-function(x, split, captionRow=1, headerRow=2, labels )
   
    y <- strsplit(split, " ")[[1]]
    if(length(y)>9) stop("Can only split 9 or more columns (ie, backreferences \\10 and above are not allowed in gsub)")
-   # regular expression
-   z  <- list(w="([^ ]*)", d="([0-9Ee.-]*)", a="(.*)")
+   # regular expression 
+     ##  fix July 31, 2013 - use non-greedy match 
+     #.*? doesn't work if at end of row!  see Staph PMC2790875
+     
+
+   z  <- list(w="([^ ]*)", d="([0-9Ee.-]*)", s="([^ ])", a="(.*)", e="?(.*?)")
    z1 <- paste( z[ match(y, names(z))], collapse= " ")   #pattern
    z2 <-  paste( "\\", paste(1:length(y), collapse="\t\\"), sep="")  #capture strings \\1\t\\2\t\\3
+#print(z1)
+#print(z2)
    x <- gsub( z1,z2, x)
    # read into data.frame
    zz <- textConnection(x)

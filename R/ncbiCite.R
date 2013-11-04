@@ -24,8 +24,8 @@ ncbiCite <-function(id,  citedby=TRUE ){
       x    <- parse_pubmed_XML( xml )
       print(paste("Found", nrow(x), "references cited in",  id))
    }     
-   x <- x[order(x$authors),]
-   rownames(x)<-NULL
+  # x <- x[order(x$authors),]
+  # rownames(x)<-NULL
    # bibformat?
    x
 }

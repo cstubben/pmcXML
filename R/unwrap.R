@@ -3,9 +3,9 @@
 
 # fix multiline Row on new line
 
-unwrap <- function(x, startRow, sep= " "){    
-   startRow <- paste("^", startRow, sep="")
-   n <- grep(startRow, x)
+unwrap <- function(x, startRow, sep= " ", ...){    
+   # startRow <- paste("^", startRow, sep="")   ## skip?
+   n <- grep(startRow, x, ...)
    # use loop (backwards)
    for(i in length(x):n[1]){
       if( !grepl(startRow, x[i])) {

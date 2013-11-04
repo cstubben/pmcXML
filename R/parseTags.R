@@ -22,7 +22,7 @@ parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digit
 
    tag <- paste(prefix, "[0-9]+", sep="")  # 1 or more
    if(is.numeric(digits ) )  tag <- paste(prefix, "[0-9]{", digits, "}", sep="")   
-   # replace long dash
+   # replace long dash   en dash "\u2013"  - OR all u2010 to u2014?
    y$citation <- gsub("–", "-", y$citation)
    y$citation <-  gsub(" *- *", "-", y$citation)
 

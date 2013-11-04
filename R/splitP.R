@@ -10,11 +10,14 @@ if(length(z)==0){
 }else{
     z <- gsub("\n", " ", z)
    # dont split on abbrev B. subtilis 
-    z <- gsub(" ([A-Z])\\.", " \\1X.X", z)
+   #    z <- gsub(" ([A-Z])\\.", " \\1X.X", z)
+
+   ## July 25, 2013 some sentences end in single letter, so check next word.  
+      # Also inlcude optional parentheses -- see PMC3536570 for S. Typhimurium  (will split due to capital)
+     z <- gsub(" (\\(?[A-Z])\\. ([a-z])", " \\1X.X \\2", z)    
+
    # OR abbrev at start of paragraph!
     z <- gsub("^([A-Z])\\. ", "\\1X.X ", z)
-   # or if abbrev in parenthesesis
-    z <- gsub("\\(([A-Z])\\.", "\\(\\1X.X", z)
 
    z <- gsub("\\.$", "", z)
   
