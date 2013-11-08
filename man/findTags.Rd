@@ -20,7 +20,7 @@ Searches for locus tags in text and tables using \code{\link{searchP}} and extra
 
 }
 \value{
-A data.frame with locus tag, section title or table name and sentence or table row containing the citation
+A data.frame with locus tag, section title or table name and sentence or table row containing the mention
 }
 % \references{ }
 \author{ Chris Stubben }
@@ -35,7 +35,7 @@ data(yplocus)
  y<-findTags(doc, yplocus, "YPO", "a")
 head(y)
 table2(y$range)
-table2(y$citation) # check range expansions
+table2(y$mention) # check range expansions
 subset(y, locus=="YPO0988")
 
 # or just text

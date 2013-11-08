@@ -1,5 +1,5 @@
 
-## write citations to file...
+## write mentions to file...
 
 writeLocus <-function(x, file= "locus.tab" ){
    n <- nrow(x)

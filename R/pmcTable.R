@@ -1,6 +1,6 @@
 ## GET tables from pmc XML file
 # this  uses rowspan and colspan attributes to format table including multi-line headers.  
-# Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a citation 
+# Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a mention 
 
 
 pmcTable  <- function(doc, whichTable, verbose=TRUE, simplify=TRUE,...)

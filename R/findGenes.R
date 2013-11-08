@@ -48,7 +48,7 @@ n <- unlist( strsplit(n, "-"))
    if(proteins){
       ## PROTEINS - can start beginning of sentence.  Some proteins with numbers, but will get Chr1, Chr2 etc 
       proteins <- searchP(txt, "[A-Z][a-z]{2}[A-Z][^a-zA-Z]", ignore.case=FALSE)
-      proteins <- unique( unlist( str_extract_all(proteins$citation, "[A-Z][a-z]{2}[A-Z]") ))
+      proteins <- unique( unlist( str_extract_all(proteins$mention, "[A-Z][a-z]{2}[A-Z]") ))
       print(paste("Found", length(genes), "genes and", length(proteins), "proteins")) 
       # sometimes protein names are italicized and this avoids searching for bopA AND BopA (since searches are case-insensitive)
       genes <-sort( unique(tolower(c(genes, proteins) )))
@@ -75,11 +75,11 @@ n <- unlist( strsplit(n, "-"))
      x <-  data.frame(do.call("rbind", z), stringsAsFactors=FALSE)
    
      if(nrow(x)==0){
-        print("No gene citations found")
+        print("No gene mentions found")
         x<-NULL
      }else{
-        print(paste(nrow(x), "gene citations"))
-        names(x)<-c("gene", "source", "citation")
+        print(paste(nrow(x), "gene mentions"))
+        names(x)<-c("gene", "source", "mention")
         x<- data.frame( pmid= pmid(doc), x, stringsAsFactors=FALSE)
      }
   }

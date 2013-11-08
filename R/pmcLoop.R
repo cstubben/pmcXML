@@ -38,7 +38,7 @@ pmcLoop<-function( pmcresults, tags, prefix, suffix , file="locus.tab", notStart
                # add caption after...see PMC1525188 for problems
                y <-  findTags(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits, caption =FALSE)
                if(!is.null(y)){
-                  y$citation  <- paste("Caption=", attr(x[[i]], "caption") , ";", y$citation, sep="")
+                  y$mention  <- paste("Caption=", attr(x[[i]], "caption") , ";", y$mention, sep="")
                   writeLocus( y, file )
                 }
             }

@@ -23,12 +23,12 @@ parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digit
    tag <- paste(prefix, "[0-9]+", sep="")  # 1 or more
    if(is.numeric(digits ) )  tag <- paste(prefix, "[0-9]{", digits, "}", sep="")   
    # replace long dash   en dash "\u2013"  - OR all u2010 to u2014?
-   y$citation <- gsub("–", "-", y$citation)
-   y$citation <-  gsub(" *- *", "-", y$citation)
+   y$mention <- gsub("–", "-", y$mention)
+   y$mention <-  gsub(" *- *", "-", y$mention)
 
    ## fix newlines AND tabs
-   y$citation <- gsub("\n *", "", y$citation)
-   y$citation <- gsub("\t *", " ", y$citation)
+   y$mention <- gsub("\n *", "", y$mention)
+   y$mention <- gsub("\t *", " ", y$mention)
     
    # add suffix 
    if( !missing(suffix) ) tag<- paste(tag, suffix, "?", sep="")
@@ -40,14 +40,14 @@ parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digit
    if(!missing(notStartingWith)){
       tag1 <- paste("(?<!", notStartingWith, ")", tag1, sep="")
    }
-   ids0 <- str_extract_all(y$citation, perl( ignore.case( tag1  ) ) )
+   ids0 <- str_extract_all(y$mention, perl( ignore.case( tag1  ) ) )
 
 ## EXPAND ranges...
    if(expand){ 
       ## IDs including ranges  tag1 to tag2 OR tag1-tag2 OR tag1-n
       ## FIX?  should skip "compare tag1 to tag2" if "compare" in sentence!
 
-      ids <- str_extract_all(y$citation,  perl( ignore.case( paste(tag1, " to ", tag, "|", tag1, "-", tag, "|",  tag1,"-[0-9]+|", tag1, sep=""  ) )) )
+      ids <- str_extract_all(y$mention,  perl( ignore.case( paste(tag1, " to ", tag, "|", tag1, "-", tag, "|",  tag1,"-[0-9]+|", tag1, sep=""  ) )) )
  
       ## Expand ranges
       n <- grepl("-|to", ids)
@@ -56,7 +56,7 @@ parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digit
       ## locus may be in range and directly cited... select unique
       ids <- lapply(ids, unique) 
  
-      ## check if ID is part of range (by comparing to IDs in that specific citation)
+      ## check if ID is part of range (by comparing to IDs in that specific mention)
       ## fix - lower case range converted to uppercase...
 
       ## inRange <- !unlist( mapply(function(x,y) x %in% y, ids, ids0, SIMPLIFY=FALSE)) 
@@ -66,12 +66,12 @@ parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digit
       if(sum(n) > 0 ) print(paste("Expanded", sum(n), "matches to", paste(n2[n], collapse=", "), "tags"))
       ids <- unlist(ids)
      
-      y <- data.frame( source= rep(y$section, n2),  locus=ids, range=inRange,  citation= rep(y$citation, n2), stringsAsFactors=FALSE)
+      y <- data.frame( source= rep(y$section, n2),  locus=ids, range=inRange,  mention= rep(y$mention, n2), stringsAsFactors=FALSE)
    }else{
       n2 <- sapply(ids0, length)
       ids <- unlist(ids0)
       
-       y <- data.frame( source= rep(y$section, n2),  locus=ids, citation= rep(y$citation, n2), stringsAsFactors=FALSE)
+       y <- data.frame( source= rep(y$section, n2),  locus=ids, mention= rep(y$mention, n2), stringsAsFactors=FALSE)
     }
    ## fix tag prefix... rv, Rv, RV and remove duplicates (sometime same sentence/row with 2 prefixes, eg, bpsl2179 AND BPSL2179) 
      # prefix without special characters like [] or ?,  use gsub... 

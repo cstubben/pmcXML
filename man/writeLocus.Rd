@@ -1,8 +1,8 @@
 \name{writeLocus}
 \alias{writeLocus}
 
-\title{ Write citations to file }
-\description{  Write locus tag and other citations to file
+\title{ Write mentions to file }
+\description{  Write locus tag and other mentions to file
 
 }
 \usage{

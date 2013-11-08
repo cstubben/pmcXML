@@ -16,7 +16,7 @@ findGenes(doc, tag, length = 4, proteins = FALSE)
 \details{ There are a few ways to find gene names, and probably the best approach will use a combination of sources, including 1) Match to known list of genes. Some genes are common names like 'thiS' and many gene names are not listed in Refseq and other databases.  2) Find gene names in italic tags with length = 4.  Misses genes with 3 or 5 characters and may include some 4 letter words that are not genes.  3) Find protein names with initial and final capital, e.g. SpoT.  Often genes are cited using both protein and gene names.
 }
 \value{
-A data.frame with gene names, section title and sentence containing the citation
+A data.frame with gene names, section title and sentence containing the mention
 
 }
 % \references{ }

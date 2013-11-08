@@ -29,7 +29,7 @@ findSpecies <-function(doc ){
    not_species<-c("SI Text", "P value", "In silico", "Boolean function")
    spx <- spx[!spx %in% not_species]
 
-   print(paste("Found", length(spx), "species citations")) 
+   print(paste("Found", length(spx), "mentions")) 
    ## fix E. coli (often without fill name cited first)
    spx <- gsub("E. coli",  "Escherichia coli", spx)
 

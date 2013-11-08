@@ -23,17 +23,17 @@ searchP <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore
          x2 <- collapse2( x[[i]], na.string= na.string ) 
          n <- grep(pattern, x2,  ignore.case=ignore.case, ...)
          if(length(n) >0){
-             z[[i]] <- data.frame( section = names(x[i]), citation = x2[n] , stringsAsFactors=FALSE )
-             if(caption) z[[i]]$citation <- paste("Caption=", attr(x[[i]], "caption") , ";", z[[i]]$citation, sep="")
+             z[[i]] <- data.frame( section = names(x[i]), mention = x2[n] , stringsAsFactors=FALSE )
+             if(caption) z[[i]]$mention <- paste("Caption=", attr(x[[i]], "caption") , ";", z[[i]]$mention, sep="")
          }
       }else{
          # FULL TEXT
          n <- grep(pattern, x[[i]],  ignore.case=ignore.case, ...)
          if(length(n) >0){
-            z[[i]] <- data.frame( section = names(x[i]), citation = x[[i]][n] , stringsAsFactors=FALSE)
+            z[[i]] <- data.frame( section = names(x[i]), mention = x[[i]][n] , stringsAsFactors=FALSE)
             # if(number) z[[i]]$n <- n
-            if(before) z[[i]]$citation <- ifelse(n==1, z[[i]]$citation,  paste( x[[i]][n-1], z[[i]]$citation)  )
-            if(after)  z[[i]]$citation <- ifelse( n==length(x[[i]]),  z[[i]]$citation,  paste( z[[i]]$citation , x[[i]][n+1] ) )
+            if(before) z[[i]]$mention <- ifelse(n==1, z[[i]]$mention,  paste( x[[i]][n-1], z[[i]]$mention)  )
+            if(after)  z[[i]]$mention <- ifelse( n==length(x[[i]]),  z[[i]]$mention,  paste( z[[i]]$mention , x[[i]][n+1] ) )
          }
       }       
    }

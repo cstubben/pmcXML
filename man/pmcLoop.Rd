@@ -18,10 +18,10 @@ pmcLoop(pmcresults, tags, prefix, suffix, file = "locus.tab", notStartingWith, e
   \item{digits}{ number of digits in locus tags, use NA for 1 or more } 
 }
 
-\details{ Downloads XML using \code{\link{pmcOAI}} and then parses text using \code{\link{pmcText}}  and tableus using \code{\link{pmcTable}} and extracts tags using \code{\link{findTags}}.  Also adds captions to collapsed table rows and writes citations to output file
+\details{ Downloads XML using \code{\link{pmcOAI}} and then parses text using \code{\link{pmcText}}  and tables using \code{\link{pmcTable}} and extracts tags using \code{\link{findTags}}.  Also adds captions to collapsed table rows and writes mentions to output file
 
 }
-\value{  None. Citations are saved to output file }
+\value{  None. Mentions are saved to output file }
 % \references{ }
 \author{ Chris Stubben}
 % \note{ }

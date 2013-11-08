@@ -17,7 +17,7 @@ pmcTable(doc, whichTable, verbose = TRUE, simplify=TRUE, ...)
   \item{\dots}{ other options passed to \code{\link{fixTypes}} 
 }
 }
-\details{ Saves the caption and footnotes as attributes and uses rowspan and colspan attributes to format multi-line headers.  Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a citation.
+\details{ Saves the caption and footnotes as attributes and uses rowspan and colspan attributes to format multi-line headers.  Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a mention.
 
 }
 \value{ A list of data.frames, or if simplify = TRUE and only 1 table, then a data.frame.}
