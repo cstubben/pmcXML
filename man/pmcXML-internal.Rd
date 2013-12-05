@@ -1,4 +1,4 @@
-\name{genomes-internal}
+\name{pmcXML-internal}
 \alias{addAttr}
 \alias{fixTypes}
 \alias{matchTag}
@@ -11,9 +11,9 @@
 \alias{xvalues}
 
 
-\title{Internal pubmed functions}
+\title{Internal pmcXML functions}
 \description{
-  Internal pubmed functions.
+  Internal package functions.
 }
 \note{
   Some internal functions.

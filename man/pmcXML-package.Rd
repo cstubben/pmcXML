@@ -1,16 +1,16 @@
-\name{pubmed-package}
-\alias{pubmed-package}
+\name{pmcXML-package}
+\alias{pmcXML-package}
 \alias{pubmed}
 \docType{package}
 \title{ 
 XML documents from Pubmed Central 
 }
 \description{
-Download XML documents from the Open Access subset of Pubmed Central, and search for genes and locus tags in full text, tables, and supplmentary materials. 
+Download XML documents from the Open Access subset of Pubmed Central and search for genes and locus tags in full text, tables, and supplmentary materials. 
 }
 \details{
 \tabular{ll}{
-Package: \tab pubmed\cr
+Package: \tab pmcXML\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2013-05-08\cr

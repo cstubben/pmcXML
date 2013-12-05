@@ -1,6 +1,6 @@
-# pubmed
+# pmcXML
 
-`pubmed` is an `R` package to download and parse XML documents from
+`pmcXML` is an `R` package to download and parse XML documents from
 [Pubmed Central](http://www.ncbi.nlm.nih.gov/pmc) (PMC).  
 
 
@@ -13,7 +13,7 @@ from Bioconductor and `genomes2` from github.
 	biocLite("genomes")
 	library(devtools)
 	install_github("genomes2", "cstubben")
-	install_github("pubmed", "cstubben")
+	install_github("pmcXML", "cstubben")
 
 
 The `pmcSupp` function also requires a number of Unix dependencies (unzip, unoconv, pdftotext) 
