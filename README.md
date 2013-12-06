@@ -12,8 +12,8 @@ from Bioconductor and `genomes2` from github.
 	source("http://bioconductor.org/biocLite.R")
 	biocLite("genomes")
 	library(devtools)
-	install_github("genomes2", "cstubben")
-	install_github("pmcXML", "cstubben")
+	install_github("cstubben/genomes2")
+	install_github("cstubben/pmcXML")
 
 
 The `pmcSupp` function also requires a number of Unix dependencies (unzip, unoconv, pdftotext) 
