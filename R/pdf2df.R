@@ -25,6 +25,7 @@ pdf2df <-function(x, split, captionRow=1, headerRow=2, labels )
 
    if(is.numeric(captionRow)){
        caption <- x[captionRow]
+       if(length(caption)>1) caption <- paste(caption, collapse=" ")
    } 
    if(is.numeric(headerRow)){
       xx <- x[headerRow]

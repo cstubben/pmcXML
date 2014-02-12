@@ -220,8 +220,6 @@ pmcTable  <- function(doc, whichTable, verbose=TRUE, simplify=TRUE,...)
          names(y)[k ] <- label
       }
       if(simplify & length(y)==1) y<-y[[1]]
-
-       attr(y, "id") <- attr(doc, "id")
       y
    }
 }

@@ -20,4 +20,4 @@ The `pmcSupp` function also requires a number of Unix dependencies (unzip, unoco
 to read zip, word tables and pdf supplementary files. 
 
 Additional details about the package are on the wiki pages and in an upcoming publication in BMC Bioinformatics.
-Stubben, CJ and JC Challacombe, 2013.  Mining locus tags in Pubmed Central to improve microbial gene annotation.
+Stubben, CJ and JC Challacombe, 2013.  Mining locus tags in PubMed Central to improve microbial gene annotation.

@@ -8,7 +8,7 @@
 ## Elsevier   h2= 3:6  
 ## SGM        h2= 1:6
 ## Springer   h2= 1:3
-## Wiley      h2= 7:12  (uses //h3 tags)
+## Wiley      h3= 7:12  (uses //h3 tags)
 ## PMC        all h2 tags (and h2 option not used)
 
 ## PARSING NOTES:  if tags in header like  <h2><em>Methods</em></h2>
@@ -76,7 +76,7 @@ if(  pub %in% c("elsevier", "sciencedirect")   ){
     ## sections to parse
    if(missing(h2)) h2 <- 2:6
    z[["Main Title"]] <- gsub("\n *", "", xpathSApply(doc, "//title", xmlValue))
-
+   sec <- xpathSApply(doc, "//h2", xmlValue)
    for(i in h2){
         xpath <- paste( "//p[preceding::h2[.='", sec[i],  "'] and following::h2[.='", sec[i+1], "']]", sep="")
         y <- xpathSApply(doc, xpath, xmlValue)
@@ -230,18 +230,10 @@ if(  pub %in% c("elsevier", "sciencedirect")   ){
    z[["Main title"]] <- xpathSApply(doc, "//head/title", xmlValue)
 
    ## split into main sections  
+   ##NOTES: INTRODUCTION header is often missing.
+   ## some papers with unlabeled main text only  - some with 'tsec sec...'
 
-   ## INTRODUCTION is often missing... this might work
-   ##  xpathSApply(doc, "//div[@class='sec headless whole_rhythm']", xmlValue)
-
-   n1 <- length( xpathSApply(doc, "//div[@class='sec headless whole_rhythm']", xmlName) )
-   ## print warning if more than 1 headless div class - skipped for now s
-   if(n1>1){print("More than 1 div with class = sec headless whole_rhythm")}  
-   if(n1 == 1){
-       x <- getNodeSet(doc, "//div[h2]|//div[@class='sec headless whole_rhythm']" )
-   }else{
-       x <- getNodeSet(doc, "//div[h2]" )
-   }
+   x <- getNodeSet(doc, "//div[h2]|//div[@class='sec headless whole_rhythm']|//div[@class='tsec sec headless whole_rhythm']" )
 
    ## LOOP through sections
    for(i in 1: length(x) ){
@@ -250,8 +242,14 @@ if(  pub %in% c("elsevier", "sciencedirect")   ){
 
       title <- xvalue(doc2, "//h2"  )
       if(is.na(title)){
-          print("Missing section title - using Introduction")
-          title <- "Introduction"
+          ## in some cases this should be "Main Text"  see PMC2786597, PMC3690193
+          if( "Introduction" %in% names(z)){
+              print("Found another section without title - using Unknown")
+              title <- "Unknown"
+          }else{
+              print("Missing section title - using Introduction")
+              title <- "Introduction"
+          }
       }
       title <- gsub("^[0-9.]* (.*)", "\\1", title )  # remove numbered sections
       title <- gsub("\n", "", title ) # remove new lines
@@ -262,6 +260,7 @@ if(  pub %in% c("elsevier", "sciencedirect")   ){
       z[[title ]] <- removeSpecChar( splitP( y) )
       free(doc2)
    }
+
 
    # list h3 section titles
    h3 <- xpathSApply(doc, "//h3", xmlValue) 
@@ -285,6 +284,10 @@ if(  pub %in% c("elsevier", "sciencedirect")   ){
 }
 ## ALL
    attr(z, "id") <- attr(doc, "id")
+   
+   # check for empty sections
+   n <- sapply(z, length)==0
+   if(sum(n)>0) z <- z[!n]
    z
 }
 

@@ -1,5 +1,5 @@
 
-# split paragraph into sentences...
+# split paragraph into sentences...  replace with sentDetect in openNLP
 
 
 splitP <- function( z ){
@@ -25,7 +25,10 @@ if(length(z)==0){
   # z <- gsub(".^",       "X.X^",        z, fixed = TRUE)   # reference superscripts
     z <- gsub(".^",       ". ^",        z, fixed = TRUE)   # reference superscripts after period 
    z <- gsub("Fig. ",    "FigX.X ",     z, fixed = TRUE)   # Fig. 
+   z <- gsub("Suppl. ",   "SupplX.X ",     z, fixed = TRUE)   # Supplement
+   z <- gsub("Supp. ",    "SuppX.X ",     z, fixed = TRUE)   # Supplement 
    z <- gsub("et al. ",  "et alX.X ",   z, fixed = TRUE)   # et al. 
+   z <- gsub("et. al. ",  "et alX.X ",   z, fixed = TRUE)   # et. al. 
    z <- gsub(" no. ",    " noX.X ",     z, fixed = TRUE)   # acc no. 
    z <- gsub(" nos. ",   " nosX.X ",    z, fixed = TRUE)   # acc nos. 
    z <- gsub("e.g. ",    "e.gX.X ",     z, fixed = TRUE)   # e.g.
@@ -35,7 +38,7 @@ if(length(z)==0){
    z <- gsub(" sp. ",    " spX.X ",     z, fixed = TRUE) 
    z <- gsub(" subsp. ", " subspX.X ",  z, fixed = TRUE)   # subspecies
    z <- gsub(" var. ",   " varX.X ",    z, fixed = TRUE)   # varieties
-  
+     z <- gsub(" bv. ",   " bvX.X ",    z, fixed = TRUE)   # varieties
    z <- gsub(" ca. ",    " caX.X ",     z, fixed = TRUE)  # approx 
    z <- gsub("approx. ", "approxX.X ",  z, fixed = TRUE)
    z <- gsub(" vs. ",    " vsX.X ",     z, fixed = TRUE)  # vs.
