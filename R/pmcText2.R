@@ -81,11 +81,13 @@ pmcText2<-function(doc, references = FALSE ){
       y <- xpathSApply(doc2, "//sec/title", xmlValue)
       # count parents = level in tree
       n <- xpathSApply(doc2, "//sec/title", function(y) length(xmlAncestors(y) ))
-      # format a delimited list of subsection as list name
+      # format a delimited string to assign as list name
+      # eg, Results and discussions; Gene contents and predicted functional roles of GIs; iii) Pathogenicity
       path <- path.string(y, n)
       sep <- "'"
+      # loop through subsections
       for(i in 1:length(y) ){
-          ##  need to change separator if quote in section titles like "Authors' contribution -
+          ##  need to change separator if quote in section title like "Authors' contribution"
           if(grepl("'", y[i])) sep<-'"'
           y2 <-  xpathSApply(doc2, paste("//sec/title[.=", y[i], "]/../p", sep= sep), xmlValue)
           if(length(y2)>0)  z[[ path[i] ]] <- splitP(y2) 
