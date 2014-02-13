@@ -74,14 +74,16 @@ pmcText2<-function(doc, references = FALSE ){
    }
        # abstract ONLY ?? PMC2447356
    if(length(x) > 0){
-   ## LOOP through body sections
+   ## LOOP through main sections
    for(i in 1: length(x) ){
       doc2 <- xmlDoc(x[[i]])
-
+      # get all subsections
       y <- xpathSApply(doc2, "//sec/title", xmlValue)
+      # count parents = level in tree
       n <- xpathSApply(doc2, "//sec/title", function(y) length(xmlAncestors(y) ))
+      # format a delimited list of subsection as list name
       path <- path.string(y, n)
-       sep <- "'"
+      sep <- "'"
       for(i in 1:length(y) ){
           ##  need to change separator if quote in section titles like "Authors' contribution -
           if(grepl("'", y[i])) sep<-'"'
@@ -90,8 +92,8 @@ pmcText2<-function(doc, references = FALSE ){
       }
       free(doc2)
    }
-   # SINCE only main sections are parsed, get list of all section titles
-   z[["Section title"]] <- xpathSApply(doc, "//sec/title", xmlValue) 
+ 
+   #  z[["Section title"]] <- xpathSApply(doc, "//sec/title", xmlValue) 
    z[["Figure caption"]]     <- splitP( xpathSApply(doc, "//fig/caption/title", xmlValue) )
    z[["Figure text"]]        <- splitP( xpathSApply(doc, "//fig/caption/p", xmlValue) )
    z[["Table caption"]]      <- splitP( xpathSApply(doc, "//table-wrap/caption", xmlValue))
@@ -100,10 +102,6 @@ pmcText2<-function(doc, references = FALSE ){
   if(references)  z[["References"]] <-  xpathSApply(doc, "//ref//article-title" , xmlValue) 
 }
 
-# CONVERT to dataframe ?
-## z <-data.frame( section=rep(names(z), sapply(z, length) ), cite=unlist(z))
-# OR leave as list
-## package(tm) - convert using Corpus(VectorSource(z))
 
 # add attributes
 
