@@ -1,4 +1,63 @@
-# split PMC xml into sentences with section labels (Incl ALL subsection titles in single delimited string)
+#  split PMC xml into sentences with ALL subsection titles in a single delimited string
+
+## TRY 
+#  id <- "PMC2612704"
+#  bibformat(ncbiPMC(id))
+#  Tuanyok A, Leadem BR, Auerbach RK, et al. 2008. Genomic islands from five strains of Burkholderia pseudomallei. BMC Genomics 9:566.
+
+#  doc <- pmc(id)
+#  txt <-pmcText2(doc)
+
+#  x <- getNodeSet(doc, "//body/sec")
+#  doc2 <- xmlDoc( x[[2]])
+#  y <- xpathSApply(doc2, "//sec/title", xmlValue)
+#  y
+#   [1] "Results and discussions"                               "Identification of genomic islands in B. pseudomallei" 
+#   [3] "i) Genomic comparison of five B. pseudomallei strains" "ii) Nomenclature of B. pseudomallei genomic islands"  
+#   [5] "a) Precedence"                                         "b) Unique gene composition"                           
+#   [7] "c) Unique genomic location"                            "Genetic recombination of genomic islands"             
+#   [9] "i) tRNA-SSR"                                           "ii) Gene specific recombination"                      
+#  [11] "Gene contents and predicted functional roles of GIs"   "i) Prophages"                                         
+#  [13] "ii) Metabolism"                                        "iii) Pathogenicity"                                   
+#  [15] "iv) Unknown functional roles"                         
+
+#  n <- xpathSApply(doc2, "//sec/title", function(y) length(xmlAncestors(y) ))
+#  [1] 2 3 4 4 5 5 5 3 4 4 3 4 4 4 4
+
+#  cat(sprintf(paste("%", (n-2) * 3, "s%s", sep=""), "", y), sep="\n")
+#  Results and discussions
+#    Identification of genomic islands in B. pseudomallei
+#        i) Genomic comparison of five B. pseudomallei strains
+#        ii) Nomenclature of B. pseudomallei genomic islands
+#           a) Precedence
+#           b) Unique gene composition
+#           c) Unique genomic location
+#     Genetic recombination of genomic islands
+#        i) tRNA-SSR
+#        ii) Gene specific recombination
+#     Gene contents and predicted functional roles of GIs
+#        i) Prophages
+#        ii) Metabolism
+#        iii) Pathogenicity
+#        iv) Unknown functional roles
+
+#  path.string(y, n)
+#   [1] "Results and discussions"                                                                                                                                       
+#   [2] "Results and discussions; Identification of genomic islands in B. pseudomallei"                                                                                 
+#   [3] "Results and discussions; Identification of genomic islands in B. pseudomallei; i) Genomic comparison of five B. pseudomallei strains"                          
+#   [4] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands"                            
+#   [5] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; a) Precedence"             
+#   [6] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; b) Unique gene composition"
+#   [7] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; c) Unique genomic location"
+#   [8] "Results and discussions; Genetic recombination of genomic islands"                                                                                             
+#   [9] "Results and discussions; Genetic recombination of genomic islands; i) tRNA-SSR"                                                                                
+#  [10] "Results and discussions; Genetic recombination of genomic islands; ii) Gene specific recombination"                                                            
+#  [11] "Results and discussions; Gene contents and predicted functional roles of GIs"                                                                                  
+#  [12] "Results and discussions; Gene contents and predicted functional roles of GIs; i) Prophages"                                                                    
+#  [13] "Results and discussions; Gene contents and predicted functional roles of GIs; ii) Metabolism"                                                                  
+#  [14] "Results and discussions; Gene contents and predicted functional roles of GIs; iii) Pathogenicity"                                                              
+#  [15] "Results and discussions; Gene contents and predicted functional roles of GIs; iv) Unknown functional roles"          
+
 
 pmcText2<-function(doc, references = FALSE ){
 
