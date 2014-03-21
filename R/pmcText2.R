@@ -42,21 +42,21 @@
 #        iv) Unknown functional roles
 
 #  path.string(y, n)
-#   [1] "Results and discussions"                                                                                                                                       
-#   [2] "Results and discussions; Identification of genomic islands in B. pseudomallei"                                                                                 
-#   [3] "Results and discussions; Identification of genomic islands in B. pseudomallei; i) Genomic comparison of five B. pseudomallei strains"                          
-#   [4] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands"                            
-#   [5] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; a) Precedence"             
-#   [6] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; b) Unique gene composition"
-#   [7] "Results and discussions; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; c) Unique genomic location"
-#   [8] "Results and discussions; Genetic recombination of genomic islands"                                                                                             
-#   [9] "Results and discussions; Genetic recombination of genomic islands; i) tRNA-SSR"                                                                                
-#  [10] "Results and discussions; Genetic recombination of genomic islands; ii) Gene specific recombination"                                                            
-#  [11] "Results and discussions; Gene contents and predicted functional roles of GIs"                                                                                  
-#  [12] "Results and discussions; Gene contents and predicted functional roles of GIs; i) Prophages"                                                                    
-#  [13] "Results and discussions; Gene contents and predicted functional roles of GIs; ii) Metabolism"                                                                  
-#  [14] "Results and discussions; Gene contents and predicted functional roles of GIs; iii) Pathogenicity"                                                              
-#  [15] "Results and discussions; Gene contents and predicted functional roles of GIs; iv) Unknown functional roles"          
+#   [1] "Results"                                                                                                                                       
+#   [2] "Results; Identification of genomic islands in B. pseudomallei"                                                                                 
+#   [3] "Results; Identification of genomic islands in B. pseudomallei; i) Genomic comparison of five B. pseudomallei strains"                          
+#   [4] "Results; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands"                            
+#   [5] "Results; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; a) Precedence"             
+#   [6] "Results; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; b) Unique gene composition"
+#   [7] "Results; Identification of genomic islands in B. pseudomallei; ii) Nomenclature of B. pseudomallei genomic islands; c) Unique genomic location"
+#   [8] "Results; Genetic recombination of genomic islands"                                                                                             
+#   [9] "Results; Genetic recombination of genomic islands; i) tRNA-SSR"                                                                                
+#  [10] "Results; Genetic recombination of genomic islands; ii) Gene specific recombination"                                                            
+#  [11] "Results; Gene contents and predicted functional roles of GIs"                                                                                  
+#  [12] "Results; Gene contents and predicted functional roles of GIs; i) Prophages"                                                                    
+#  [13] "Results; Gene contents and predicted functional roles of GIs; ii) Metabolism"                                                                  
+#  [14] "Results; Gene contents and predicted functional roles of GIs; iii) Pathogenicity"                                                              
+#  [15] "Results; Gene contents and predicted functional roles of GIs; iv) Unknown functional roles"          
 
 
 pmcText2<-function(doc, references = FALSE ){
@@ -86,21 +86,35 @@ pmcText2<-function(doc, references = FALSE ){
       path <- path.string(y, n)
       sep <- "'"
       # loop through subsections
-      for(i in 1:length(y) ){
+      for(j in 1:length(y) ){
           ##  need to change separator if quote in section title like "Authors' contribution"
-          if(grepl("'", y[i])) sep<-'"'
-          y2 <-  xpathSApply(doc2, paste("//sec/title[.=", y[i], "]/../p", sep= sep), xmlValue)
-          if(length(y2)>0)  z[[ path[i] ]] <- splitP(y2) 
+          if(grepl("'", y[j])) sep<-'"'
+          y2 <-  xpathSApply(doc2, paste("//sec/title[.=", y[j], "]/../p", sep= sep), xmlValue)
+          if(length(y2)>0)  z[[ path[j] ]] <- splitP(y2) 
       }
       free(doc2)
    }
  
-   #  z[["Section title"]] <- xpathSApply(doc, "//sec/title", xmlValue) 
-   z[["Figure caption"]]     <- splitP( xpathSApply(doc, "//fig/caption/title", xmlValue) )
-   z[["Figure text"]]        <- splitP( xpathSApply(doc, "//fig/caption/p", xmlValue) )
-   z[["Table caption"]]      <- splitP( xpathSApply(doc, "//table-wrap/caption", xmlValue))
+    # INCLUDE labels
+    f1 <- xpathSApply(doc, "//fig/label", xmlValue)
+    if( length(f1) > 0){
+       f2 <- xpathSApply(doc, "//fig/caption/title", xmlValue)
+       f3 <- xpathSApply(doc, "//fig/caption/p", xmlValue)
+       z[["Figure caption"]]     <- splitP(  paste(f1, f2, f3) )
+    }
+    f1 <- xpathSApply(doc, "//table-wrap/label", xmlValue)
+    if( length(f1) > 0){
+        f2<- xpathSApply(doc, "//table-wrap/caption", xmlValue)
+        z[["Table caption"]]      <- splitP( paste(f1, f2) )
+    }
    z[["Table footnotes"]]    <- splitP( xpathSApply(doc, "//table-wrap-foot/fn", xmlValue))
-   z[["Supplement caption"]] <-  splitP( xpathSApply(doc, "//supplementary-material/caption/p[1]", xmlValue))
+
+    f1 <- xpathSApply(doc, "//supplementary-material/label", xmlValue)
+    if( length(f1) > 0){
+       f2<- xpathSApply(doc, "//supplementary-material/caption", xmlValue)
+       z[["Supplement caption"]] <-  splitP( paste(f1, f2) )
+    }
+
   if(references)  z[["References"]] <-  xpathSApply(doc, "//ref//article-title" , xmlValue) 
 }
 

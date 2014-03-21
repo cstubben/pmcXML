@@ -28,6 +28,10 @@ removeSpecChar <- function(y){
      y <- gsub("Ã¼", "ü", y)
      y <- gsub("Ã\u0097", "×", y)
 
+    ## use utf
+      y <- gsub("\u00A0", " ", y) # no break space
+
+
   ## {\"type\":\"entrez-protein\",\"attrs\":{\"text\":\"AAG33249\",\"term_id\":\"11230854\"}}
       y <- gsub("\\{[^}]*\\}\\}" , "", y)
       y

@@ -283,11 +283,11 @@ if(  pub %in% c("elsevier", "sciencedirect")   ){
   stop("No match to pub.  Pub must be PMC, Elsevier, Wiley, Springer, SGM, AnnualReviews ")
 }
 ## ALL
-   attr(z, "id") <- attr(doc, "id")
-   
+
    # check for empty sections
    n <- sapply(z, length)==0
    if(sum(n)>0) z <- z[!n]
+   attr(z, "id") <- attr(doc, "id")
    z
 }
 

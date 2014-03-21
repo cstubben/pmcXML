@@ -39,7 +39,7 @@ pmcSupp <-function(doc, file, ... ){
             y
          }else{
            ## download using file number, 1,2,3, etc
-           print(paste("Downloading", y$label[file] ))      
+           message(paste("Downloading", y$label[file] ))      
             getSupp(doc, y$file[file], ...)
          }
       }

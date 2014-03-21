@@ -15,10 +15,10 @@ pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
 
    #########################
    if(local && file.exists( xmlfile ) ){
-      print("Loading local XML copy")
+      message("Loading local XML copy")
       doc <- xmlParse( xmlfile)  
    }else if(local && file.exists( htmlfile ) ){
-      print("Loading local HTML copy")
+      message("Loading local HTML copy")
       doc <- htmlParse( htmlfile  )
    }else{
    #########################
@@ -37,7 +37,7 @@ pmc <- function(id, local=TRUE, dir="~/downloads/pmc", ...){
          }else{
             ## SEE Open Access Subset description at http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/
              #  The publisher of this article does not allow downloading of the full text in XML form
-            print("No XML results in Open Access Subset.  Downloading HTML from PMC (please check copyright restrictions)")
+            message("No XML results in Open Access Subset.  Downloading HTML from PMC (please check copyright restrictions)")
 
              x <- gsub("<sup>", "<sup>^", x)
               x <- gsub("<sub>", "<sub>_", x)   ## subscripts -  use _ like Latex math 

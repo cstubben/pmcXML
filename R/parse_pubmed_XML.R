@@ -6,7 +6,7 @@
 
 # no pmc or abstract from esummary
 
-parse_pubmed_XML<-function(xml, authorsN=3, journalFull=TRUE)
+parse_pubmed_XML<-function(xml, authorsN=2, journalFull=TRUE)
 { 
    # xml results returned by efetch 
    z<- getNodeSet(xml, "//DocumentSummary")
@@ -31,7 +31,7 @@ parse_pubmed_XML<-function(xml, authorsN=3, journalFull=TRUE)
 
       a3 <-xpathSApply(z2, "//Author/Name", xmlValue)
       
-      if(length(a3) > authorsN){
+      if(length(a3) > authorsN + 1){
          authors <- paste(c(a3[1: authorsN], "et al"),  collapse=", ")
       }else{
          authors <- paste(a3,  collapse=", ")

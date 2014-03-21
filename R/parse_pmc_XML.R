@@ -1,4 +1,4 @@
-parse_pmc_XML<-function(xml, authorsN=3, journalFull=TRUE )
+parse_pmc_XML<-function(xml, authorsN=2, journalFull=TRUE )
 { 
    # results returned from esummary version 2.0 
 
@@ -18,7 +18,8 @@ parse_pmc_XML<-function(xml, authorsN=3, journalFull=TRUE )
 
       #authors
       a3<- xpathSApply(z2, "//Author/Name", xmlValue)   # all authors
-      if(length(a3) > authorsN){
+       # fix march 19, 2014 -  et al should represent two or more authors (not 1)
+      if(length(a3) > authorsN+1){
          authors <- paste(c(a3[1: authorsN], "et al"),  collapse=", ")
       }else{
          authors <- paste(a3,  collapse=", ")

@@ -30,15 +30,23 @@ if(length(z)==0){
    z <- gsub("et al. ",  "et alX.X ",   z, fixed = TRUE)   # et al. 
    z <- gsub("et. al. ",  "et alX.X ",   z, fixed = TRUE)   # et. al. 
    z <- gsub(" no. ",    " noX.X ",     z, fixed = TRUE)   # acc no. 
-   z <- gsub(" nos. ",   " nosX.X ",    z, fixed = TRUE)   # acc nos. 
+   z <- gsub(" nos. ",   " nosX.X ",    z, fixed = TRUE)   # acc nos.
+   z <- gsub(" No. ",    " NoX.X ",     z, fixed = TRUE) 
+
    z <- gsub("e.g. ",    "e.gX.X ",     z, fixed = TRUE)   # e.g.
    z <- gsub("(eg. ",    "(egX.X ",     z, fixed = TRUE)   # eg.  .. add paren to avoid words ending in eg.
    z <- gsub("i.e. ",    "i.eX.X ",     z, fixed = TRUE)   # i.e. 
+
    z <- gsub(" spp. ",   " sppX.X ",    z, fixed = TRUE)   # species
    z <- gsub(" sp. ",    " spX.X ",     z, fixed = TRUE) 
-   z <- gsub(" subsp. ", " subspX.X ",  z, fixed = TRUE)   # subspecies
+   z <- gsub("subsp. ", "subspX.X ",  z, fixed = TRUE)   # subspecies
    z <- gsub(" var. ",   " varX.X ",    z, fixed = TRUE)   # varieties
-     z <- gsub(" bv. ",   " bvX.X ",    z, fixed = TRUE)   # varieties
+     z <- gsub(" bv. ",   " bvX.X ",    z, fixed = TRUE)   # biovars
+     z <- gsub(" sv. ",   " svX.X ",    z, fixed = TRUE)   # serovars
+
+        z <- gsub("i.n. ",   "i.nX.X ",    z, fixed = TRUE)  #intranasal i.n.
+        z <- gsub("i.p. ",   "i.pX.X ",    z, fixed = TRUE) 
+
    z <- gsub(" ca. ",    " caX.X ",     z, fixed = TRUE)  # approx 
    z <- gsub("approx. ", "approxX.X ",  z, fixed = TRUE)
    z <- gsub(" vs. ",    " vsX.X ",     z, fixed = TRUE)  # vs.
