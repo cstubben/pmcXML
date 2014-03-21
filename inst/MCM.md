@@ -16,7 +16,6 @@ a number of recent advances in our understanding of invasiveness and immune syst
 closely related Y. pseudotuberculosis and Y. enterocolitica and exciting new laboratory diagnostic and vaccine
 development approaches ([10], [13], [59], [68]).
 
-
 ###TAXONOMY AND HISTORY OF THE GENUS
 
 The agent of plague, Y. pestis (previously Bacterium pestis, Bacillus pestis, and Pasteurella pestis), was first
