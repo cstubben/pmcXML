@@ -14,21 +14,22 @@ The sequenced and annotated genomes of Y. pestis biovar Orientalis and biovar Me
 Yersinia species, as members of the family Enterobacteriaceae, are gram-negative, non-spore-forming bacilli that exhibit bipolar staining particularly when seen in primary specimens stained with Giemsa or Wayson's dye. The bacilli are smaller (0.5 to 0.8 mm in diameter and 1 to 3 mm in length) than other members of their family and tend to grow more slowly as well. With the exception of Y. pestis, Yersinia species are motile at 25°C due to peritrichous or paripolar flagella (Table 1). Interestingly, the pathogenic yersiniae either repress (Y. pseudotuberculosis and Y. enterocolitica) or, through mutation, have lost the capability to express (Y.  pestis) the flagellar apparatus; by either mechanism they effectively avoid stimulation of innate immune responses to these potent inducers.
 
 ###REFERENCES
-10. Butler, T. 2009. Plague into the 21st century. Clin. Infect. Dis. 49:736-742
+ 10. Butler, T. 2009. Plague into the 21st century. Clin. Infect. Dis. 49:736-742
 
-13. Chain, P. S., E. Carniel, F. W. Larimer, J. Lamerdin, P. O.  Stoutland, W. M. Regala, A. M. Georgescu, L. M. Vergez, M. L. Land, V. L. Motin, R. R. Brubaker, J. Fowler, J.  Hinnebusch, M. Marceau, C. Medigue, M. Simonet, V.  Chenal-Francisque, B. Souza, D. Dacheux, J. M. Elliott, A.  Derbise, L. J. Hauser, and E. Garcia. 2004. Insights into the evolution of Yersinia pestis through whole-genome comparison with Yersinia pseudotuberculosis. Proc. Natl. Acad. Sci. USA 101:13826-13831
+ 13. Chain, P. S., E. Carniel, F. W. Larimer, J. Lamerdin, P. O.  Stoutland, W. M. Regala, A. M. Georgescu, L. M. Vergez, M. L. Land, V. L. Motin, R. R. Brubaker, J. Fowler, J.  Hinnebusch, M. Marceau, C. Medigue, M. Simonet, V.  Chenal-Francisque, B. Souza, D. Dacheux, J. M. Elliott, A.  Derbise, L. J. Hauser, and E. Garcia. 2004. Insights into the evolution of Yersinia pestis through whole-genome comparison with Yersinia pseudotuberculosis. Proc. Natl. Acad. Sci. USA 101:13826-13831
 
-16. Chen, C. L., J. C. Yu, S. Holme, M. R. Jacobs, R. Yomtovian, and C. P. McDonald. 2008. Detection of bacteria in stored red cell products using a culture-based bacterial detection system.  Transfusion 48:1550-1557
+ 16. Chen, C. L., J. C. Yu, S. Holme, M. R. Jacobs, R. Yomtovian, and C. P. McDonald. 2008. Detection of bacteria in stored red cell products using a culture-based bacterial detection system.  Transfusion 48:1550-1557
 
-22. Deng, W., V. Burland, G. Plunkett III, A. Boutin, G. F.  Mayhew, P. Liss, N. T. Perna, D. J. Rose, B. Mau, S. Zhou, D.  C. Schwartz, J. D. Fetherston, L. E. Lindler, R. R. Brubaker, G. V. Plano, S. C. Straley, K. A. McDonough, M. L. Nilles, J. S. Matson, F. R. Blattner, and R. D. Perry. 2002. Genome sequence of Yersinia pestis KIM. J. Bacteriol. 184:4601-4611.
+ 22. Deng, W., V. Burland, G. Plunkett III, A. Boutin, G. F.  Mayhew, P. Liss, N. T. Perna, D. J. Rose, B. Mau, S. Zhou, D.  C. Schwartz, J. D. Fetherston, L. E. Lindler, R. R. Brubaker, G. V. Plano, S. C. Straley, K. A. McDonough, M. L. Nilles, J. S. Matson, F. R. Blattner, and R. D. Perry. 2002. Genome sequence of Yersinia pestis KIM. J. Bacteriol. 184:4601-4611.
 
-57. Parkhill, J., B. W. Wren, N. R. Thomson, R. W. Titball, M. T. Holden, M. B. Prentice, M. Sebaihia, K. D. James, C. Churcher, K. L. Mungall, S. Baker, D. Basham, S. D. Bentley, K. Brooks, A. M. Cerdeno-Tarraga, T.  Chillingworth, A. Cronin, R. M. Davies, P. Davis, G. Dougan, T. Feltwell, N. Hamlin, S. Holroyd, K. Jagels, A. V.  Karlyshev, S. Leather, S. Moule, P. C. Oyston, M. Quail, K.  Rutherford, M. Simmonds, J. Skelton, K. Stevens, S. Whitehead, and B. G. Barrell. 2001. Genome sequence of Yersinia pestis, the causative agent of plague. Nature 413:523-527.
+ 57. Parkhill, J., B. W. Wren, N. R. Thomson, R. W. Titball, M. T. Holden, M. B. Prentice, M. Sebaihia, K. D. James, C. Churcher, K. L. Mungall, S. Baker, D. Basham, S. D. Bentley, K. Brooks, A. M. Cerdeno-Tarraga, T.  Chillingworth, A. Cronin, R. M. Davies, P. Davis, G. Dougan, T. Feltwell, N. Hamlin, S. Holroyd, K. Jagels, A. V.  Karlyshev, S. Leather, S. Moule, P. C. Oyston, M. Quail, K.  Rutherford, M. Simmonds, J. Skelton, K. Stevens, S. Whitehead, and B. G. Barrell. 2001. Genome sequence of Yersinia pestis, the causative agent of plague. Nature 413:523-527.
 
-59. Perry, R. D., and J. D. Fetherston. 1997. Yersinia pestis--etiologic agent of plague. Clin. Microbiol. Rev. 10:35-66.
+ 59. Perry, R. D., and J. D. Fetherston. 1997. Yersinia pestis--etiologic agent of plague. Clin. Microbiol. Rev. 10:35-66.
 
-68. Smiley, S. T. 2008. Current challenges in the development of vaccines for pneumonic plague. Expert Rev. Vaccines 7:209-221.
+ 68. Smiley, S. T. 2008. Current challenges in the development of vaccines for pneumonic plague. Expert Rev. Vaccines 7:209-221.
 
-76. Thomson, N. R., S. Howard, B. W. Wren, M. T. Holden, L. Crossman, G. L. Challis, C. Churcher, K. Mungall, K.  Brooks, T. Chillingworth, T. Feltwell, Z. Abdellah, H.  Hauser, K. Jagels, M. Maddison, S. Moule, M. Sanders, S.  Whitehead, M. A. Quail, G. Dougan, J. Parkhill, and M.  B. Prentice. 2006. The complete genome sequence and comparative genome analysis of the high pathogenicity Yersinia enterocolitica strain 8081. PLoS Genet. 2:e206.
+ 76. Thomson, N. R., S. Howard, B. W. Wren, M. T. Holden, L. Crossman, G. L. Challis, C. Churcher, K. Mungall, K.  Brooks, T. Chillingworth, T. Feltwell, Z. Abdellah, H.  Hauser, K. Jagels, M. Maddison, S. Moule, M. Sanders, S.  Whitehead, M. A. Quail, G. Dougan, J. Parkhill, and M.  B. Prentice. 2006. The complete genome sequence and comparative genome analysis of the high pathogenicity Yersinia enterocolitica strain 8081. PLoS Genet. 2:e206.
+
 
 [10]: http://www.ncbi.nlm.nih.gov/pubmed/19606935 "Butler, T. 2009. Plague into the 21st century. Clin. Infect. Dis. 49:736-742"  
 
