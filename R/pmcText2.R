@@ -79,6 +79,10 @@ pmcText2<-function(doc, references = FALSE ){
       doc2 <- xmlDoc(x[[i]])
       # get all subsections
       y <- xpathSApply(doc2, "//sec/title", xmlValue)
+      ## repeating subsection titles in PMC3564208 will cause text to repeat!
+      ## PMC1557856 has lots of empty section titles, so use y[y!=""] to skip
+      if( any( duplicated(y[y!=""])) ){print(paste("WARNING: duplicate subsection titles in", y[1])) }
+
       # count parents = level in tree
       n <- xpathSApply(doc2, "//sec/title", function(y) length(xmlAncestors(y) ))
       # format a delimited string to assign as list name
@@ -107,7 +111,7 @@ pmcText2<-function(doc, references = FALSE ){
         f2<- xpathSApply(doc, "//table-wrap/caption", xmlValue)
         z[["Table caption"]]      <- splitP( paste(f1, f2) )
     }
-   z[["Table footnotes"]]    <- splitP( xpathSApply(doc, "//table-wrap-foot/fn", xmlValue))
+   ### z[["Table footnotes"]]    <- splitP( xpathSApply(doc, "//table-wrap-foot/fn", xmlValue))
 
     f1 <- xpathSApply(doc, "//supplementary-material/label", xmlValue)
     if( length(f1) > 0){

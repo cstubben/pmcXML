@@ -98,17 +98,17 @@ comparative genome analysis of the high pathogenicity Yersinia enterocolitica st
 
 [10]: http://www.ncbi.nlm.nih.gov/pubmed/19606935 "Butler, T. 2009. Plague into the 21st century. Clin. Infect. Dis. 49:736-742"  
 
-[13]: http://www.ncbi.nlm.nih.gov/pubmed/15358858 "Chain, P. S., E. Carniel, F. W. Larimer, J. Lamerdin, P. O.  Stoutland, W. M. Regala, A. M. Georgescu, L. M. Vergez, M. L. Land, V. L. Motin, R. R. Brubaker, J. Fowler, J.  Hinnebusch, M. Marceau, C. Medigue, M. Simonet, V.  Chenal-Francisque, B. Souza, D. Dacheux, J. M. Elliott, A.  Derbise, L. J. Hauser, and E. Garcia. 2004. Insights into the evolution of Yersinia pestis through whole-genome comparison with Yersinia pseudotuberculosis. Proc. Natl. Acad. Sci. USA 101:13826-13831"
+[13]: http://www.ncbi.nlm.nih.gov/pubmed/15358858 "Chain, P. S., E. Carniel, F. W. Larimer, et al. 2004. Insights into the evolution of Yersinia pestis through whole-genome comparison with Yersinia pseudotuberculosis. Proc. Natl. Acad. Sci. USA 101:13826-13831"
 
-[16]: http://www.ncbi.nlm.nih.gov/pubmed/18466178 "Chen, C. L., J. C. Yu, S. Holme, M. R. Jacobs, R. Yomtovian, and C. P. McDonald. 2008. Detection of bacteria in stored red cell products using a culture-based bacterial detection system.  Transfusion 48:1550-1557" 
+[16]: http://www.ncbi.nlm.nih.gov/pubmed/18466178 "Chen, C. L., J. C. Yu, S. Holme, et al. 2008. Detection of bacteria in stored red cell products using a culture-based bacterial detection system.  Transfusion 48:1550-1557" 
 
-[22]: http://www.ncbi.nlm.nih.gov/pubmed/12142430 "Deng, W., V. Burland, G. Plunkett III, A. Boutin, G. F.  Mayhew, P. Liss, N. T. Perna, D. J. Rose, B. Mau, S. Zhou, D.  C. Schwartz, J. D. Fetherston, L. E. Lindler, R. R. Brubaker, G. V. Plano, S. C. Straley, K. A. McDonough, M. L. Nilles, J. S. Matson, F. R. Blattner, and R. D. Perry. 2002. Genome sequence of Yersinia pestis KIM. J. Bacteriol. 184:4601-4611."
+[22]: http://www.ncbi.nlm.nih.gov/pubmed/12142430 "Deng, W., V. Burland, G. Plunkett III, et al. 2002. Genome sequence of Yersinia pestis KIM. J. Bacteriol. 184:4601-4611."
 
-[57]: http://www.ncbi.nlm.nih.gov/pubmed/11586360  "Parkhill, J., B. W. Wren, N. R. Thomson, R. W. Titball, M. T. Holden, M. B. Prentice, M. Sebaihia, K. D. James, C. Churcher, K. L. Mungall, S. Baker, D. Basham, S. D. Bentley, K. Brooks, A. M. Cerdeno-Tarraga, T.  Chillingworth, A. Cronin, R. M. Davies, P. Davis, G. Dougan, T. Feltwell, N. Hamlin, S. Holroyd, K. Jagels, A. V.  Karlyshev, S. Leather, S. Moule, P. C. Oyston, M. Quail, K.  Rutherford, M. Simmonds, J. Skelton, K. Stevens, S. Whitehead, and B. G. Barrell. 2001. Genome sequence of Yersinia pestis, the causative agent of plague. Nature 413:523-527." 
+[57]: http://www.ncbi.nlm.nih.gov/pubmed/11586360  "Parkhill, J., B. W. Wren, N. R. Thomson, et al. 2001. Genome sequence of Yersinia pestis, the causative agent of plague. Nature 413:523-527." 
 
 [59]: http://www.ncbi.nlm.nih.gov/pubmed/8993858 "Perry, R. D., and J. D. Fetherston. 1997. Yersinia pestis--etiologic agent of plague. Clin. Microbiol. Rev. 10:35-66."
 
 [68]: http://www.ncbi.nlm.nih.gov/pubmed/18324890 "Smiley, S. T. 2008. Current challenges in the development of vaccines for pneumonic plague. Expert Rev. Vaccines 7:209-221."
 
-[76]: http://www.ncbi.nlm.nih.gov/pubmed/17173484 "Thomson, N. R., S. Howard, B. W. Wren, M. T. Holden, L. Crossman, G. L. Challis, C. Churcher, K. Mungall, K.  Brooks, T. Chillingworth, T. Feltwell, Z. Abdellah, H.  Hauser, K. Jagels, M. Maddison, S. Moule, M. Sanders, S.  Whitehead, M. A. Quail, G. Dougan, J. Parkhill, and M.  B. Prentice. 2006. The complete genome sequence and comparative genome analysis of the high pathogenicity Yersinia enterocolitica strain 8081. PLoS Genet. 2:e206."
+[76]: http://www.ncbi.nlm.nih.gov/pubmed/17173484 "Thomson, N. R., S. Howard, B. W. Wren, et al. 2006. The complete genome sequence and comparative genome analysis of the high pathogenicity Yersinia enterocolitica strain 8081. PLoS Genet. 2:e206."
 

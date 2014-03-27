@@ -9,12 +9,17 @@ if(length(z)==0){
    NULL
 }else{
     z <- gsub("\n", " ", z)
+
+z <-gsub("([A-Z]\\.[A-Z])\\. ",    "\\1X.X ",  z)   ## INITIALS (with or without space)
+ z <-gsub("([A-Z])\\. ([A-Z])\\. ",    "\\1X.X \\2X.X ",   z)
+
    # dont split on abbrev B. subtilis 
    #    z <- gsub(" ([A-Z])\\.", " \\1X.X", z)
 
    ## July 25, 2013 some sentences end in single letter, so check next word.  
-      # Also inlcude optional parentheses -- see PMC3536570 for S. Typhimurium  (will split due to capital)
+      # Also inlcude optional parentheses 
      z <- gsub(" (\\(?[A-Z])\\. ([a-z])", " \\1X.X \\2", z)    
+     z <- gsub(" (\\[?[A-Z])\\. ([a-z])", " \\1X.X \\2", z)    
 
    # OR abbrev at start of paragraph!
     z <- gsub("^([A-Z])\\. ", "\\1X.X ", z)
@@ -32,6 +37,7 @@ if(length(z)==0){
    z <- gsub(" no. ",    " noX.X ",     z, fixed = TRUE)   # acc no. 
    z <- gsub(" nos. ",   " nosX.X ",    z, fixed = TRUE)   # acc nos.
    z <- gsub(" No. ",    " NoX.X ",     z, fixed = TRUE) 
+   z <- gsub(" S. Typhi",    " SX.X Typhi",     z, fixed = TRUE) # see PMC3536570 for S. Typhimurium  (will split due to capital)
 
    z <- gsub("e.g. ",    "e.gX.X ",     z, fixed = TRUE)   # e.g.
    z <- gsub("(eg. ",    "(egX.X ",     z, fixed = TRUE)   # eg.  .. add paren to avoid words ending in eg.
@@ -50,7 +56,13 @@ if(length(z)==0){
    z <- gsub(" ca. ",    " caX.X ",     z, fixed = TRUE)  # approx 
    z <- gsub("approx. ", "approxX.X ",  z, fixed = TRUE)
    z <- gsub(" vs. ",    " vsX.X ",     z, fixed = TRUE)  # vs.
+   z <- gsub(" Dr. ",    " DrX.X ",     z, fixed = TRUE)  # Dr.
+   z <- gsub(" Mr. ",    " MrX.X ",     z, fixed = TRUE)  # Mr.
+   z <- gsub(" Mrs. ",    " MrsX.X ",     z, fixed = TRUE)  # Mrs.
+  z <- gsub("cfu. ",    "cfuX.X ",     z, fixed = TRUE)  # cfu
+ z <- gsub("c.f.u. ",    "c.f.uX.X ",     z, fixed = TRUE)  #
 
+ 
 
    # split sentences
    z2 <- unlist( strsplit(z, ". ", fixed=TRUE) )

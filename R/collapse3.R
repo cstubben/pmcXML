@@ -2,7 +2,7 @@
 # UPDATE for collapse2  to write table to file for indexing in Solr
 
 
-collapse3 <- function(x, caption=FALSE, footnotes= TRUE, na.string="" ){
+collapse3 <- function(x, footnotes= TRUE, na.string="" ){
   y <- names(x)
   n <- nrow(x)
 
@@ -23,7 +23,6 @@ collapse3 <- function(x, caption=FALSE, footnotes= TRUE, na.string="" ){
      if(na.string !="" ) n2<- n2 | as.character(x[i,] ) == na.string 
      cx[i] <- paste("Row ", i, " of ", n, "; ", paste(paste(y[!n2], x[i, !n2], sep="="), collapse="; "), sep="")
   }
-  if(caption) cx <- paste("Caption=", attr(x, "caption") , "; ", cx, sep="")
   if(footnotes){
       fn <- attr(x, "footnotes")
       if(!is.null(fn)){
