@@ -1,11 +1,11 @@
-\name{collapse2}
-\alias{collapse2}
+\name{collapse}
+\alias{collapse}
 
 \title{ Collapse a data.frame }
 \description{  Collapse a data.frame into a delimited list with column names and cell values
 }
 \usage{
-collapse2(x, caption = FALSE, footnotes = FALSE, na.string)
+collapse(x, caption = FALSE, footnotes = FALSE, na.string)
 }
 
 \arguments{

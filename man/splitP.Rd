@@ -10,7 +10,7 @@ splitP(z)
 \arguments{
   \item{z}{  A character vector }
 }
-\details{ Splits text within paragraph tags into complete sentences by taking care to avoid splitting after genus abbreviations like E. coli or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and many others.
+\details{ Splits text within paragraph tags into complete sentences by taking care to avoid splitting after genus abbreviations like E. coli or other common abbreviations such as Fig., et al., e.g., i.e., sp., ca., vs., and many others.  Another similar option is sentDetect in openNLP
 }
 \value{  A vector of sentences
 }
