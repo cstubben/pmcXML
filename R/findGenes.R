@@ -1,7 +1,3 @@
-
-# source("~/plague/R/packages/pubmed/R/findGenes.R")
-
-
 findGenes<-function(txt ){
    id <- attr(txt, "id")
   if(is.null(id)) stop("No id attribute found")

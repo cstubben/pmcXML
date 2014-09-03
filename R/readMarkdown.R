@@ -4,10 +4,8 @@
 
 readMarkdown<-function(file, sentence=TRUE, openNLP=FALSE){
    x1 <- readLines(file)
-  
-
    id<-NULL
-## option to save pmid as attribute?
+   ## option to save pmid as attribute?
    if(grepl("^ID=", x1[1])){
         id <- as.numeric( gsub("ID=(.*)", "\\1", x1[1]) )
         x1<- x1[-1]
@@ -15,15 +13,12 @@ readMarkdown<-function(file, sentence=TRUE, openNLP=FALSE){
    ## add empty lines
    x1 <-c("",  x1, "")
 
-## remove duplicate (empty?) rows
-x1 <- x1[cumsum(rle(x1)$lengths)]
-
+   ## remove duplicate (empty?) rows
+   x1 <- x1[cumsum(rle(x1)$lengths)]
 
    ## WRAP text between paragraph breaks (and remove hyphen at end of line?)
-
    n <- which(x1=="")
-
-   n2<- length(n)-1
+   n2 <- length(n)-1
 
    x <- vector("character", n2)
    for(i in 1:n2 ){
@@ -69,9 +64,8 @@ x1 <- x1[cumsum(rle(x1)$lengths)]
           z[[ path[i] ]] <- fixText( y )    
       }
    }
- sec <- gsub("([0-9])\\. ", "\\1 ", sec)
- z[["Section title"]] <- sec
-
+   #sec <- gsub("([0-9])\\. ", "\\1 ", sec)
+   z[["Section title"]] <- sec
 
    if(sentence){
         if(openNLP){  
