@@ -6,12 +6,11 @@
 ##        OR called citation-type in //ref/citation
 
 
-pmcRef <- function ( doc , verbose=TRUE) 
+pmcRef <- function ( doc ) 
 {
    z <- getNodeSet(doc, "//ref")
    # element-citation, mixed-citation, or citation?
-   if(verbose) print( table(xpathSApply(doc, "//ref/*", xmlName)))
-
+ 
    n <- length(z)
    refs <- vector("list", n)
    for (i in 1:n) {
@@ -51,8 +50,6 @@ pmcRef <- function ( doc , verbose=TRUE)
          title <- xvalue(z2, "//article-title")
          title <- gsub("\\.$", "", title)
 
-
-
          journal <- xvalue(z2, "//source")
          volume <- xvalue(z2, "//volume")
 
@@ -65,13 +62,14 @@ pmcRef <- function ( doc , verbose=TRUE)
 
        
          bookpub <- xvalue(z2, "//publisher-name")
-            y <- xvalue(z2, "//publisher-loc")
-            if(!is.na(y)) bookpub <- paste(y, journal, sep=": ")
-## need better parsing for books
-        if(is.na(bookpub)){
-            title <- journal
-            journal <- bookpub 
-        }
+       
+          ## TO DO need better parsing for books
+            if(!is.na(bookpub)){
+               y <- xvalue(z2, "//publisher-loc")
+               bookpub <- paste(y, journal, sep=": ")
+               title <- journal
+               journal <- bookpub 
+            }
 # missing title and other tags see PMC3559055
         if(is.na(title)){
             title <-  paste(xpathSApply(z2, "//ref/element-citation/text()|//ref/mixed-citation/text()|//ref/citation/text()", xmlValue) , collapse="")
