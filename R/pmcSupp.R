@@ -1,5 +1,3 @@
-
-
 # supplmentary materials
 
 pmcSupp <-function(doc, file, ... ){

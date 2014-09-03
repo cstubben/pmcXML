@@ -1,3 +1,4 @@
+# source("~/plague/R/packages/pubmed/R/read.xls2.R")
 
 read.xls2<-function(file, sheet=1, skip=0, ...){
    # if a single quote " is in cell, then use quote="" 
@@ -10,6 +11,25 @@ read.xls2<-function(file, sheet=1, skip=0, ...){
     for(i in 1:ncol(x)) x[,i]<- gsub('"|\n', '', x[,i] )
    x<- guessTable(x )
    attr(x, "file") <- file
+  ## check for attributes added to footnotes...
+   y <- attr(x, "footnotes")
+   if(!is.null(y) ){
+      n <- grep("^id=", y)
+      if(length(n) == 1){
+         attr(x, "id") <-  gsub("id=", "", y[n])
+         y <- y[-n]
+      }
+      n <- grep("^file=", y)
+      if(length(n)==1){
+         attr(x, "file") <-  gsub("file=", "", y[n])
+         y <- y[-n]
+      }
+      if(length(y)==0){
+         attr(x, "footnotes") <- NULL  
+      }else{
+         attr(x, "footnotes") <- y
+      }
+   }
    x
 }
 

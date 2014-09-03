@@ -12,7 +12,8 @@ findTags <-function(txt, tags, prefix, suffix, notStartingWith, expand=TRUE, dig
 
    if(is.data.frame(txt) ){
       ## use label and caption for source?
-      label <- attr(txt, "label")
+      #  label <- attr(txt, "label")
+      label <- paste( attr(txt, "label"), attr(txt, "caption"), sep=". ")
       txt <- list(  Table = collapse3(txt ) )
       names(txt) <- label
       attr(txt, "id") <- id

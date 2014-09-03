@@ -1,4 +1,3 @@
-
 # repeat sub headings in new column.  Must start in first row (with empty second column)
 
 # add as first (or last) column

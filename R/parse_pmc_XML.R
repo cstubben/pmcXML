@@ -1,4 +1,4 @@
-parse_pmc_XML<-function(xml, authorsN=2, journalFull=TRUE )
+parse_pmc_XML<-function(xml, authorsN=3, journalFull=TRUE )
 { 
    # results returned from esummary version 2.0 
 
@@ -41,10 +41,11 @@ parse_pmc_XML<-function(xml, authorsN=2, journalFull=TRUE )
       pages   <- xvalue(z2, "//Pages")
       # use epub date else pub date
       epubdate <- xvalue(z2, "//EPubDate")
-      if(epubdate == "")  epubdate <- xvalue(z2, "//PubDate")
+      pubdate <- xvalue(z2, "//PubDate")
+
       pmid <- xtags(z2, "//ArticleId", "IdType", "Value", "pmid")
 
-      pubs[[i]]<-data.frame(pmc, authors, year, title, journal, volume, pages, epubdate, pmid,
+      pubs[[i]]<-data.frame(pmc, authors, year, title, journal, volume, pages, pubdate, epubdate, pmid,
          stringsAsFactors=FALSE)
     
       free(z2)

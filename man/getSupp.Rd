@@ -4,19 +4,20 @@
 \title{ Get supplmentary tables }
 \description{  Get supplementary tables from PMC  }
 \usage{
-getSupp(doc, file, type, opts = "-raw -nopgbrk", rm = TRUE, header = TRUE, ...)
+getSupp(pmcid, file, type, opts = "-raw -nopgbrk", rm = TRUE, header = TRUE, pmc=TRUE, ...)
 }
 
 \arguments{
-  \item{doc}{ XML document with PMC id attribute }
-  \item{file}{ supplementary file name }
+  \item{pmcid}{ id or  XML document with PMC id attribute }
+  \item{file}{ supplementary file name  }
   \item{type}{ type of file, default to file extension }
   \item{opts}{ pdftotext options }
   \item{rm}{ remove downloaded files}
   \item{header}{ column labels in Word doc }
+  \item{pmc}{  download from NCBI pmc  }
   \item{\dots}{ other options passed to \code{read} commands }
 }
-\details{ This function is used by \code{\link{pmcSupp}} to read supplmentary tables in a variety of formats including Excel, Word, HTML, PDF, text, and zip. The url string is generated using the PMC id and the file name  http://www.ncbi.nlm.nih.gov/pmc/articles/<pmcid>/bin/<supplementary file>
+\details{ This function is used by \code{\link{pmcSupp}} to read supplmentary tables in a variety of formats including Excel, Word, HTML, PDF, text, and zip. If pmc=TRUE, the url string is generated using the PMC id and the file name  http://www.ncbi.nlm.nih.gov/pmc/articles/<pmcid>/bin/<supplementary file>.  If pmc=FALSE, then include the full url string in the file name.
 
 }
 \value{

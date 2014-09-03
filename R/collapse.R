@@ -1,9 +1,14 @@
+## collapse a data.frame into key-value pairs with row id
 
-# UPDATE for collapse2  to write table to file for indexing in Solr
 
-
-collapse3 <- function(x, footnotes= TRUE, na.string="" ){
+collapse <- function(x, footnotes= TRUE, na.string="" ){
   y <- names(x)
+  # check for column names ending in period (.= will split sentence)
+  if(any( grepl("\\.$", y) )){
+     print("Note: removing period from column names for Solr")
+     y <- gsub("\\.$", "", y)
+     names(x) <- y
+}
   n <- nrow(x)
 
   ## check for subheadings
@@ -21,7 +26,7 @@ collapse3 <- function(x, footnotes= TRUE, na.string="" ){
   for(i in 1: n ){ 
      n2 <- is.na(x[i,]) | as.character(x[i,]) == "" 
      if(na.string !="" ) n2<- n2 | as.character(x[i,] ) == na.string 
-     cx[i] <- paste("Row ", i, " of ", n, "; ", paste(paste(y[!n2], x[i, !n2], sep="="), collapse="; "), sep="")
+     cx[i] <- paste(" row ", i, " of ", n, "; ", paste(paste(y[!n2], x[i, !n2], sep="="), collapse="; "), ". ", sep="")
   }
   if(footnotes){
       fn <- attr(x, "footnotes")

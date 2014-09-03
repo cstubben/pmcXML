@@ -1,6 +1,6 @@
 
 # split paragraph into sentences...  replace with sentDetect in openNLP
-
+# source("~/plague/R/packages/pubmed/R/splitP.R")
 
 splitP <- function( z ){
 # check if empty list (returned by xpathSApply)
@@ -62,7 +62,14 @@ z <-gsub("([A-Z]\\.[A-Z])\\. ",    "\\1X.X ",  z)   ## INITIALS (with or without
   z <- gsub("cfu. ",    "cfuX.X ",     z, fixed = TRUE)  # cfu
  z <- gsub("c.f.u. ",    "c.f.uX.X ",     z, fixed = TRUE)  #
 
- 
+## table or fig at start of sentence
+ z <-  gsub("^(Table [0-9]+)\\. ", "\\1X.X ", z)
+ z <-  gsub("^(Figure [0-9]+)\\. ", "\\1X.X ", z)
+ z <-  gsub("^(Fig. [0-9]+)\\. ", "\\1X.X ", z)
+
+## any letter  A. 
+ z <-  gsub("(\\. [A-Z])\\. ", "\\1X.X ", z)
+
 
    # split sentences
    z2 <- unlist( strsplit(z, ". ", fixed=TRUE) )

@@ -1,40 +1,28 @@
-removeSpecChar <- function(y){  
-      y <- gsub("â\u0080\u008b\\(?Table[0-9])?.", "", y)
-
-      y <- gsub("â\u0080\u008bFigure[0-9]", "", y)
-     y <- gsub("â\u0080\u008b\\(?Fig.[0-9][A-Za-z])?.", "", y)
-      y <- gsub("â\u0080\u008b\\(?Fig.[0-9])?.", "", y)
-
-      y <- gsub("\u200B\\(?Table[0-9])?.", "", y)
-      y <- gsub("\u200B\\(?Fig.[0-9])?.", "", y)
-
-      y <- gsub("â\u0080\u008b", "", y)
+## remove/fix chars  for pmcMetadata
 
 
-      y <- gsub("â\u0088\u0092", "-", y)
-      y <- gsub("â\u0080\u0093", "-", y)
+removeSpecChar <- function(txt){  
+  txt <- gsub("&", "&amp;", txt)   ## check for &lt; in file?
+  txt <- gsub("&amp;lt;", "&lt;", txt) 
+  txt <- gsub("&amp;gt;", "&gt;", txt) 
 
-      y <- gsub("â\u0080\u009c", "'", y)
-      y <- gsub("â\u0080\u009d", "'", y)
+  txt <- gsub("<", "&lt;", txt)
+  txt <- gsub("“", '"', txt)
+  txt <- gsub("”", '"', txt)
+  txt <- gsub("″", '"', txt)
 
-      y <- gsub("â\u0080²", "'", y)
-      y <- gsub("Î\u0094", "Δ", y)
+  txt <- gsub("′", "'", txt)
+  txt <- gsub("’", "'", txt)
 
-      y <- gsub("Î²", "β", y)
-      y <- gsub("Î±", "α", y)
-      y <- gsub("Â°", "°", y)
-      y <- gsub("Î¼", "μ", y)
-      y <- gsub("Î»", "λ", y)
-     y <- gsub("Ã¼", "ü", y)
-     y <- gsub("Ã\u0097", "×", y)
+  txt <- gsub("−", "-", txt)
+  txt <- gsub("–", "-", txt)
+  txt <- gsub("∼", "~", txt)
+  txt <- gsub("×", "x", txt)
+#  txt <- gsub("\u00A0", "", txt)  # non-break?
+  txt <- gsub("‥", "..", txt)
+  txt <- gsub("ö", "o", txt)
 
-    ## use utf
-      y <- gsub("\u00A0", " ", y) # no break space
-
-
-  ## {\"type\":\"entrez-protein\",\"attrs\":{\"text\":\"AAG33249\",\"term_id\":\"11230854\"}}
-      y <- gsub("\\{[^}]*\\}\\}" , "", y)
-      y
+#  txt <- gsub("", "", txt)
+     txt
 }
-
 

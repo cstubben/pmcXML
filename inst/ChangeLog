@@ -1,6 +1,5 @@
-changes in version 1.0.1 (2013-06-11)
-	* fixed getSupp to read all sheets in XLS files
-	* updated htmlText to parse Introduction (which is often missing header name)
+changes in version 1.0.2 (2014-09-03)
+	* moved extra functions to pmcXML2. 
 
 version 1.0 released on Github (2013-04-12)
 

@@ -1,5 +1,5 @@
 
-## format ncbiCite, ncbiPMC or ncbiPubmed output
+## format ncbiPMC  output
 
 bibformat <- function(refs, id=FALSE, ...){
    # full journal title is default

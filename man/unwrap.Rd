@@ -5,13 +5,15 @@
 \description{Fix rows wrapped over two or more lines
 }
 \usage{
-unwrap(x, startRow, sep = " ")
+unwrap(x, subset, startRow, sep = " ", ...)
 }
 
 \arguments{
   \item{x}{  a vector of pdf text containing a structured table }
+  \item{subset}{  index of rows to keep (optional).  Added to save table attributes }
   \item{startRow}{  common row identifier at start of each new row }
   \item{sep}{ separator used to join multiple lines }
+  \item{...}{ other options passed to \code{\link{grep}} }
 }
 \details{  PDF tables may contain rows that wrap over two or more lines and this function attempts to join multiple lines into single row  before converting pdf text to data frame using \code{\link{pdf2df}} 
 

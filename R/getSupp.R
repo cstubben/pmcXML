@@ -5,9 +5,13 @@
 ## June 25, 2013.  add pmc=TRUE to allow downloads of supplements outside PMC (then file = url).
 ## change 1st option doc to pmcid
 
+# aug 18, 2013 - removed option encoding="latin1" for pdf
+# Aug 27, 2014 - use htmlParse for doc files and get caption/ footnotes
+
+
 # SAVE pmid and file
 
-getSupp <- function(pmcid, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE, pmc=TRUE,  ...)
+getSupp <- function(pmcid, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=TRUE, pmc=TRUE, ...)
 {
    ## option to read id from XML doc
    if( !is.vector(pmcid) ){
@@ -57,7 +61,7 @@ getSupp <- function(pmcid, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=T
       outfile <- paste(file, ".out", sep="")
       command <- paste("pdftotext", opts, file,  outfile)
       system(command)
-      x <- readLines(outfile, encoding="latin1", ...)
+      x <- readLines(outfile, ...)  # encoding =latin1
       # remove files
       if(rm){
          file.remove(file)
@@ -85,10 +89,41 @@ getSupp <- function(pmcid, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=T
       }
       system(command)
       ## read html or  table ??  read html to see captions, footnotes 
-     # x <- htmlParse2("tmp.html", ...)
-      x <-readHTMLTable("tmp.html", stringsAsFactors=FALSE, header=header, ...)    # fixed July 25, 2013  -add header=header
-      if(length(x)==1) x <- x[[1]]
+      doc2 <- htmlParse2("tmp.html")
 
+      x <-readHTMLTable(doc2, stringsAsFactors=FALSE, header=header, ...)    # fixed July 25, 2013  -add header=header
+
+      ## if empty, get text?
+      if(length(x)==0){
+           print("Warning: no tables found in Word Doc")
+           x <- xpathSApply(doc2, "//p", xmlValue)
+           x<-x[! x %in% c("", " ")]
+      }else{
+           ## add captions and footnotes?
+           xp <- xpathSApply(doc2, "//body/p", xmlValue)
+           xp<-xp[! xp %in% c("", " ")]
+        if(length(xp)>0){
+            caption <- xp[1]
+            print(paste("Parsing caption: ", caption))
+            label <- gsub("([^.:-]*).*", "\\1", caption)
+            label <- gsub(" *$", "", label)
+            caption <- gsub("[^.:-]*. *(.*)", "\\1", caption)
+            for(j in 1:length(x)){
+                  attr(x[[j]], "label") <-  label
+                  attr(x[[j]], "caption") <- caption
+            }
+         }         
+         if(length(x)==1){
+                x <- x[[1]]   
+                if(length(xp[-1])>0)  attr(x, "footnotes") <- xp[-1]
+         }else{     # multiple tables - use same caption and label for all???
+              print(paste("  Note:", length(x), "tables found"))  
+             if(length(xp[-1])>0){  
+                    print("  Possible text for captions and footnotes")
+                    print( xp[-1])
+                 }
+         }
+      }  
 
       # remove files
       if(rm){
@@ -100,12 +135,19 @@ getSupp <- function(pmcid, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=T
          file.remove("tmp.html")
       }
 
-   ## TEXT tables 
+   ## TEXT 
    } else if(type=="txt"){
-      ## should tab be default separator ?  sep="\t" 
-      x <- read.table(url, stringsAsFactors=FALSE, ...)
+      x <- readLines(url, ...)
+      if(rm & ZIP) file.remove(file2)
+
+   ## TEXT tables 
+   } else if(type=="csv"){
+      ##  default separator ?  
+      x <- read.table(url, stringsAsFactors=FALSE, check.names=FALSE, ...)
       x <- guessTable(x)
       if(rm & ZIP) file.remove(file2)
+
+
    ## HTML tables   
    }else if( type == "html"){
       # html supplements have formatting AND data tables..
@@ -157,6 +199,12 @@ getSupp <- function(pmcid, file, type,  opts="-raw -nopgbrk", rm=TRUE,  header=T
    }
    attr(x, "id") <-  pmcid
    attr(x, "file") <- url 
+   ## 
+   zz <- attr(x, "footnotes")
+   if(!is.null(zz)){
+     if(length(zz)==1 && zz =="") attr(x, "footnotes")<-NULL
+   }
+
    if(ZIP)  attr(x, "file") <- urlzip
    x
 }
