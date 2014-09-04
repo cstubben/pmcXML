@@ -10,8 +10,7 @@ pmcRef(doc)
 \arguments{
   \item{doc}{ XML document from PMC }
 }
-\details{  
-}
+%\details{  }
 \value{ a data.frame with pmid, authors, year, title, journal, volume, pages, label, id, and type
 }
 %\references{ }

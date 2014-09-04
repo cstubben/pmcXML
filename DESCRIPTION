@@ -6,6 +6,6 @@ Date: 2014-09-03
 Author: Chris Stubben
 Maintainer: Chris Stubben <stubben@lanl.gov>
 License: GPL (>=3)
-Depends: stringr, gdata, openNLP, genomes, genomes2, R (>= 2.12)
+Depends: stringr, gdata, openNLP, genomes, R (>= 2.12)
 BiocViews: GenomicSequence, Annotation, Genetics
 Description: tools for searching and parsing full text XML articles in Pubmed Central

@@ -1,7 +1,7 @@
 # supplmentary materials
 
 pmcSupp <-function(doc, file, ... ){
-   if(!is.xml(doc )) stop("An XML document is required")
+  
   ## using file name
   if(!missing(file) && is.character(file) )
   {

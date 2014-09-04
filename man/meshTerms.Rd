@@ -9,8 +9,8 @@ meshTerms(term)
 
 \arguments{
   \item{term}{ a search term or vector of pubmed IDs }
+}
 \details{ Parses MeSH headings in XML document returned by E-fetch
-
 }
 \value{ A data.frame listing pubmed ID and MeSH term }
 %\references{ }
@@ -19,7 +19,7 @@ meshTerms(term)
 
 %\seealso{ }
 \examples{
-\dontrun{
+ \dontrun{
 meshTerms(17963531)
 }
 }

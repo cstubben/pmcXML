@@ -14,12 +14,10 @@ pmcText(doc, sentence = TRUE, openNLP = FALSE)
 
 }
 \value{ a list of character vectors }
-%%\references{ }
+%\references{ }
 \author{ Chris Stubben }
-\note{ }
-
-\seealso{  
-}
+%\note{ }
+%\seealso{  }
 \examples{
 \dontrun{
   id <- "PMC2612704"

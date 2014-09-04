@@ -10,11 +10,11 @@ readMarkdown(file, sentence = TRUE, openNLP = FALSE) }
   \item{openNLP}{ use sentDetect in openNLP }
 
 }
-\details{ }
+%\details{ }
 \value{ a list of subsections }
-\references{ }
+%\references{ }
 \author{ Chris Stubben }
-\note{ }
-\seealso{ }
-\examples{ }
+%\note{ }
+%\seealso{ }
+%\examples{ }
 \keyword{ methods }

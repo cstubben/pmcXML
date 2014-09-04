@@ -8,7 +8,7 @@ parseTags(y, tags, prefix, suffix, notStartingWith, expand = TRUE, digits = 4)
 }
 
 \arguments{
-  \item{y}{ output from \code{\link{searchP}} }
+  \item{y}{ output from \code{\link{searchPMC}} }
   \item{tags}{  an ordered list of locus tags, used for expanding locus tag pairs }
   \item{prefix}{ locus tag prefix, can be a regular expression such as "BPS[SL]" or "VCA?" }
   \item{suffix}{ locus tag suffix, should be a  single letter  "a" or character class "[ac]"  or grouping brackets "(a|c|\\.1)" }

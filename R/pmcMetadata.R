@@ -1,6 +1,6 @@
 # GET PMC xml article metadata (mainly for Solr)
 
-pmcMetadata <-function(doc, tables, supps ){
+pmcMetadata <-function(doc ){
 
    z <- vector("list")
 

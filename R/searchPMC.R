@@ -2,7 +2,7 @@
 # other options to grep  (or collapse ?)  
 # some grep like options to print sentence before and after 
 
-searchPMC <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore.case=TRUE, na.string = "", ...){
+searchPMC <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore.case=TRUE, ...){
 
    ## x should be list (sentences or tables) OR  table -  is.list(data.frame()) = TRUE
    if(class(x)!="list" ){
@@ -17,7 +17,7 @@ searchPMC <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, igno
       
       if(class(x[[i]] )=="data.frame"){
          #COLLAPSE table rows  - add caption after search
-         x2 <- collapse( x[[i]], na.string= na.string ) 
+         x2 <- collapse( x[[i]] ) 
          n <- grep(pattern, x2,  ignore.case=ignore.case, ...)
          if(length(n) >0){
              z[[i]] <- data.frame( section = names(x[i]), mention = x2[n] , stringsAsFactors=FALSE )

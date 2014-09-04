@@ -15,10 +15,7 @@ listToSolr(x, file)
 \value{  Writes to a xml file }
 %\references{ }
 \author{ Chris Stubben}
-\note{ }
-
-
-\seealso{
-}
-\examples{ }
+%\note{ }
+%\seealso{}
+%\examples{ }
 \keyword{ methods }
