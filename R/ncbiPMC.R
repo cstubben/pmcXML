@@ -1,4 +1,4 @@
-ncbiPMC<-function(term, ... )
+ncbiPMC <- function(term, ... )
 { 
    if(length(term) > 1){ term  <- paste(term, collapse = ",") }  
    # use efetch to get full text with retmode="xml"

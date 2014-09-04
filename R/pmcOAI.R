@@ -1,10 +1,12 @@
-# uses PMC-OAI service only (Pubmed Central Open Archives Initiative)
-# NOTE: pmc function gets HTML from pmc website IF XML not available from OAI (also tries efetch if OAI is down)
+# use PMC-OAI service  (Pubmed Central Open Archives Initiative)
+# other option is PMC ftp
 
 # id should be PMC id like "PMC3443583"
 
 pmcOAI <- function(id, local=TRUE, dir="~/downloads/pmc",  ...){
    
+   if(!file.exists(dir) ){ stop("Warning: no local directory found: please mkdir ", dir, " or change the dir option") }
+
    # check for PMC prefix 
    if(!grepl("^PMC[0-9]+$", id))  stop("Please include a valid PMC id like PMC3443583")
    # file name for attributes
@@ -54,7 +56,7 @@ pmcOAI <- function(id, local=TRUE, dir="~/downloads/pmc",  ...){
          x[n] <- gsub(">([^<])</xref>", ">^\\1</xref>", x[n])
 
          doc <- xmlParse(x)
-          ## save file to reload from local copy (may change the display of some special characters)
+          ## save file to reload from local copy (may change the display of some special characters???)
          saveXML(doc, file= xmlfile )
       }
    }

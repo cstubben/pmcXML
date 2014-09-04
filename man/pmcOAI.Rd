@@ -26,8 +26,10 @@ pmcOAI(id, local = TRUE, dir = "~/downloads/pmc", ...)
 
 \seealso{\code{\link{pmcOAI}} }
 \examples{
-doc <- pmc("PMC2231364")
-is.xml(doc)
+\dontrun{
+doc <- pmcOAI("PMC2231364")
+}
+
 }
 
 \keyword{ methods }

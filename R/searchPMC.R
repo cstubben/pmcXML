@@ -1,11 +1,8 @@
-
-### search pmcText output  - search in base used to list packages...
-
-# other options to grep  (or collapse2 ?)  
-
+# search pmcText output 
+# other options to grep  (or collapse ?)  
 # some grep like options to print sentence before and after 
 
-searchP <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore.case=TRUE, na.string = "", ...){
+searchPMC <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore.case=TRUE, na.string = "", ...){
 
    ## x should be list (sentences or tables) OR  table -  is.list(data.frame()) = TRUE
    if(class(x)!="list" ){
@@ -20,7 +17,7 @@ searchP <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore
       
       if(class(x[[i]] )=="data.frame"){
          #COLLAPSE table rows  - add caption after search
-         x2 <- collapse2( x[[i]], na.string= na.string ) 
+         x2 <- collapse( x[[i]], na.string= na.string ) 
          n <- grep(pattern, x2,  ignore.case=ignore.case, ...)
          if(length(n) >0){
              z[[i]] <- data.frame( section = names(x[i]), mention = x2[n] , stringsAsFactors=FALSE )

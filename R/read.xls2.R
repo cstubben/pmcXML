@@ -1,6 +1,5 @@
-# source("~/plague/R/packages/pubmed/R/read.xls2.R")
 
-read.xls2<-function(file, sheet=1, skip=0, ...){
+read.xls2 <- function(file, sheet=1, skip=0, ...){
    # if a single quote " is in cell, then use quote="" 
    # x <- read.xls(file, stringsAsFactors=FALSE, header=FALSE, sheet=sheet, method="tab", quote="", skip=skip)
 

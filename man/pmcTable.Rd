@@ -6,13 +6,12 @@
 
 }
 \usage{
-pmcTable(doc, whichTable, verbose = TRUE, simplify=TRUE, ...)
+pmcTable(doc, whichTable, simplify=TRUE, ...)
 }
 
 \arguments{
   \item{doc}{ XML document from PMC }
   \item{whichTable}{  table number to parse, default all tables }
-  \item{verbose}{ print captions to screen before parsing }
   \item{simplify}{ simplify to data frame if 1 table }
   \item{\dots}{ other options passed to \code{\link{fixTypes}} 
 }
@@ -27,10 +26,12 @@ pmcTable(doc, whichTable, verbose = TRUE, simplify=TRUE, ...)
 \seealso{ \code{\link{repeatSub}} to repeat subheadings }
 \examples{
 
-doc <- pmc("PMC2231364" )
-tab <- pmcTable(doc)
-sapply(tab, nrow)
-tab
+\dontrun{
+doc <- pmcOAI("PMC2231364" )
+x <- pmcTable(doc)
+sapply(x, nrow)
+x
+}
 
 }
 \keyword{ methods }

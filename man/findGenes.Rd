@@ -2,45 +2,39 @@
 \alias{findGenes}
 
 \title{ Find gene names }
-\description{  Find gene names within XML documents downloaded from PMC Open Access}
+\description{  Find gene names in PMC text or tables using pattern matching }
 \usage{
-findGenes(doc, tag, length = 4, proteins = FALSE)
+findGenes(txt)
 }
 
 \arguments{
-  \item{doc}{ XML document  }
-  \item{tag}{ XML tag, default //italic }
-  \item{length}{  length of gene name, default 4}
-  \item{proteins}{ also search for protein names with initial and final capital }
+  \item{ txt }{ A PMC txt or table object   }
 }
-\details{ There are a few ways to find gene names, and probably the best approach will use a combination of sources, including 1) Match to known list of genes. Some genes are common names like 'thiS' and many gene names are not listed in Refseq and other databases.  2) Find gene names in italic tags with length = 4.  Misses genes with 3 or 5 characters and may include some 4 letter words that are not genes.  3) Find protein names with initial and final capital, e.g. SpoT.  Often genes are cited using both protein and gene names.
-}
+\details{ Find genes names in  \code{\link{pmcText}} or \code{\link{pmcTable}} output.  PMC text should be split into sentences   }
+
 \value{
-A data.frame with gene names, section title and sentence containing the mention
+A data.frame with id, source, gene and mention
 
 }
 % \references{ }
 \author{ Chris Stubben  }
 
-\note{ In progress }
+\note{ Matches words with second and third letter lower case and fourth letter upper case. This does not find three letter gene names  }
 
 %\seealso{ }
 \examples{
 
+\dontrun{
 doc <- pmcOAI("PMC2231364" )
-#lots of terms in italics.  findGenes will miss operons and other genes like ymt
-table2(xpathSApply(doc, "//body//italic", xmlValue), n=20)
-
-y <-findGenes(doc)
+txt <-pmcText(doc)
+y <-findGenes(txt)
 table(y$gene)
-y
 
-y2<-findGenes(doc, proteins=TRUE)
-table(y2$gene)
-
-y3<-findGenes(doc, length=3)
-table(y3$gene)
-head(y3) # cis is not a gene
+## italics (inlcuding tables)
+x <- gdata::trim( xpathSApply(doc, "//body//italic", xmlValue) )
+## most of these are not genes...
+table( x[nchar(x)==3] )
+}
 
 }
 

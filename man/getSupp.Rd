@@ -34,9 +34,11 @@ A data.frame or vector for PDF files.
 \examples{
 
 \dontrun{
-data(doc)
+doc <- pmcOAI("PMC2231364" )
 pmcSupp(doc)  # list files
-x3 <- getSupp(doc, "1471-2180-7-96-S3.pdf" )
+# pmcSupp(doc, 3)  # OR
+s2 <- getSupp(doc, "1471-2180-7-96-S3.pdf" )
+s2
 }
 
 }

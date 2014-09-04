@@ -2,9 +2,7 @@
 # this  uses rowspan and colspan attributes to format table including multi-line headers.  
 # Repeats cell values down columns if rowspan > 1 since single rows should stand-alone as a mention 
 
-# TO do: drop verbose and use message
-
-pmcTable  <- function(doc, whichTable, verbose=TRUE, simplify=TRUE,...)
+pmcTable  <- function(doc, whichTable, simplify=TRUE,...)
 {
    tables  <- getNodeSet(doc, "//table-wrap")
    if(length(tables)==0){ 
@@ -35,7 +33,7 @@ pmcTable  <- function(doc, whichTable, verbose=TRUE, simplify=TRUE,...)
           caption <- gsub("\\.$", "", caption)
 
 
-         if(verbose)   print(paste("Parsing", paste(label, caption) ))
+         message(paste("Parsing", paste(label, caption) ))
 
          #--------------------------------------------------------------------
          # PARSE footnotes (with option label and captions)

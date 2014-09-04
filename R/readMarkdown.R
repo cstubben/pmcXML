@@ -1,7 +1,5 @@
 ## read markdown file into list of paragraphs with subsection names
 
-# source("~/plague/R/packages/pubmed/R/readMarkdown.R")
-
 readMarkdown<-function(file, sentence=TRUE, openNLP=FALSE){
    x1 <- readLines(file)
    id<-NULL

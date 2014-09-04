@@ -13,11 +13,11 @@ repeatSub <- function(x, column="subheading", first =TRUE, ...){
    y <- x
    ## check for consecuitive subheaders (and then probably not subheaders)
     ## SEE http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3334355/table/pone-0035971-t003/
-   if( sum(diff(which(n))==1)>1){
+   if( sum(diff(which(n)) == 1) > 1){
       print("Too many subheaders in consecutive rows") 
-   }else if(which(n)[1]!=1){
+   }else if(which(n)[1] != 1){
       print("No subheader in row 1")
-   }else if(length(n)==0 ){
+   }else if(length(n) == 0 ){
       print("No subheaders found")
 
    }else{

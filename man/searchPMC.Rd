@@ -1,9 +1,9 @@
-\name{searchP}
-\alias{searchP}
+\name{searchPMC}
+\alias{searchPMC}
 \title{ Search PMC text and tables }
 \description{ Search PMC text and tables for a specific pattern }
 \usage{
-searchP(x, pattern, caption = TRUE, before = FALSE, after = FALSE, ignore.case = TRUE, ...)
+searchPMC(x, pattern, caption = TRUE, before = FALSE, after = FALSE, ignore.case = TRUE, ...)
 }
 \arguments{
   \item{x}{ output from pmcText or pmcTable or pmcSupp }
@@ -23,14 +23,16 @@ searchP(x, pattern, caption = TRUE, before = FALSE, after = FALSE, ignore.case =
 \seealso{ \code{\link{pmcText}} }
 
 \examples{
+\dontrun{
 doc <- pmcOAI("PMC2231364" )
 txt <- pmcText(doc)
-searchP(txt, "virulen")
-searchP(txt, "pathway")
-searchP(txt, "accession")
+searchPMC(txt, "virulen")
+searchPMC(txt, "pathway")
+searchPMC(txt, "accession")
 # regular expression
-searchP(txt, "[ACTGN]{6}")   # seqeunce
-searchP(txt, "YPO[0-9]{4}")  # locus tag
-searchP(txt, "[A-Z][a-z]{2}[A-Z]", ignore.case=FALSE)  # protein name
+searchPMC(txt, "[ACTGN]{6}")   # seqeunce
+searchPMC(txt, "YPO[0-9]{4}")  # locus tag
+searchPMC(txt, "[A-Z][a-z]{2}[A-Z]", ignore.case=FALSE)  # protein name
+}
 }
 \keyword{ methods }

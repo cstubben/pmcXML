@@ -17,7 +17,6 @@ if(!file.exists(file)) stop("No file found")
                x[[i]] <- NA
                print("Empty Sheet")
            }
-
        }
        # remove empty sheets
        x[is.na(x)] <- NULL

@@ -8,9 +8,7 @@ meshTerms(term)
 }
 
 \arguments{
-  \item{term}{ a search term, pubmed IDs or document with pmid attribute (returned by \code{pmid})
-}
-}
+  \item{term}{ a search term or vector of pubmed IDs }
 \details{ Parses MeSH headings in XML document returned by E-fetch
 
 }
@@ -21,8 +19,9 @@ meshTerms(term)
 
 %\seealso{ }
 \examples{
+\dontrun{
 meshTerms(17963531)
-
+}
 }
 \keyword{ methods }
 

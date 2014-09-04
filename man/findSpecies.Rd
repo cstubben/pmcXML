@@ -2,7 +2,7 @@
 \alias{findSpecies}
 
 \title{  Find species names  }
-\description{ Find species in italcis within XML documents downloaded from PMC Open Access }
+\description{ Find species in italics within PMC XML documents }
 \usage{
 findSpecies(doc )
 }
@@ -22,8 +22,10 @@ findSpecies(doc )
  \code{\link{unabbrev}}
 }
 \examples{
+\dontrun{
 doc <- pmcOAI("PMC2231364" )
 table2(findSpecies(doc))
+}
 }
 \keyword{ methods }
 

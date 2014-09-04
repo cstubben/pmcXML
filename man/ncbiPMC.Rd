@@ -13,7 +13,7 @@ ncbiPMC(term, ...)
   \item{term}{ Entrez search terms or a vector of PMC IDs }
   \item{\dots}{other options passed to parse_pmc_xml, current defaults are authorsN=3 and journalFull=TRUE }
 }
-\details{Searches the PubMed database and parses the XML returned by E-summary 
+\details{Searches the PMC database and parses the XML returned by E-summary 
 }
 \value{
 A data.frame
@@ -24,8 +24,8 @@ A data.frame
 %\seealso{ }
 \examples{
 
-ncbiPMC("PMC2231364")
 \dontrun{
+ncbiPMC("PMC2231364")
 yp <- ncbiPMC("(YPO0* OR YPO1* OR YPO2* OR YPO3* OR YPO4*) AND (Yersinia[TITLE] OR Yersinia[ABSTRACT]) AND open access[FILTER]")
 head(yp)
 }

@@ -24,13 +24,14 @@ repeatSub(x, column = "subheading", first = TRUE, ...)
 % \seealso{ }
 \examples{
 
+\dontrun{
 doc <- pmcOAI("PMC2231364" )
 t1<-pmcTable(doc, 1)
 head(t1, 10)
 t1<-repeatSub(t1)
 head(t1,10)
 table2(t1$sub)
-
+}
 
 }
 \keyword{ methods }

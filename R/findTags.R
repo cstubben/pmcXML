@@ -4,7 +4,7 @@
 # or Helicobacter strain j99 tags -- HP not JHP_   
 # txt should be list returned by pmcText or table
 
-findTags <-function(txt, tags, prefix, suffix, notStartingWith, expand=TRUE, digits=4, na.string="", ...){
+findTags <-function(txt, tags, prefix, suffix, notStartingWith, expand=TRUE, digits=4, ...){
 
    id <- attr(txt, "id")
 
@@ -14,19 +14,15 @@ findTags <-function(txt, tags, prefix, suffix, notStartingWith, expand=TRUE, dig
       ## use label and caption for source?
       #  label <- attr(txt, "label")
       label <- paste( attr(txt, "label"), attr(txt, "caption"), sep=". ")
-      txt <- list(  Table = collapse3(txt ) )
+      txt <- list(  Table = collapse(txt ) )
       names(txt) <- label
       attr(txt, "id") <- id
    }
 
-
      ## one or more digits
    tag <- paste(prefix, "[0-9]+", sep="")
-   ## exactly 4 digits - will not match if tag at end of table row    or primers with underscore BPSL0001_f1  -- NEED for vibrios
-   # if(is.numeric(digits ) )  tag <- paste(prefix, "[0-9]{", digits, "}[^0-9_]", sep="")   
-   # avoid before or after since tags will also be extracted. If tag in table caption, 
-   # then that will be repeated... see PMC1525188 for problems
-   y <-  searchP(txt, tag , na.string=na.string, ...)
+ 
+   y <-  searchPMC(txt, tag, ...)
    if(!is.null(y)){
       print(paste(nrow(y), "matches"))
       y <- parseTags(y, tags, prefix, suffix, notStartingWith, expand, digits )

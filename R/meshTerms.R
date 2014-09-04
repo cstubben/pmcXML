@@ -1,12 +1,7 @@
 meshTerms<-function(term )
 {  
-   if(is.vector(term)){
-      if(length(term) > 1){ term <- paste(term, collapse = ",") }  
-   }else{
-   ## Or Pubmed Doc
-      term <- pmid(doc)
-   }
 
+   if(length(term) > 1){ term <- paste(term, collapse = ",") }  
 
    # CHECK if IDs (and skip esearch)
    if( grepl("^[0-9, ]*$", term)){
