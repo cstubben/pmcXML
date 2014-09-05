@@ -17,7 +17,7 @@ searchPMC <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, igno
       
       if(class(x[[i]] )=="data.frame"){
          #COLLAPSE table rows  - add caption after search
-         x2 <- collapse( x[[i]] ) 
+         x2 <- collapse2( x[[i]] ) 
          n <- grep(pattern, x2,  ignore.case=ignore.case, ...)
          if(length(n) >0){
              z[[i]] <- data.frame( section = names(x[i]), mention = x2[n] , stringsAsFactors=FALSE )

@@ -1,6 +1,6 @@
 ## collapse a data.frame into key-value pairs 
 
-collapse <- function(x, footnotes= TRUE, rowid=TRUE, na.string ){
+collapse2 <- function(x, footnotes= TRUE, rowid=TRUE, na.string ){
    y <- names(x)
    # check for column names ending in period (.= will split sentence)
    if(any( grepl("\\.$", y) )){

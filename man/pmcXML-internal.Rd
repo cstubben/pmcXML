@@ -1,7 +1,6 @@
 \name{pmcXML-internal}
 \alias{fixTypes}
 \alias{parse_pmc_XML}
-\alias{searchTable}
 \alias{seq2}
 \alias{removeSpecChar}
 \alias{unabbrev}

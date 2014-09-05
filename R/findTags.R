@@ -14,7 +14,7 @@ findTags <-function(txt, tags, prefix, suffix, notStartingWith, expand=TRUE, dig
       ## use label and caption for source?
       #  label <- attr(txt, "label")
       label <- paste( attr(txt, "label"), attr(txt, "caption"), sep=". ")
-      txt <- list(  Table = collapse(txt ) )
+      txt <- list(  Table = collapse2(txt ) )
       names(txt) <- label
       attr(txt, "id") <- id
    }
@@ -24,7 +24,7 @@ findTags <-function(txt, tags, prefix, suffix, notStartingWith, expand=TRUE, dig
  
    y <-  searchPMC(txt, tag, ...)
    if(!is.null(y)){
-      print(paste(nrow(y), "matches"))
+      message(paste(nrow(y), "matches"))
       y <- parseTags(y, tags, prefix, suffix, notStartingWith, expand, digits )
       ## may not extract any tags if using notStartingWith
       if(nrow(y) == 0){

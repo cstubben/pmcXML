@@ -4,44 +4,29 @@ pmcLoop <- function( pmcresults, tags, prefix, suffix , file="locus.tab", notSta
 
    for(j in 1:nrow( pmcresults)) {
       id  <- pmcresults$pmc[j]
-      print(paste(j, ". Checking ", pmcresults$title[j], sep=""))
+      message(paste(j, ". Checking ", pmcresults$title[j], sep=""))
       doc <- pmcOAI(id)  
 
       x1 <- pmcText(doc)
  
-      y <- findTags(x1, tags, prefix, suffix, notStartingWith, expand, digits)
+      y <- suppressMessages(findTags(x1, tags, prefix, suffix, notStartingWith, expand, digits) )
       if(is.null(y)){
-         print("WARNING: no locus tags in full text")
+         message(" NO locus tags in full text")
       }else{
          writeLocus( y, file )
+          message(paste(" Found", nrow(y), "tags in full text"))
       }
       # TABLES
-      x <- pmcTable(doc, verbose=FALSE, simplify=FALSE)
+      x <- suppressMessages( pmcTable(doc, simplify=FALSE) )
       if( is.list(x) ){
          for (i in 1:length(x)){
-             xtag <- paste(prefix, "[0-9]+", sep="")
-             if(is.numeric(digits ) )  xtag <- paste(prefix, "[0-9]{", digits, "}[^0-9_]", sep="")   
-             hasTags <- searchTable(x[[i]] , xtag )  
-        
-            if(hasTags){
-               print(paste(" Found tags in", paste( names(x[i]), attr(x[[i]], "caption"), sep=". ") )) 
-               ## check for subheadings
-              if(ncol(x[[i]]) >1){
-                  hasSubs <-  apply(x[[i]][1,-1,FALSE], 1, function(z) all(  is.na(z) | z=="NA"| z==""| z=="\u00A0"))
-                  if(hasSubs){
-                      print(" REPEATING subheadings") 
-                      x[[i]]<- repeatSub(x[[i]])
-                  }
-               }
-               # add caption after...see PMC1525188 for problems with locus tag in caption
-               y <-  findTags(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits, caption =FALSE)
-               if(!is.null(y)){
-                  y$mention  <- paste("Caption=", attr(x[[i]], "caption") , ";", y$mention, sep="")
-                  writeLocus( y, file )
-                }
+            y <- suppressMessages( findTags(x[[i]], tags, prefix, suffix, notStartingWith, expand, digits) )
+            if(!is.null(y)){
+               message(paste(" Found", nrow(y), "tags in", paste( names(x[i]), attr(x[[i]], "caption"), sep=". ") )) 
+               writeLocus( y, file )         
             }
          }
       }
-      print("")
+      message("")
    }
 }

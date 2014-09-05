@@ -5,7 +5,7 @@ findGenes <- function( txt ){
    # if TABLE?
    if(is.data.frame(txt) ){
       label <- paste( attr(txt, "label"), attr(txt, "caption"), sep=". ")
-      txt <- list(  Table = collapse(txt ) )
+      txt <- list(  Table = collapse2(txt ) )
       names(txt) <- label
       attr(txt, "id") <- id
    }
