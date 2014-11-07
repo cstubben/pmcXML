@@ -4,12 +4,11 @@
 [Pubmed Central](http://www.ncbi.nlm.nih.gov/pmc) (PMC).  
 
 
-To install the package, first install the required dependencies, `stringr`, `gdata` and `openNLP` from CRAN and `genomes` 
+To install the package, first install the required dependencies, `stringr` and `gdata` from CRAN and `genomes` 
 from Bioconductor
 
  	install.packages("stringr")
 	install.packages("gdata")
-	install.packages("openNLP")
 	source("http://bioconductor.org/biocLite.R")
 	biocLite("genomes")
 	library(devtools)
