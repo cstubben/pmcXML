@@ -29,7 +29,7 @@ pmcMetadata <-function(doc ){
    ## include published YEAR?
    y1 <- xpathSApply(doc, "//pub-date[@pub-type='ppub']/year", xmlValue)
    if(is.null(y1))   y1 <- xpathSApply(doc, "//pub-date[@pub-type='collection']/year", xmlValue)
-   z[["year"]] <- y1
+
 
    journal <- xpathSApply(doc,  "//journal-id[@journal-id-type='nlm-ta']", xmlValue)
    if(length(journal) == 0) stop("No match to nlm-ta journal type")
@@ -46,8 +46,9 @@ pmcMetadata <-function(doc ){
    }
    pages <- p1
 
-   z[["journal_display"]] <- paste(y1, " ", journal, " ", volume, ":", pages, sep="")  
-   z[["doc_source"]] <- "PMC OA"
+   z[["journal_display"]] <- paste(y1, " ", journal, " ", volume, ":", pages, sep="") 
+   z[["year"]] <- y1
+ 
 
    #------
    # PUB Date
@@ -102,8 +103,8 @@ pmcMetadata <-function(doc ){
 
 
    # keywords?
-   # x <-  xpathSApply(doc, "//kwd", xmlValue)
-   #if(length(x)>0) z[["Keywords"]] <- x
+    x <-  xpathSApply(doc, "//kwd", xmlValue)
+   if(length(x)>0) z[["Keywords"]] <- x
 
    z[["subject"]] <- xpathSApply(doc,  "//subject", xmlValue)
 
@@ -112,7 +113,7 @@ pmcMetadata <-function(doc ){
    if(is.null(x)){
       print("NO MeSH terms found")
    }else{
-      z[["mesh"]] <-removeSpecChar( x$term )
+      z[["MeSH"]] <-removeSpecChar( x$term )
    }
 
 

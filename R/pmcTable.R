@@ -55,7 +55,7 @@ pmcTable  <- function(doc, whichTable, simplify=TRUE,...)
          ## some table tags are missing   
          ## SEE http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2211553/table/ppat-0040009-t001/
          if(length(t1)==0){ 
-            print("  No table node - possible link to image?") 
+            message("  No table node - possible link to image?") 
             x <- data.frame()
             thead <- NA
             free(z2)

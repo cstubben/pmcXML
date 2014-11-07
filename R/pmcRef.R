@@ -80,7 +80,11 @@ pmcRef <- function ( doc )
             title, journal, volume, pages, label, id, type, 
          stringsAsFactors=FALSE)
       }else{
-        title <- xpathSApply(z2, "//ref/element-citation|//ref/mixed-citation|//ref/citation", xmlValue)
+         ## use node() to avoid combining words like "CDC 2014 Map of" into "CDC2104Map of "
+        title <- paste( xpathSApply(z2, "//ref/element-citation/node()|//ref/mixed-citation/node()|//ref/citation/node()", xmlValue), collapse=" ")
+        title <- gsub("  ", " ", title)
+       title <- gsub(" . ", ". ", title, fixed=TRUE)
+
         pmid <- xvalue(z2, '//pub-id[@pub-id-type="pmid"]')
         if(!is.na(pmid)) title <- gsub(pmid, "", title)
         title<- gsub("( ", "(", title, fixed=TRUE)

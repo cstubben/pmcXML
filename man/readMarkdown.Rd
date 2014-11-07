@@ -3,12 +3,10 @@
 \title{ Read markdown file }
 \description{ Read markdown file into a list of subsections }
 \usage{
-readMarkdown(file, sentence = TRUE, openNLP = FALSE) }
+readMarkdown(file, sentence = TRUE) }
 \arguments{
   \item{file}{ Markdown file }
   \item{sentence}{ split paragraphs into sentences}
-  \item{openNLP}{ use sentDetect in openNLP }
-
 }
 %\details{ }
 \value{ a list of subsections }

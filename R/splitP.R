@@ -1,5 +1,6 @@
-# split paragraphs into sentences...  should replace with sentDetect in openNLP
-## but openNLP does not split on sentences ending with numbers like table 2 or  roman numbers I 
+# split paragraphs into sentences... 
+# could use sentDetect in old openNLP package (now Maxent_Sent_Token_Annotator)
+## but that does not split on sentences ending with numbers like table 2 or  roman numbers I 
 
 splitP <- function( z ){
 # check if empty list (returned by xpathSApply)

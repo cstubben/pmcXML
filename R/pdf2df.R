@@ -1,5 +1,3 @@
-## source("~/plague/R/packages/pubmed/R/pdf2df.R")
-
 
 # SPLIT is a space delimited string with either 
 # w = single word (no spaces)
@@ -86,9 +84,10 @@ pdf2df <-function(x, split, captionRow=1, headerRow=2, labels , subset)
    close(zz)
    if(length(header) ==  ncol(x) ) names(x) <- header
 
-   y <-strsplit(caption, ". ", fixed=TRUE)[[1]]
-   attr(x, "label") <- y[1]
-   attr(x, "caption") <- paste(y[2:length(y)], collapse=". ")
+   # see guessTable
+   attr(x, "label") <- gsub("([^.:-]*).*", "\\1", caption)
+   attr(x, "caption") <-gsub("[^.:-]*. *(.*)", "\\1", caption)
+
 if(length(xAttr)>0){
    for(i in 1:length(xAttr) ){
        attr(x, names(xAttr)[i]) <- xAttr[[i]]

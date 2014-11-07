@@ -1,8 +1,9 @@
 #  split PMC xml into subsections
 
-pmcText <- function(doc, sentence=TRUE, openNLP=FALSE ){
+pmcText <- function(doc, sentence=TRUE ){
 
    z <- vector("list")
+
    z[["Main title"]] <-  xpathSApply(doc, "//front//article-title", xmlValue) 
    z[["Abstract"]] <-  xpathSApply(doc, "//abstract//p", xmlValue) 
 
@@ -15,8 +16,8 @@ pmcText <- function(doc, sentence=TRUE, openNLP=FALSE ){
    path <- path.string(sec, n)
 
    y <- lapply(x, function(y) xpathSApply(y, "./p", xmlValue))
-  
-    ##LOOP through subsections
+
+   ##LOOP through subsections
       for(i in 1: length(y) ){
          if(length(y[[i]]) > 0)  z[[path[i] ]] <- y[[i]]
       }
@@ -33,23 +34,15 @@ pmcText <- function(doc, sentence=TRUE, openNLP=FALSE ){
          f2<- xpathSApply(doc, "//table-wrap/caption", xmlValue)
          z[["Table caption"]]      <- paste(f1, f2) 
       }
-      ## table footnotes
-      ### z[["Table footnotes"]]    <- xpathSApply(doc, "//table-wrap-foot/fn", xmlValue)
-
-      f1 <- xpathSApply(doc, "//supplementary-material/label", xmlValue)
+    
+      f1 <- xpathSApply(doc, "//supplementary-material//label|//supplementary-material//title", xmlValue)
       if( length(f1) > 0){
-         f2<- xpathSApply(doc, "//supplementary-material/caption", xmlValue)
+         f2<- xpathSApply(doc, "//supplementary-material//caption", xmlValue)
          z[["Supplement caption"]] <-   paste(f1, f2) 
       }
 
-   if(sentence){
-        if(openNLP){  
-                z <- lapply(z, sentDetect)
-                z <- lapply(z, function(x) gsub(" $", "", x) )
-              }else{
-                 z <- lapply(z, splitP)
-              }
-   }
+   if(sentence) z <- lapply(z, splitP)
+
    # add attributes
    attr(z, "id") <- attr(doc, "id")
    z
