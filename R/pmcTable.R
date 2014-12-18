@@ -31,7 +31,8 @@ pmcTable  <- function(doc, whichTable, simplify=TRUE,...)
              caption <- gsub(paste(label, ". " ,sep="") , "", caption)
           }
           caption <- gsub("\\.$", "", caption)
-
+        # remove newlines
+         caption <- fixText(caption)
 
          message(paste("Parsing", paste(label, caption) ))
 

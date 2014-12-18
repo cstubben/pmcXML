@@ -1,8 +1,12 @@
 ## collapse a data.frame into key-value pairs 
 
 collapse2 <- function(x, footnotes= TRUE, rowid=TRUE, na.string ){
+
+  # add subheaders if present
+  x <- suppressMessages( repeatSub(x) )
+
    y <- names(x)
-   # check for column names ending in period (.= will split sentence)
+   # check for column names ending in period for SentDetect
    if(any( grepl("\\.$", y) )){
      print("Note: removing period from column names for Solr")
      y <- gsub("\\.$", "", y)
@@ -10,15 +14,7 @@ collapse2 <- function(x, footnotes= TRUE, rowid=TRUE, na.string ){
    }
    n <- nrow(x)
 
-   ## check for subheadings
-   if(ncol(x) >1){
-      hasSubs <-  apply(x[1,-1,FALSE], 1, function(z) all(  is.na(z) | z=="NA"| z==""| z=="\u00A0"))
-      if(hasSubs){
-          x<- repeatSub(x)
-          y <- names(x)
-          n <- nrow(x)
-       }
-   }
+  
    ## convert factors to character...
    for(i in 1:ncol(x)){
       if(class(x[,i]) =="factor") x[,i] <- as.character(x[,i])
@@ -32,12 +28,13 @@ collapse2 <- function(x, footnotes= TRUE, rowid=TRUE, na.string ){
       if(!missing(na.string)  ) n2<- n2 | as.character(x[i,] ) == na.string 
       rowx <- paste(paste(y[!n2], x[i, !n2], sep="="), collapse="; ")
       if(rowid)  rowx <- paste( "Row ", i, " of ", n, "; ", rowx, sep="")
-      ## add period to return row using sentDetect?
-      cx[i] <- paste(rowx , ". ", sep="")
+      ## add period to end of row?
+      cx[i] <- paste(rowx , ".", sep="")
    }
    if(footnotes){
       fn <- attr(x, "footnotes")
-      if(!is.null(fn)){
+       n <- is.null(fn)|| fn==""
+       if(!n){
         fn <- paste(fn, collapse=" ") 
         cx[length(cx)+1] <- paste("Footnotes=", fn , sep="")
       }

@@ -4,7 +4,7 @@
 # if digits is NA (or not numeric) then use 1 or more numbers 
 ## suffix is optional 
 
-# May 8 - add notStartingWith to parse HP and not JHP tags in Helicobacter..
+# May 8, 2013 - add notStartingWith to parse HP and not JHP tags in Helicobacter..
 ## USES a negative lookbehind 
 ##  str_extract_all("HP0001,HP0002 but not JPH0003", perl( "(?<!J)HP[0-9]{4}" ) )
 

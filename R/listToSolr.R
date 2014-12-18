@@ -11,6 +11,7 @@ listToSolr <- function(x, file  ){
  
       file <- paste(id, ".xml", sep="")
    }
+
    cat("<add>\n<doc>\n", file=file)
    for(i in 1:length(x)){
       cat( paste('  <field name="', names(x)[i], '">',  x[[i]], '</field>\n', sep=""), file=file, append=TRUE)

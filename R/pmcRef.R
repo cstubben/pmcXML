@@ -12,6 +12,11 @@ pmcRef <- function ( doc )
    # element-citation, mixed-citation, or citation?
  
    n <- length(z)
+   # no refs?
+   if(n==0){
+     NULL
+}else{
+
    refs <- vector("list", n)
    for (i in 1:n) {
      
@@ -24,10 +29,11 @@ pmcRef <- function ( doc )
       # mixed or element-citation?
       type <- xpathSApply(z2, "//ref/element-citation|//ref/mixed-citation", xmlGetAttr,  "publication-type")
 
-      if(length(type)==0){
-         ## BMC genomics from 2007 PMC1853089
-         type <- xpathSApply(z2, "//ref/citation", xmlGetAttr,  "citation-type")
-      }
+       ## BMC genomics from 2007 PMC1853089
+      if(length(type)==0) type <- xpathSApply(z2, "//ref/citation", xmlGetAttr,  "citation-type")
+       if(length(type)==0)   type <-  xpathSApply(z2, "//ref/note", xmlName)
+       if(length(type)==0)  type <- "unknown"
+
 
       # CHECK TAGS 
 
@@ -82,6 +88,8 @@ pmcRef <- function ( doc )
       }else{
          ## use node() to avoid combining words like "CDC 2014 Map of" into "CDC2104Map of "
         title <- paste( xpathSApply(z2, "//ref/element-citation/node()|//ref/mixed-citation/node()|//ref/citation/node()", xmlValue), collapse=" ")
+       if(title=="") title <-  xpathSApply(z2, "//ref//p", xmlValue)  # notes
+
         title <- gsub("  ", " ", title)
        title <- gsub(" . ", ". ", title, fixed=TRUE)
 
@@ -93,5 +101,6 @@ pmcRef <- function ( doc )
       free(z2)
    }
    do.call("rbind", refs)
+ }
 }
 
