@@ -1,45 +1,30 @@
-meshTerms<-function(term )
+# GEt MeSH terms for 1 pmid
+
+# 1     <MeshHeading>
+# 1        <DescriptorName 
+# 0-many   <QualifierName  
+#       </MeshHeading>
+
+meshTerms<-function( id )
 {  
 
-   if(length(term) > 1){ term <- paste(term, collapse = ",") }  
-
-   # CHECK if IDs (and skip esearch)
-   if( grepl("^[0-9, ]*$", term)){
-     x <- efetch(term, "pubmed", retmode="xml")
+    url <- "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&id="
+   x <- getURL( paste0(url, id), .encoding="UTF-8")
+   doc <- xmlParse(x)  
+   pmid    <- as.numeric( xpathSApply(doc, "//MedlineCitation/PMID", xmlValue) )
+   # get all Descriptor and Qualifier Names
+   mesh <- xpathSApply(doc , "//MeshHeading/*", xmlValue)
+   if(length(mesh)>0){
+      # split Names by size of MeshHeading
+      n<-  xpathSApply(doc, "//MeshHeading", xmlSize)
+      y <- split(mesh, rep(1:length(n), n))
+      # paste first Descriptor name to all Qualifier names
+      mesh <- as.vector(unlist(lapply(y, function(x) paste(x[1], x[-1], sep="/") )) )
+      mesh <- gsub("\\/$", "", mesh)  # if no Qualifiers, remove /
    }else{
-     x <- efetch(esearch(term, "pubmed") , retmode="xml" )
+      mesh <- NULL
    }
-
-      doc <- xmlParse(x)  
-      z<- getNodeSet(doc, "//PubmedArticle")
-      n<-length(z)
-      if(n==0){stop("No results found")} 
-      pubs<-vector("list",n)
-      for(i in 1:n)
-      {
-         # use xmlDoc or memory leak -see ?getNodeSet for queries on subtree..
-         z2<-xmlDoc(z[[i]])
-
-         pmid    <- as.numeric(xvalue(z2, "//PMID"))  # first PMID id
-          
-
-      mesh <- xvalues(z2, "//MeshHeading/*")
-       # fix for multiple qualifiers in node
-       n<-grepl("/.*/", mesh)
-       if(sum(n)>0){
-         mesh2 <- mesh[n]
-         y <- strsplit(mesh2, "/")
-         mesh2<-unlist(sapply(y, function(z) paste(z[1], z[-1], sep="/")))
-         mesh <- sort( c(mesh[!n], mesh2))
-       }
-      #  mesh <- paste(mesh, collapse="; ")  # one row per pmid
-
-       if(! is.na(mesh[1]))  pubs[[i]]<-data.frame(pmid, term=mesh, stringsAsFactors=FALSE)
-    
-          free(z2)
-      }
-      x<- do.call("rbind", pubs)
-      x
+   mesh
 }
 
 

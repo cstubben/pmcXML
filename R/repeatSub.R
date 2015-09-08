@@ -32,7 +32,7 @@ repeatSub <- function(x, column="subheading", first =TRUE, ...){
          y <-fixTypes(y, ...)
          if(first) y <- y[, c( ncol(y), 1:(ncol(y)-1)) ]
          # keep attributes - if NULL, then not added
-         for(i in c("id", "file", "label", "caption", "footnotes"))  attr(y, i) <- attr(x, i)
+         for(i in c("id", "file", "label", "caption", "subcaption", "footnotes"))  attr(y, i) <- attr(x, i)
          attr(y, "subheaders") <- x[n,1]
          x <- y
       }

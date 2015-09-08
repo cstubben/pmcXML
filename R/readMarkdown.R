@@ -1,19 +1,13 @@
 ## read markdown file into list of paragraphs with subsection names
-## steps 1) convert pdf to text using pdftotext
-## 2) manually format subsection titles with # or ## or ### 
-## 3) optionally, add attributes like ID=1234 at beginning of doc
+## 1) convert pdf to text using pdftotext
+## 2) add new sections for Title, authors, affiliations, figures (and move tables into separate file) 
+## 3) manually format other section titles with # or ## or ### 
+
 
 readMarkdown<-function(file, sentence=TRUE ){
    x1 <- readLines(file)
-   id<-NULL
 
-   ## TO DO - add option to read any attributes
-   ## option to save pmid as attribute? 
-   if(grepl("^ID=", x1[1])){
-        id <-  gsub("ID=(.*)", "\\1", x1[1]) 
-        x1<- x1[-1]
-   }
-   ## add empty lines
+   ## add empty lines at start and end
    x1 <-c("",  x1, "")
 
    x1 <- gsub("^ +$", "", x1)
@@ -71,10 +65,8 @@ readMarkdown<-function(file, sentence=TRUE ){
       }
    }
    #sec <- gsub("([0-9])\\. ", "\\1 ", sec)
-   z[["Section title"]] <- sec
+   # z[["Section title"]] <- sec
 
    if(sentence) z <- lapply(z, splitP)
- 
-   attr(z, "id") <- id
    z 
 }

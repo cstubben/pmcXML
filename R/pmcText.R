@@ -1,52 +1,97 @@
-#  split PMC xml into subsections
+#  split pmcXML into list of subsections, and each subsection is a vector of paragraphs or sentences
 
-pmcText <- function(doc, sentence=TRUE ){
+pmcText <-function(doc, sentence=TRUE ){
 
    z <- vector("list")
 
-   z[["Main title"]] <-  xpathSApply(doc, "//front//article-title", xmlValue) 
-   z[["Abstract"]] <-  xpathSApply(doc, "//abstract//p", xmlValue) 
+   ## Also in metadata..
+   z[["Main title"]] <- xpathSApply(doc, "//front//article-title", xmlValue)
 
-   ## BODY 
-    x <- getNodeSet(doc, "//body//sec")
-   # TO do : check PMC3471637 and other EID papers without sections
+   # ABSTRACT 
+   
+   x <- paste( xpathSApply(doc, "//abstract[not(contains(@abstract-type,'summary'))]//p", xmlValue), collapse=" ")
+   z[["Abstract"]] <- fixText(x) 
 
-   sec <- xpathSApply(doc, "//body//sec/title", xmlValue)
-   n <- xpathSApply(doc, "//body//sec/title", function(y) length(xmlAncestors(y) ))
-   path <- path.string(sec, n)
+   ## author or executive summary...
+   x<- paste( xpathSApply(doc, "//abstract[contains(@abstract-type,'summary')]//p", xmlValue), collapse=" ")  
+   if(x != "") z[["Summary"]] <- fixText(x) 
+   
+   ## check for //body/p  instead of //body/sec/p
 
-   y <- lapply(x, function(y) xpathSApply(y, "./p", xmlValue))
+   intro <- xpathSApply(doc, "//body/p", xmlValue)
+   intro <- gsub("\n", " ", intro)
 
-   ##LOOP through subsections
+   ## figures - run before removing any nested fig nodes
+   f1 <- suppressMessages( pmcFigure(doc) )
+
+   ## BODY - split into sections
+   x <- getNodeSet(doc, "//body//sec")
+
+   ## IF no  sections? - EID journal
+   if(length(x) == 0){
+      message("NOTE: No sections found, using Main")
+      z[["Main"]] <-   fixText(intro)
+   }else{
+      if(length(intro) > 0){
+         message("NOTE: adding untitled Introduction")
+         intro <- gsub("\n", " ", intro)
+         z[["Introduction"]] <-   fixText(intro)
+      }   
+
+      ## check for tables and figs within p tags  
+
+      x1 <- xpathSApply(doc, "//sec/p/table-wrap", removeNodes)
+
+      if(length(x1) > 0) message(paste("WARNING: removed", length(x1), "nested table tag"))
+      x1 <- xpathSApply(doc, "//sec/p/fig", removeNodes)
+      if(length(x1) > 0) message(paste("WARNING: removed", length(x1), "nested fig tag"))
+
+      sec <- xpathSApply(doc, "//body//sec/title", xmlValue)
+      n <- xpathSApply(doc, "//body//sec/title", function(y) length(xmlAncestors(y) ))
+      path <- path.string(sec, n)
+
+      y <- lapply(x, function(y) xpathSApply(y, "./p", xmlValue))
+
+      ##LOOP through subsections
       for(i in 1: length(y) ){
-         if(length(y[[i]]) > 0)  z[[path[i] ]] <- y[[i]]
+         subT <- path[i]
+         subT <- gsub("\\.$", "", subT)
+         subT <- gsub("[; ]{3,}", "; ", subT)  # in case of "; ; ; "
+         if(length(y[[i]]) > 0)  z[[ subT ]] <- fixText( y[[i]] )
       }
-      z[["Section title"]] <- sec
+   } 
 
-      f1 <- xpathSApply(doc, "//fig/label", xmlValue)
-      if( length(f1) > 0){
-         f2 <- xpathSApply(doc, "//fig/caption/title", xmlValue)
-         f3 <- xpathSApply(doc, "//fig/caption/p", xmlValue)
-         z[["Figure caption"]]     <-  paste(f1, f2, f3) 
-      }
-      f1 <- xpathSApply(doc, "//table-wrap/label", xmlValue)
-      if( length(f1) > 0){
-         f2<- xpathSApply(doc, "//table-wrap/caption", xmlValue)
-         z[["Table caption"]]      <- paste(f1, f2) 
-      }
-    
-      f1 <- xpathSApply(doc, "//supplementary-material//label|//supplementary-material//title", xmlValue)
-      if( length(f1) > 0){
-         f2<- xpathSApply(doc, "//supplementary-material//caption", xmlValue)
-         z[["Supplement caption"]] <-   paste(f1, f2) 
-      }
 
-   if(sentence) z <- lapply(z, splitP)
+   ## ACKNOWLEDGEMENTS
+   ack <- xpathSApply(doc, "//back//sec/title[starts-with(text(), 'Acknow')]/../p", xmlValue)
+ 
+   if (length(ack) == 0)  ack <- xpathSApply(doc, "//back/ack/p", xmlValue)  # scientificWorldJournal
+   if (length(ack) > 0)  z[["Acknowledgements"]]<- fixText(ack)
+
+   # Funding
+   funds <-  xpathSApply(doc, "//funding-statement", xmlValue)
+   if (length(funds) > 0)  z[["Funding"]]<- fixText(funds )
+
+   sec <- names(z)
+   sec<- sec[!sec %in% c("Main title", "Abstract", "Summary", "Acknowledgements", "Funding")] 
+
+   # Figures
+   if(!is.null(f1)){
+      z<- c(z, f1)
+      z[["Figure caption"]] <- names(f1)
+   }
+
+   ##   # SPLIT sections (not title)
+   if(sentence) z[-1] <- lapply(z[-1], splitP)
+
+   z[["Section title"]] <- sec
 
    # add attributes
    attr(z, "id") <- attr(doc, "id")
    z
 }
+
+
 
 
 

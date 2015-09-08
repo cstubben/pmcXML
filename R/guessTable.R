@@ -23,7 +23,7 @@ guessTable <-function(x, header= 1, ...){
    }
 
    # FOOTNOTES (some footnotes in first and second columns!)
-   footnotes <- "" 
+   footnotes <- NULL
    if(n[length(n)] == 1) {
       z<-rle(n)$lengths
       n2 <-  (length(n) - z[length(z)] + 1) : length(n)
@@ -49,6 +49,15 @@ guessTable <-function(x, header= 1, ...){
    }
 
    if(length(caption)>1)  caption <- paste(caption, collapse=" ")
+
+      ## check for sub-caption
+        subcaption <- NULL
+        zz <- splitP(caption)
+       if( length(zz) > 1 ){
+            subcaption <- zz[2 : length(zz)]
+               caption <- zz[1]
+        }
+ caption <- gsub("[ .]+$", "", caption)
 
    # CHECK subheaders (other rows with only 1 column) -- see repeatSub
 
@@ -78,11 +87,14 @@ guessTable <-function(x, header= 1, ...){
     #fix column types (by running read.delim)
    x <- fixTypes(x, ...)
 
-   ## split label and caption  -doesn't work in many cases
 
-   attr(x, "label") <- gsub("([^.:-]*).*", "\\1", caption)
-   attr(x, "caption") <-gsub("[^.:-]*. *(.*)", "\\1", caption)
+  # 
+   label<- genomes::strsplit2(caption, "\\. ")
+   caption <- gsub(paste(label, "\\. " ,sep="") , "", caption)
 
+   attr(x, "label") <-  label
+   attr(x, "caption") <-  caption
+attr(x, "subcaption") <-  subcaption
    attr(x, "footnotes") <- footnotes
    
    x

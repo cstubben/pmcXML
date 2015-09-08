@@ -9,6 +9,7 @@ seqIds<-function(id, stop, tags)
 {
    if(missing(stop)){ 
       ## range of IDs like BPSL1774-BPSL1779  OR BPSL1774 to BPSL1779  OR BPSL1774-1779   OR even BPSL1774-9
+# should work with optional prefix ...  BTH_I0126-I0135
       id <- gsub(" to ", "-", id)
 
       # removing trailing dash in case id = "BPSL1774-"

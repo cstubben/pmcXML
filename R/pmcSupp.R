@@ -1,46 +1,51 @@
-# supplmentary materials
+# supplmentary materials in XML only  
+#  use getSupp to download tables using file name in comments
 
-pmcSupp <-function(doc, file, ... ){
-  
-  ## using file name
-  if(!missing(file) && is.character(file) )
-  {
-    getSupp(doc, file, ...)
-
-  }else{
-      z <- getNodeSet(doc, "//supplementary-material")
-      if(length(z)==0){
-          message("No supplementary materials found")
+pmcSupp <-function( doc , sentence = TRUE ){
+   x <- getNodeSet(doc, "//supplementary-material" )
+   if( length(x) == 0){
+      message("No supplementary-material tag found")
+      NULL
+   }else{
+      f1 <- sapply(x, xpathSApply, "./label", xmlValue)
+      if (length(unlist(f1) ) == 0) {
+         message("WARNING: No label tag found")
+         # check xpathSApply(x[[1]], "./*", xmlName)
+         ## ONLY caption and media tags - see PMC4390269
+         f2 <- sapply(x, xpathSApply, "./caption/title", xmlValue)   
+         z <- lapply(x, xpathSApply, "./media", xmlGetAttr, "href")
+         names(z) <- f2
       }else{
-         y <- vector("list", length(z) )
-         for(i in 1: length(z) ){
-            z2 <- xmlDoc(z[[ i ]])
-            label <- xvalue(z2, "//label")
-            if(is.na(label)) label <- xvalue(z2, "//title")
-  
-
-            caption <- xpathSApply(z2, "//caption/p", xmlValue) 
-            n <-grep("^Click here", caption, invert=TRUE)
-            caption <- paste( caption[n], collapse= " ")
-
-            filex <- xattr(z2, "//supplementary-material/media", "href")
-            type <- xattr(z2, "//supplementary-material/media", "mime-subtype")
-
-            type <-gsub("vnd.ms-", "", type)    
-
-            y[[i]] <- data.frame(label, caption, file=filex, type, stringsAsFactors=FALSE)
-            free(z2)
-         }
-         y <- do.call("rbind", y)
-          # print list of supplements
-         if(missing(file) ){
-            y
+         f1 <- gsub("[ .]+$", "", f1)
+         # check for titles
+         f2 <- sapply(x, xpathSApply, "./caption/title", xmlValue)
+         f2p <-  sapply(x, function(y) paste( xpathSApply(y, "./caption/p", xmlValue), collapse=". "))
+         if(length(unlist(f2)) == 0){
+            #message("NOTE: NO caption/title")
+            f2 <- f2p  # no paragraphs??
          }else{
-           ## download using file number, 1,2,3, etc
-           message(paste("Downloading", y$label[file] ))      
-            getSupp(doc, y$file[file], ...)
+            f2 <- paste(f2, f2p, sep=". ")
          }
+         f2 <- gsub("..", ".", f2, fixed=TRUE)
+         f2 <- gsub(" Download $", "", f2) 
+
+         z <-  lapply(f2, splitP)
+         cap <-  sapply(z, "[", 1)
+         cap <- gsub("\\.$", "", cap)
+          
+         z <- lapply(z, function(x) paste(x[-1], collapse=" "))
+         names(z) <- paste(f1, cap, sep=". ")
+         if(sentence) z <- lapply(z, splitP)
+
+         ## ADD file name as comment
+         ids <- sapply(x, xpathSApply, "./media", xmlGetAttr, "href")
+         ids <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles", attr(doc, "id"), "bin", ids, sep="/")    
+   
+         for(i in 1: length(z) ){
+            message(paste(" ",  f1[i], ". ", cap[i], sep="" ))
+            comment(z[[i]] ) <-  ids[i]
+         }
+      z
       }
    }
-}
-
+}  

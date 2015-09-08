@@ -1,2 +1,3 @@
 exportPattern("^[[:alpha:]]+")
-importFrom(genomes, strsplit2)
+import(genomes, gdata, stringr)
+

@@ -1,21 +1,22 @@
 findGenes <- function( txt ){
    id <- attr(txt, "id")
-   if(is.null(id)) stop("No id attribute found")
 
-   # if TABLE?
-   if(is.data.frame(txt) ){
-      label <- paste( attr(txt, "label"), attr(txt, "caption"), sep=". ")
-      txt <- list(  Table = collapse2(txt ) )
-      names(txt) <- label
-      attr(txt, "id") <- id
-   }
+   if(is.null(id)){
+       if(is.list(txt)) id <- attr(txt[[1]], "id")   # list of tables
+       if(is.null(id)){
+          message("Warning: No id attribute found")
+          id <- NA
+       }
+    }
 
+
+ 
    # start of sentence - do not match PubMed (=PubM), so include flanking [^a-z]
    #  y <-      searchPMC(txt, "(^|[^a-zA-Z])[A-Za-z][a-z]{2}[A-Z0-9][^a-z]", ignore.case=FALSE)
 
    ## OR use word boundary AND include mutant strains like ΔtofR ??    
    # June 23, 2014 Added = for genes in collapsed tables.  Not sure why this is needed (code seems to works line by line but not in function
-   # July 13, 2014 added (\\b|_) for genes with subscripts sctU_Bp
+   # July 13, 2014 added (\\b|_) for genes with subscripts 
   
    y <- searchPMC(txt, "\\b[=Δ]?[A-Za-z][a-z]{2}[A-Z0-9]+(\\b|_)", ignore.case=FALSE)
  

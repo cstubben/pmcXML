@@ -29,7 +29,7 @@ read.xls2 <- function(file, sheet=1, skip=0, ...){
          attr(x, "footnotes") <- y
       }
    }
-   x
+  x
 }
 
 

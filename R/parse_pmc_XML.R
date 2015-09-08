@@ -46,7 +46,7 @@ parse_pmc_XML<-function(xml, authorsN=3, journalFull=TRUE )
       pmid <- xtags(z2, "//ArticleId", "IdType", "Value", "pmid")
        doi <- xtags(z2, "//ArticleId", "IdType", "Value", "doi")
 
-      pubs[[i]]<-data.frame(pmc, authors, year, title, journal, volume, pages, pubdate, epubdate, pmid, doi,
+      pubs[[i]]<-data.frame(pmid, authors, year, title, journal, volume, pages, pubdate, epubdate, pmc, doi,
          stringsAsFactors=FALSE)
     
       free(z2)

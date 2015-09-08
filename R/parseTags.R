@@ -47,7 +47,9 @@ parseTags<-function(y, tags, prefix, suffix, notStartingWith, expand=TRUE, digit
       ## IDs including ranges  tag1 to tag2 OR tag1-tag2 OR tag1-n
       ## FIX?  should skip "compare tag1 to tag2" if "compare" in sentence!
 
-      ids <- str_extract_all(y$mention,  perl( ignore.case( paste(tag1, " to ", tag, "|", tag1, "-", tag, "|",  tag1,"-[0-9]+|", tag1, sep=""  ) )) )
+# July 31, 2015  range may include prefix BP1026B_I0126-I0135  (added [AI]? below)
+
+      ids <- str_extract_all(y$mention,  perl( ignore.case( paste(tag1, " to ", tag, "|", tag1, "-", tag, "|",  tag1,"-[AI]?[0-9]+|", tag1, sep=""  ) )) )
  
       ## Expand ranges
       n <- grepl("-|to", ids)

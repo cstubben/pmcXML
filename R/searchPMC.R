@@ -2,26 +2,25 @@
 # other options to grep  (or collapse ?)  
 # some grep like options to print sentence before and after 
 
-searchPMC <- function(x , pattern, caption=TRUE, before=FALSE, after=FALSE, ignore.case=TRUE, ...){
+searchPMC <- function(x , pattern, before=FALSE, after=FALSE, ignore.case=TRUE, ...){
 
-   ## x should be list (sentences or tables) OR  table -  is.list(data.frame()) = TRUE
-   if(class(x)!="list" ){
-         y <- attr(x, "label")
-         if(is.null(y)) y <- "Unknown"  # in case label is missing
-         x <- list(x)
-         names(x) <- y
-   } 
+   ## x should be list (sentences or tables) 
+   if(class(x)!="list" ) x <- list(x)
 
    z <- vector("list", length(x))
    for ( i in 1: length(x) ){
       
       if(class(x[[i]] )=="data.frame"){
-         #COLLAPSE table rows  - add caption after search
-         x2 <- collapse2( x[[i]] ) 
+        # tables as images return data.frame with 0 columns and rows
+        if(nrow(x[[i]]) == 0){
+            x2<- NULL 
+         }else{
+            #COLLAPSE table rows  
+            x2 <- collapse2( x[[i]] ) 
+        }
          n <- grep(pattern, x2,  ignore.case=ignore.case, ...)
          if(length(n) >0){
-             z[[i]] <- data.frame( section = names(x[i]), mention = x2[n] , stringsAsFactors=FALSE )
-             if(caption) z[[i]]$mention <- paste("Caption=", attr(x[[i]], "caption") , ";", z[[i]]$mention, sep="")
+             z[[i]] <- data.frame( section =  paste(attr(x[[i]], "label"), attr(x[[i]], "caption"))  , mention = x2[n] , stringsAsFactors=FALSE )
          }
       }else{
          # FULL TEXT

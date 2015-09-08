@@ -1,65 +1,43 @@
-# use PMC-OAI service  (Pubmed Central Open Archives Initiative)
-# other option is PMC ftp
+# Get XML from PMC-OAI service  (Pubmed Central Open Archives Initiative)
 
-# id should be PMC id like "PMC3443583"
+# http://www.ncbi.nlm.nih.gov/pmc/tools/oai/
 
-pmcOAI <- function(id, local=TRUE, dir="~/downloads/pmc",  ...){
-   
-   if(!file.exists(dir) ){ stop("Warning: no local directory found: please mkdir ", dir, " or change the dir option") }
+pmcOAI <- function(id,  ...){
+  
+   # check for PMC prefix (needed for attribute)
+   if(!grepl("^PMC[0-9]+$", id))  stop("Please use a PMC id like PMC3443583")
 
-   # check for PMC prefix 
-   if(!grepl("^PMC[0-9]+$", id))  stop("Please include a valid PMC id like PMC3443583")
+   # no prefix for URL string
+   id2 <- gsub("PMC", "", id)
+
    # file name for attributes
-   file      <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles/", id, sep="")
-   xmlfile   <- paste(dir, "/", id, ".xml", sep="")
+   file  <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles/", id, sep="")
+ 
+   # use getURL in RCurl package (readlines returns incomplete line warning and does not get errors (just 404 NOT found)
+   url <- "http://www.pubmedcentral.nih.gov/oai/oai.cgi?verb=GetRecord&metadataPrefix=pmc&identifier=oai:pubmedcentral.nih.gov:"   
+   x <- getURL( paste0(url, id2), .encoding="UTF-8", ...)
    
-   #########################
-   if(local && file.exists( xmlfile ) ){
-      print("Loading local XML copy")
-      doc <- xmlParse( xmlfile)  
-   }else{
-   #########################
-      url <- "http://www.pubmedcentral.nih.gov/oai/oai.cgi?verb=GetRecord&metadataPrefix=pmc&identifier=oai:pubmedcentral.nih.gov:"
-       # no prefix
-      id2 <- gsub("PMC", "", id)
-      # will complain about incomplete final line
-      x <- suppressWarnings( readLines(paste(url, id2, sep=""), ...))
-     
-      if(grepl("<error", x[1])){
-         ## NOT in open access subset
-         x <- try( readLines(file)  , silent=TRUE)
-         if(class(x)[1] == "try-error"){
-            stop("No results found using ", id)
-         }else{
-            ## SEE Open Access Subset description at http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/
-             # error = The publisher of this article does not allow downloading of the full text in XML form
-            stop("No results in Open Access Subset (publisher does not allow downloading of full text XML)")
-         }
-      }else{
-         # if pmc OAI not working ?
-         if(length(x) == 0 ){ 
-            stop("WARNING: Cannot connect to PMC OAI service")
-         }else{
-            # remove namespace (from OAI) - for EASIER xpath queries
-            x[1] <- gsub(" xmlns=[^ ]*" , "", x[1])
-         }
+   #error codes=  idDoesNotExist  OR cannotDisseminateFormat (not Open Access)  
+   if (grepl("<error code", x[1])) {
+      error <- gsub('.*error code="([^"]+).*', "\\1", x[1])
+      if(error=="idDoesNotExist") stop("No results found using ", id)
 
-         ## FIX some SPECIAL characters
-         x <- gsub("â\u0080²", "'", x)  ## 3' and 5'
-         x <- gsub("–", "-", x)         ## long dashes
-         x <- gsub("\u00A0", " ", x)     # nbsp
-
-         ## ADD ^ caret symbol inside all superscripts tags 
-         x <- gsub("<sup>", "<sup>^", x)
-         ## ALso add ^ caret to hyperlink footnotes in column headers and other table cells with xref tags  <xref ref-type="table-fn" rid="tf1-1">a</xref>
-         n <- grep("table-fn", x)
-         x[n] <- gsub(">([^<])</xref>", ">^\\1</xref>", x[n])
-
-         doc <- xmlParse(x)
-          ## save file to reload from local copy (may change the display of some special characters???)
-         saveXML(doc, file= xmlfile )
-      }
+      message("No full text in Open Access Subset, downloading metadata only" )        
+      url <- "http://www.pubmedcentral.nih.gov/oai/oai.cgi?verb=GetRecord&metadataPrefix=pmc_fm&identifier=oai:pubmedcentral.nih.gov:"
+      x <- getURL( paste0(url, id2), .encoding="UTF-8", ...)
+  
    }
+   # Remove namespace for easier XPath queries
+   x[1] <- gsub(" xmlns=[^ ]*" , "", x[1])
+
+   ## ADD ^ caret symbol inside all superscripts tags 
+   x <- gsub("<sup>", "<sup>^", x)
+   ## Also add ^ caret to hyperlink footnotes in tables with xref tags like <xref ref-type="table-fn" rid="tf1-1">a</xref>
+   n <- grep("table-fn", x)
+   x[n] <- gsub(">([^<])</xref>", ">^\\1</xref>", x[n])
+
+   doc <- xmlParse(x)  
+ 
    ## ADD attributes  
    attr(doc, "id") <- id
    attr(doc, "file") <- file

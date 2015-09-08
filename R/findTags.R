@@ -8,16 +8,13 @@ findTags <-function(txt, tags, prefix, suffix, notStartingWith, expand=TRUE, dig
 
    id <- attr(txt, "id")
 
-   if(is.null(id)) stop("Missing ID attribute")
-
-   if(is.data.frame(txt) ){
-      ## use label and caption for source?
-      #  label <- attr(txt, "label")
-      label <- paste( attr(txt, "label"), attr(txt, "caption"), sep=". ")
-      txt <- list(  Table = collapse2(txt ) )
-      names(txt) <- label
-      attr(txt, "id") <- id
-   }
+   if(is.null(id)){
+       if(is.list(txt)) id <- attr(txt[[1]], "id")   # list of tables
+       if(is.null(id)){
+          message("Warning: No id attribute found")
+          id <- NA
+       }
+    }
 
      ## one or more digits
    tag <- paste(prefix, "[0-9]+", sep="")

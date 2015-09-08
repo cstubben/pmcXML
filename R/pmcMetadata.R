@@ -1,17 +1,16 @@
-# GET PMC xml article metadata (mainly for Solr)
+# GET PMC xml article metadata 
 
 pmcMetadata <-function(doc ){
 
    z <- vector("list")
 
-  # use pmid for id
-   pmid <- xpathSApply(doc, '//article-id[@pub-id-type="pmid"]',  xmlValue)
-   z[["id"]] <- pmid
+   # TITLE  - some title with footnotes  see PMC2293206
+#   xpathSApply(doc, "//front//article-title/xref", removeNodes)  # OR
+   x <- xpathSApply(doc, "//front//article-title/node()[not(self::xref)]", xmlValue)
+   x <- paste(x, collapse="")
+   x <- gsub(" +$", "", x)
+   z[["Title"]] <-  x
 
-   # TITLE
-   z[["title"]] <-  xpathSApply(doc, "//front//article-title", xmlValue) 
-
-   #------
    #AUTHORS
    x1 <- xpathSApply(doc, "//contrib/name/given-names", xmlValue)
    x2 <- xpathSApply(doc, "//contrib/name/surname", xmlValue)
@@ -20,23 +19,23 @@ pmcMetadata <-function(doc ){
    if(length(x1)!=length(x2) ) stop("Check author names -missing first or last")
    authors <-  paste(x1, x2)
 
-   # as string
-   z[["author_display"]] <- paste(authors, collapse=", ")
+   # as vector or collapsed string?  
+   z[["Authors"]] <- authors
 
+  # pmc displays journal abbrev, Published print; volume(issue): pages. Published online. Doi
 
    # Journal volume pages
 
-   ## include published YEAR?
-   y1 <- xpathSApply(doc, "//pub-date[@pub-type='ppub']/year", xmlValue)
-   if(is.null(y1))   y1 <- xpathSApply(doc, "//pub-date[@pub-type='collection']/year", xmlValue)
-
-
    journal <- xpathSApply(doc,  "//journal-id[@journal-id-type='nlm-ta']", xmlValue)
-   if(length(journal) == 0) stop("No match to nlm-ta journal type")
-
+   if(length(journal) >0 )    z[["Journal"]] <- journal
+ 
    volume <- xpathSApply(doc, "//article-meta/volume", xmlValue)
+   if(length(volume) >0 ) z[["Volume"]] <- volume
+ 
+   issue <- xpathSApply(doc, "//article-meta/issue", xmlValue)
+   if(length(issue) >0 ) z[["Issue"]] <- issue
 
-   #PAGES?
+   #PAGES
    p1 <- xpathSApply(doc, "//article-meta/fpage", xmlValue)
    if(length(p1)>0){
       p2 <- xpathSApply(doc, "//article-meta/lpage", xmlValue)
@@ -44,85 +43,58 @@ pmcMetadata <-function(doc ){
    }else{
       p1 <- xpathSApply(doc, "//article-meta/elocation-id", xmlValue)
    }
-   pages <- p1
+   z[["Pages"]]  <- p1
 
-   z[["journal_display"]] <- paste(y1, " ", journal, " ", volume, ":", pages, sep="") 
-   z[["year"]] <- y1
- 
+   # PUB Dates
 
-   #------
-   # PUB Date
+   x <- pubdate(doc)
+   if(!is.null(x))  z[["Published online"]] <-  x
 
-   x1 <- xpathSApply(doc, "//pub-date[@pub-type='epub']/year", xmlValue)
-   x2 <- xpathSApply(doc, "//pub-date[@pub-type='epub']/month", xmlValue)
-   x3 <- xpathSApply(doc, "//pub-date[@pub-type='epub']/day", xmlValue)
-   x <-  paste(x1, x2, x3, sep="-")
+   x <- suppressMessages( pubdate(doc, "ppub") )
+   if(!is.null(x))  z[["Published in print"]] <-  x
 
-   # format to match PMC
-   z[["published_online"]] <-  format(as.Date(x), "%Y %B %d")
+   x <- suppressMessages( pubdate(doc, "pmc-release"))
+   if(!is.null(x))  z[["PMC release"]] <-  x
 
-
-   # first author
-   z[["first_author"]] <- fauthor
-
-   # full journal name?
-   z[["journal"]] <- removeSpecChar(xpathSApply(doc,  "//journal-meta//journal-title", xmlValue))
-
-   # publisher
-   z[["publisher"]] <- removeSpecChar(xpathSApply(doc,  "//journal-meta//publisher-name", xmlValue))
-
-   ## IDs
-   z[["pmid"]] <- pmid
+  ## DOI
+   x <- xpathSApply(doc, '//article-id[@pub-id-type="doi"]',  xmlValue)
+   if(length(x)>0) z[["DOI"]] <- x 
 
    pmcid <- attr(doc, "id")
-   z[["pmcid"]] <-  pmcid
+   z[["PMCID"]] <-  pmcid
 
-   ## DOI
-   x <- xpathSApply(doc, '//article-id[@pub-id-type="doi"]',  xmlValue)
-   if(length(x)>0) z[["doi"]] <- x 
+   pmid <- xpathSApply(doc, '//article-id[@pub-id-type="pmid"]',  xmlValue)
+   z[["PMID"]] <- pmid
+
+   # first author
+   z[["First author"]] <- fauthor
+
+   # full journal name?
+   x <- xpathSApply(doc,  "//journal-meta//journal-title", xmlValue)
+   if(length(x)>0) z[["Full journal"]] <- x
+   # publisher
+   x <- xpathSApply(doc,  "//journal-meta//publisher-name", xmlValue)
+   if(length(x)>0) z[["Publisher"]]<- x
 
    # URL link 
    url <- paste("http://www.ncbi.nlm.nih.gov/pmc/articles/", pmcid, sep="")
    z[["URL"]] <- url
 
-   # LIST of authors
-   z[["author"]] <- authors
 
-   ## Affiliations
-   x <- xpathSApply(doc, "//aff/institution", xmlValue)
-   if(length(x)>0){
-      x <- paste(x,  xpathSApply(doc, "//aff/country", xmlValue) , sep=", ")
-   }else{
-      # PLOS (skip editor addr-line)
-      x <- xpathSApply(doc, "//aff[not(starts-with(@id, 'edit'))]/addr-line", xmlValue)
-   }
-   if(length(x)==0){
-      x <- xpathSApply(doc, "//aff/text()", xmlValue, trim=TRUE)
-   }
-   z[["affiliation"]] <- removeSpecChar(x)
-
-
-   # keywords?
-    x <-  xpathSApply(doc, "//kwd", xmlValue)
-   if(length(x)>0) z[["Keywords"]] <- x
-
-   z[["subject"]] <- xpathSApply(doc,  "//subject", xmlValue)
+   x <- xpathSApply(doc,  "//subject", xmlValue)
+    if(length(x)>0) z[["Subjects"]] <- x
 
    # MeSH terms
    x <- meshTerms(pmid)
    if(is.null(x)){
-      print("NO MeSH terms found")
+      message("NO MeSH terms found")
    }else{
-      z[["MeSH"]] <-removeSpecChar( x$term )
+      z[["MeSH terms"]] <- x 
    }
 
-
-# add attribute for file name
-
-attr(z, "id") <- attr(doc, "id")
-z
-
- 
+   # add attribute 
+   attr(z, "id") <- attr(doc, "id")
+   z
 }
 
 

@@ -10,7 +10,11 @@ ncbiPMC <- function(term, ... )
    }else{
      x <- esummary(esearch(term, "pmc"), version="2.0", parse=FALSE)
    } 
-   # authorsN=3, journalFull=TRUE 
-   parse_pmc_XML(x, ...)
-
+   ## Empty id list - nothing todo
+   if(class(x)[1]=="character"){
+      NULL
+   }else{
+      # authorsN=3, journalFull=TRUE 
+      parse_pmc_XML(x, ...)
+   }
 }
