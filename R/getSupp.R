@@ -7,10 +7,11 @@ getSupp <- function( file, type,  opts="-raw -nopgbrk",  header=TRUE, ...)
        type <- tolower( gsub(".*\\.([^.]*)", "\\1", file) )
    }
    rm <- FALSE
+
    ## tar.gz files in pmc FTP ( read from web or local file) 
-   if( substring(file, 1,4) == "http"){
+   if(substr(file,1,4) == "http"){
        tmpfile <- paste0( "tmp.", type)
-       message("Downloading .", type, " file")
+       message("Downloading ", file)
        download.file( file , tmpfile, quiet=TRUE)
        file <- tmpfile 
        rm <- TRUE
@@ -44,7 +45,14 @@ getSupp <- function( file, type,  opts="-raw -nopgbrk",  header=TRUE, ...)
       print(paste("Returned", length(x), "rows"))
 
    ## WORD documents
+
+## replace with https://github.com/hrbrmstr/docxtractr
+
+
    } else if(type == "doc" | type == "docx" ){
+
+
+
       command <- paste("unoconv -f xhtml", file)
       system(command)
 
@@ -115,11 +123,7 @@ getSupp <- function( file, type,  opts="-raw -nopgbrk",  header=TRUE, ...)
    ## EXCEL files  
    ## June 11, 2013  fix to read multiple sheets
    }else{
-       if(ZIP){
-          file <- file2
-       }else{
-           download.file(file, file, quiet=TRUE)
-       }
+    
     #  some delimited-files have excel extension   - try unix file command to determine file type?
     ##   n <- sheetCount(file)
     n <- suppressWarnings( try(sheetCount(file), silent=TRUE))
@@ -149,7 +153,6 @@ getSupp <- function( file, type,  opts="-raw -nopgbrk",  header=TRUE, ...)
    }
 
       # remove files
-     if(rm & ZIP) file.remove(file2)
       if(rm) file.remove(file)
       file.remove(outfile)
 

@@ -53,11 +53,10 @@ guessTable <-function(x, header= 1, ...){
       ## check for sub-caption
         subcaption <- NULL
         zz <- splitP(caption)
-       if( length(zz) > 1 ){
-            subcaption <- zz[2 : length(zz)]
-               caption <- zz[1]
-        }
- caption <- gsub("[ .]+$", "", caption)
+            label<- zz[1]
+            caption <- zz[2]
+       if( length(zz) > 2 ) subcaption <- zz[3 : length(zz)]
+        
 
    # CHECK subheaders (other rows with only 1 column) -- see repeatSub
 
@@ -89,11 +88,9 @@ guessTable <-function(x, header= 1, ...){
 
 
   # 
-   label<- genomes::strsplit2(caption, "\\. ")
-   caption <- gsub(paste(label, "\\. " ,sep="") , "", caption)
-
-   attr(x, "label") <-  label
-   attr(x, "caption") <-  caption
+  
+   attr(x, "label") <-  gsub("\\.$", "", label)
+   attr(x, "caption") <-  gsub("\\.$", "", caption)
 attr(x, "subcaption") <-  subcaption
    attr(x, "footnotes") <- footnotes
    

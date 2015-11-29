@@ -7,19 +7,6 @@ removeSpecChar <- function(txt){
   txt <- gsub("&amp;gt;", "&gt;", txt) 
 
   txt <- gsub("<", "&lt;", txt)
-  txt <- gsub("“|”|″", '"', txt)
-
-  txt <- gsub("’|′", "'", txt)
-
-  txt <- gsub("−|–", "-", txt)
-
-  txt <- gsub("∼", "~", txt)
-  txt <- gsub("×", "x", txt)
-
-  txt <- gsub("‥", "..", txt)
-  txt <- gsub("ö", "o", txt)
-
-#  txt <- gsub("", "", txt)
-     txt
+  txt
 }
 

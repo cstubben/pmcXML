@@ -12,8 +12,10 @@ pmcMetadata <-function(doc ){
    z[["Title"]] <-  x
 
    #AUTHORS
-   x1 <- xpathSApply(doc, "//contrib/name/given-names", xmlValue)
-   x2 <- xpathSApply(doc, "//contrib/name/surname", xmlValue)
+
+   x1 <- xpathSApply(doc, "//contrib[not(@contrib-type='editor')]/name/given-names", xmlValue)
+   x2 <- xpathSApply(doc, "//contrib[not(@contrib-type='editor')]/name/surname", xmlValue)
+
    fauthor <- x2[1]
 
    if(length(x1)!=length(x2) ) stop("Check author names -missing first or last")
