@@ -4,7 +4,7 @@
 \alias{seq2}
 \alias{removeSpecChar}
 \alias{htmlParse2}
-\alias{xvalues}
+\alias{xvalue}
 \alias{fixText}
 \alias{matchTag}
 

@@ -27,8 +27,10 @@ pmcTable  <- function(doc, whichTable, simplify=FALSE,...)
             label <- "Table"
          }else if( length(label) == 0){
             # missing label - may be part of caption... see PMC3544749
-            label<- genomes::strsplit2(caption, "\\. ")
-            caption <- gsub(paste(label, ". " ,sep="") , "", caption)
+            # always get first two words? "Table S1" or "S1 Table".
+
+            label <- gsub("([^ ]+ [^ ]+ ).*", "\\1", caption)
+            caption <- gsub(label , "", caption)
          }
          
          # remove newlines
