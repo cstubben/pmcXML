@@ -9,8 +9,6 @@ findGenes <- function( txt ){
        }
     }
 
-
- 
    # start of sentence - do not match PubMed (=PubM), so include flanking [^a-z]
    #  y <-      searchPMC(txt, "(^|[^a-zA-Z])[A-Za-z][a-z]{2}[A-Z0-9][^a-z]", ignore.case=FALSE)
 
