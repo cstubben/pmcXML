@@ -7,15 +7,17 @@ pmcFigure <- function(doc,  attr = FALSE ){
       f1 <- sapply(x, xpathSApply, "./label", xmlValue)
       f1 <- gsub("[ .]+$", "", f1)
 
-      # get caption since some missing caption titles or have long caption title names that should be split 
+      # get caption title and paragraphs together since some caption titles are missing, in bold tags or have long caption title names that should be split 
       f2 <- sapply(x, xpathSApply, "./caption", xmlValue)
 
-## get caption title to first :; or . (check if some caption/title missing a period?)
-      cap <- gsub("([^:;.]+).*", "\\1", f2)
-       p1 <- gsub("[^:;.]+(.*)", "\\1", f2)
-       p1 <- gsub("^[:;.] ?", "", p1)    # remove leading :;.
-   
-      z <- as.list(p1)
+     ## get caption title to first :; or . (check if some caption/title missing a period?)
+
+      z <-  lapply(f2, splitP, "[;:.]")
+      cap <-  sapply(z, "[", 1)
+      cap <- gsub("\\.$", "", cap) # drop period ??
+          
+      z <- lapply(z, function(x) paste(x[-1], collapse=" "))
+
       names(z) <- paste(f1, cap, sep=". ")
        
       if(attr) 

@@ -2,7 +2,7 @@
 # could use sentDetect in old openNLP package (now Maxent_Sent_Token_Annotator)
 ## but that does not split on sentences ending with numbers like table 2 or  roman numbers I 
 
-splitP <- function( z ){
+splitP <- function( z,  split= "[.?]"){
    # check if empty list (returned by xpathSApply)
    if(length(z) == 0){
       NULL
@@ -57,16 +57,17 @@ splitP <- function( z ){
 
       # or letters at start of sentence,  list of things.  A. stuff. B. more stuff
       z <- gsub("\\. ([A-Za-z])\\. ([A-Z])", ". \\1X.X \\2", z)
-      z <- gsub("\\.$", "", z)
-  
-      # split sentences
-      z2 <- unlist( strsplit(z, "[.?] ") )
+     
+      # split sentences, 
+     # z2 <- unlist( strsplit(z, split) )
+
+     #  change ? or . to ?~ and .~ and split on "~"
+      z2 <- strsplit( gsub( paste0("(", split, ") "),  "\\1~", z), "~")  
+       z2 <- unlist(z2)
+
 
       ## remove placeholders
       z2 <- gsub("X.X",    ".", z2, fixed = TRUE)
-      ## add period (but not empty strings)
-      z2 <- paste(z2, ".", sep="")
-      z2 <- gsub("^\\.$", "", z2)
       z2
    }  
 }
