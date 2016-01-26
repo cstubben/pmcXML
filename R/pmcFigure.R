@@ -1,6 +1,3 @@
-
-# source("~/plague/R/packages/pmcXML2/R/pmcFigure.R")
-
 pmcFigure <- function(doc,  attr = FALSE ){
 
    x <-  getNodeSet(doc, "//fig" )
