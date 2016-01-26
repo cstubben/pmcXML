@@ -6,27 +6,18 @@ pmcFigure <- function(doc,  attr = FALSE ){
    x <-  getNodeSet(doc, "//fig" )
    if (length(x) > 0) {
 
-      ## some captions may have label, caption/title and caption/p tags...
+      ## should have label and caption (and caption with title and p)
       f1 <- sapply(x, xpathSApply, "./label", xmlValue)
       f1 <- gsub("[ .]+$", "", f1)
 
-      # Always use title for caption(or first sentence in case of long titles?)
-      f2 <- sapply(x, xpathSApply, "./caption/title", xmlValue)
+      # get caption since some missing caption titles or have long caption title names that should be split 
+      f2 <- sapply(x, xpathSApply, "./caption", xmlValue)
 
-      if(length(unlist(f2) )==0){
-         message("NOTE: NO caption/title")
-         f2 <- sapply(x, xpathSApply, "./caption", xmlValue)
-      }else{
-         f2p <-  sapply(x, function(y) paste( xpathSApply(y, "./caption/p", xmlValue), collapse=". "))
-         f2 <- paste(f2, f2p, sep=". ")
-      }
-      f2 <- gsub(": ", ". ", f2, fixed=TRUE)
-      f2 <- gsub("..", ".", f2, fixed=TRUE)
-      z <-  lapply(f2, splitP)
-      cap <-  sapply(z, "[", 1)
-      cap <- gsub("\\.$", "", cap)
-          
-      z <- lapply(z, function(x) paste(x[-1], collapse=" "))
+      cap <- gsub("([^:;.]+).*", "\\1", f2)
+       p1 <- gsub("[^:;.]+(.*)", "\\1", f2)
+       p1 <- gsub("^[:;.] ?", "", p1)
+   
+      z <- as.list(p1)
       names(z) <- paste(f1, cap, sep=". ")
        
       if(attr) 
