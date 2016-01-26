@@ -10,9 +10,10 @@ pmcFigure <- function(doc,  attr = FALSE ){
       # get caption since some missing caption titles or have long caption title names that should be split 
       f2 <- sapply(x, xpathSApply, "./caption", xmlValue)
 
+## get caption title to first :; or . (check if some caption/title missing a period?)
       cap <- gsub("([^:;.]+).*", "\\1", f2)
        p1 <- gsub("[^:;.]+(.*)", "\\1", f2)
-       p1 <- gsub("^[:;.] ?", "", p1)
+       p1 <- gsub("^[:;.] ?", "", p1)    # remove leading :;.
    
       z <- as.list(p1)
       names(z) <- paste(f1, cap, sep=". ")

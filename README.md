@@ -4,13 +4,8 @@
 [Pubmed Central](http://www.ncbi.nlm.nih.gov/pmc) (PMC).  
 
 
-To install the package, first install the required dependencies, `stringr` and `gdata` from CRAN and `genomes` 
-from Bioconductor
+Use `devtools` to install the package
 
- 	install.packages("stringr")
-	install.packages("gdata")
-	source("http://bioconductor.org/biocLite.R")
-	biocLite("genomes")
 	library(devtools)
 	install_github("cstubben/pmcXML")
 
