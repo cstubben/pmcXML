@@ -1,9 +1,17 @@
 # supplmentary materials in XML only  
 #  use getSupp to download tables using file name in comments (or include number of supplement to download)
 
+# app-group in BMC microbiology
+
+
+
 pmcSupp <-function( doc , n, sentence = TRUE ){
    x <- getNodeSet(doc, "//supplementary-material" )
    if( length(x) == 0){
+       x <- getNodeSet(doc, "//app-group//media" )
+       if(length(x)>0) message("WARNING: no //supplementary-material tag, using //app-group/media")
+   }
+  if( length(x) == 0){
       message("No supplementary-material tag found")
       NULL
 # get List of supplements

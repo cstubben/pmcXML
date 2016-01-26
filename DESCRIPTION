@@ -1,11 +1,10 @@
 Package: pmcXML
 Type: Package
 Title: Tools to parse full text XML documents from PMC Open Access
-Version: 1.0.3
-Date: 2014-11-06
+Version: 1.0.4
+Date: 2015-1-26
 Author: Chris Stubben
 Maintainer: Chris Stubben <stubben@lanl.gov>
 License: GPL (>=3)
-Depends: stringr, gdata
-BiocViews: GenomicSequence, Annotation, Genetics
+Depends: stringr, gdata, XML, RCurl
 Description: tools for searching and parsing full text XML articles in Pubmed Central

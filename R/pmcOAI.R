@@ -32,7 +32,9 @@ pmcOAI <- function(id,  ...){
   
    }
    # Remove namespace for easier XPath queries
-   x[1] <- gsub(" xmlns=[^ ]*" , "", x[1])
+#   x[1] <- gsub(" xmlns=[^ ]*" , "", x[1])
+# see PMC4515827 with tab before xmlns,  \txmlns=
+   x[1] <- gsub("xmlns=[^ ]*" , "", x[1])
 
    ## ADD ^ caret symbol inside all superscripts tags 
    x <- gsub("<sup>", "<sup>^", x)
