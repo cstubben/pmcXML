@@ -1,4 +1,4 @@
-# pmcXML
+# DEPRECATED.  Please use the [tidypmc](https://github.com/cstubben/tidypmc) package
 
 `pmcXML` is an `R` package to download and parse XML documents from
 [Pubmed Central](http://www.ncbi.nlm.nih.gov/pmc) (PMC).  
